@@ -4,31 +4,29 @@ image: mcr.microsoft.com/dotnet/sdk:7.0
 pipelines:
   branches:
     main:
-        - step:
-            name: Build and Test
-            script:
-              - echo 'Installing deps (git, 7-Zip)'
-              - apt-get update && apt-get install -y python3 p7zip-full
-              - echo 'export PATH="/usr/bin:$PATH"' >> ~/.bashrc
-              - source ~/.bashrc
-              - echo "Python version check"
-              - python --version
-              - python -m ensurepip --upgrade
-              - echo 'Initializing dependencies submodule'
-              - git submodule update --init --recursive --depth=1 
-              - echo "Install Python deps"
-              - pip install -r ./build/requirements.txt
-              - echo "Running build script"
-              - python ./build/build.py
-              - ls -lR dist # identify all files inside dist directory
-            artifacts:
-              - dist/*.zip
-        - step:
-            name: Upload Artifact
-            script:
-              - ls -lR dist # identify all files inside dist directory
-              - pipe: atlassian/bitbucket-upload-file:0.3.4
-                variables:
-                  BITBUCKET_USERNAME: $BITBUCKET_USERNAME
-                  BITBUCKET_APP_PASSWORD: $BITBUCKET_APP_PASSWORD
-                  FILENAME: '**/*.zip'
+      - step:
+          name: Build and Test
+          script:
+            - echo 'Installing deps (git, 7-Zip)'
+            - apt-get update && apt-get install -y python3 p7zip-full
+            - echo "Python version check"
+            - /usr/bin/python3 --version
+            - /usr/bin/python3 -m ensurepip --upgrade
+            - echo 'Initializing dependencies submodule'
+            - git submodule update --init --recursive --depth=1
+            - echo "Install Python deps"
+            - /usr/local/bin/pip install -r ./build/requirements.txt
+            - echo "Running build script"
+            - /usr/bin/python3 ./build/build.py
+            - ls -lR dist # identify all files inside dist directory
+          artifacts:
+            - dist/*.zip
+      - step:
+          name: Upload Artifact
+          script:
+            - ls -lR dist # identify all files inside dist directory
+            - pipe: atlassian/bitbucket-upload-file:0.3.4
+              variables:
+                BITBUCKET_USERNAME: $BITBUCKET_USERNAME
+                BITBUCKET_APP_PASSWORD: $BITBUCKET_APP_PASSWORD
+                FILENAME: "**/*.zip"
