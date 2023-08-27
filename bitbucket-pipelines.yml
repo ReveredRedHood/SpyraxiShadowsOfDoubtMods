@@ -11,11 +11,13 @@ pipelines:
             - apt-get update && apt-get install -y python3 p7zip-full
             - echo "Python version check"
             - /usr/bin/python3 --version
-            # - /usr/bin/python3 -m ensurepip --upgrade
-            - echo 'Initializing dependencies submodule'
-            - git submodule update --init --recursive --depth=1
+            - echo 'Installing pip'
+            - curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+            - /usr/bin/python3 get-pip.py
             - echo "Install Python deps"
             - /usr/local/bin/pip install -r ./build/requirements.txt
+            - echo 'Initializing dependencies submodule'
+            - git submodule update --init --recursive --depth=1
             - echo "Running build script"
             - /usr/bin/python3 ./build/build.py
             - ls -lR dist # identify all files inside dist directory
