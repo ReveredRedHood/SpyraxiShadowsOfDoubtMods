@@ -8,8 +8,9 @@ pipelines:
             name: Build and Test
             script:
               - echo 'Installing deps (git, 7-Zip)'
-              - apt-get update && apt-get install -y python3 pip git p7zip-full
+              - apt-get update && apt-get install -y python3 p7zip-full
               - echo "Python version check"
+              - which python
               - python --version
               - python -m ensurepip --upgrade
               - echo 'Initializing dependencies submodule'
