@@ -1,0 +1,30 @@
+image: python:slim # debian
+
+pipelines:
+  branches:
+    main:
+        - step:
+            name: Build and Test
+            script:
+              - echo 'Initializing dependencies submodule'
+              - git submodule update --init --recursive --depth=1 
+              - echo 'Installing 7-Zip'
+              - apt-get update && apt-get install -y p7zip-full
+              - echo "Python version check"
+              - python --version
+              - echo "Install Python deps"
+              - pip install -r ./build/requirements.txt
+              - echo "Running build script"
+              - python ./build/build.py
+              - ls -lR dist # identify all files inside dist directory
+            artifacts:
+              - dist/*.zip
+        - step:
+            name: Upload Artifact
+            script:
+              - ls -lR dist # identify all files inside dist directory
+              - pipe: atlassian/bitbucket-upload-file:0.3.4
+                variables:
+                  BITBUCKET_USERNAME: $BITBUCKET_USERNAME
+                  BITBUCKET_APP_PASSWORD: $BITBUCKET_APP_PASSWORD
+                  FILENAME: '**/*.zip'

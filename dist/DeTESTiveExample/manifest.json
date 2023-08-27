@@ -1,0 +1,7 @@
+{
+    "name": "DeTESTiveExample",
+    "website_url": "https://bitbucket.org/shadows-of-doubt-mods/",
+    "description": "An example of how to use DeTESTive.",
+    "dependencies": [],
+    "version_number": "0.1.0"
+}

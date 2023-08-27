@@ -1,0 +1,7 @@
+.vscode/
+.devcontainer/
+bin/
+obj/
+dist/*/plugins/*
+dist/*.zip
+.editorconfig

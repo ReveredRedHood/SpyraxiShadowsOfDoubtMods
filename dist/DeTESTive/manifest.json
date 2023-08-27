@@ -1,0 +1,7 @@
+{
+    "name": "DeTESTive",
+    "website_url": "https://bitbucket.org/shadows-of-doubt-mods/",
+    "description": "A mod development tool allowing for crude end-to-end testing of mod functionality.",
+    "dependencies": [],
+    "version_number": "0.1.0"
+}

@@ -1,0 +1,4 @@
+[submodule "dependencies"]
+	path = dependencies
+	url = https://Spyraxi@bitbucket.org/shadows-of-doubt-mods/dependencies.git
+    branch = BepInExBE667
