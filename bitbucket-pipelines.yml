@@ -7,23 +7,24 @@ pipelines:
       - step:
           name: Build and Test
           script:
-            - echo 'Installing deps (git, 7-Zip)'
+            # Install deps
             - apt-get update && apt-get install -y python3 python3-venv p7zip-full
-            - echo "Python version check"
+            # Check python version
             - /usr/bin/python3 --version
-            - echo 'Creating virtual environment'
+            # Create virtual env (after this, can use "python" in commands)
             - /usr/bin/python3 -m venv venv
             - source venv/bin/activate
-            - echo 'Installing pip'
+            # Install pip
             - curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
-            - /usr/bin/python3 get-pip.py
-            - echo "Install Python deps"
-            - /usr/local/bin/pip install -r ./build/requirements.txt
-            - echo 'Initializing dependencies submodule'
+            - python get-pip.py --prefix=venv
+            # Install build script deps
+            - venv/bin/pip install -r ./build/requirements.txt
+            # Initialize git submodule
             - git submodule update --init --recursive --depth=1
-            - echo "Running build script"
-            - /usr/bin/python3 ./build/build.py
-            - ls -lR dist # identify all files inside dist directory
+            # Run build script
+            - python ./build/build.py
+            # Identify all files inside dist directory
+            - ls -lR dist
           artifacts:
             - dist/*.zip
       - step:
