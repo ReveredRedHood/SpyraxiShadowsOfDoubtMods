@@ -84,6 +84,8 @@ if __name__ == "__main__":
         # Not needed for CI
         # print(f"Clearing {folder_name} plugins folder")
         dest_path = f"dist/{folder_name}/plugins"
+        # CI: need to create the plugins folder
+        os.mkdir(dest_path)
         # Not needed for CI
         # clear_dir(dest_path)
 
