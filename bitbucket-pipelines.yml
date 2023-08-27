@@ -1,4 +1,5 @@
-image: python:slim # debian
+# image: python:slim # debian
+image: mcr.microsoft.com/dotnet/sdk:7.0
 
 pipelines:
   branches:
@@ -7,11 +8,12 @@ pipelines:
             name: Build and Test
             script:
               - echo 'Installing deps (git, 7-Zip)'
-              - apt-get update && apt-get install -y git p7zip-full
-              - echo 'Initializing dependencies submodule'
-              - git submodule update --init --recursive --depth=1 
+              - apt-get update && apt-get install -y python3 pip git p7zip-full
               - echo "Python version check"
               - python --version
+              - python -m ensurepip --upgrade
+              - echo 'Initializing dependencies submodule'
+              - git submodule update --init --recursive --depth=1 
               - echo "Install Python deps"
               - pip install -r ./build/requirements.txt
               - echo "Running build script"
