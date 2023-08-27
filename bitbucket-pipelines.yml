@@ -11,6 +11,9 @@ pipelines:
             - apt-get update && apt-get install -y python3 p7zip-full
             - echo "Python version check"
             - /usr/bin/python3 --version
+            - echo 'Creating virtual environment'
+            - /usr/bin/python3 -m venv venv
+            - source venv/bin/activate
             - echo 'Installing pip'
             - curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
             - /usr/bin/python3 get-pip.py
