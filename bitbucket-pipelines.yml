@@ -8,7 +8,7 @@ pipelines:
           name: Build and Test
           script:
             # Install deps
-            - apt-get update && apt-get install -y python3 python3-venv p7zip-full
+            - apt-get update && apt-get install -y python3 python3-venv # p7zip-full
             # Check python version
             - /usr/bin/python3 --version
             # Create virtual env (after this, can use "python" in commands)
@@ -22,7 +22,7 @@ pipelines:
             # Initialize git submodule
             - git submodule update --init --recursive --depth=1
             # Run build script
-            - python ./build/build.py
+            - python ./build/ci.py
             # Identify all files inside dist directory
             - ls -lR dist
           artifacts:

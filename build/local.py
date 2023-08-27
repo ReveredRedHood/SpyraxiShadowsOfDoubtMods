@@ -26,12 +26,12 @@ def clear_dir(dir):
     # We are deleting all files in the directory, hidden or not
     path = Path(dir)
     resolved_path = path.resolve()
-    # print(resolved_path)
+    print(f"Resolved path: {resolved_path}")
     files = [
         *glob.glob(f"{resolved_path.absolute()}/.*"),
         *glob.glob(f"{resolved_path.absolute()}/*"),
     ]
-    # print(files)
+    print(files)
     for file in files:
         if os.path.isdir(file):
             continue
@@ -96,8 +96,6 @@ def find_new_versions():
 
 
 if __name__ == "__main__":
-    clear_dir(f"{script_dir}/shelve")
-
     # 1: Check for changes to stored mod versions vs. versions in VersionPrefix of .csproj files
     new_versions = find_new_versions()
 
@@ -131,20 +129,18 @@ if __name__ == "__main__":
         with open(manifest_path, "w") as file:
             file.write(new_data)
 
-        # d: Package dist files into new .zip files, for the new versions only, CI takes care of rest
+        # d: Package dist files into new .zip files, for the new versions only
         zip_path = Path(f"dist/{folder_name}-v{version}-{suffix}.zip").absolute()
 
-        dest_path = Path(
-            f"{os.getenv('APPDATA')}/Thunderstore Mod Manager/DataFolder/ShadowsofDoubt/profiles/Default/BepInEx/plugins/{folder_name}-{folder_name}"
-        ).absolute()
-        if not dest_path.exists():
-            os.mkdir(dest_path)
-        clear_dir(dest_path)
-
         with ZipFile(zip_path, "w") as zip:
-            top_level_files = ["icon.png", "manifest.json", "README.md", "TestSave.sodb"]
+            top_level_files = [
+                "icon.png",
+                "manifest.json",
+                "README.md",
+                "TestSave.sodb",
+            ]
             for file in top_level_files:
-                if(not Path(f"dist/{folder_name}/{file}").exists()): 
+                if not Path(f"dist/{folder_name}/{file}").exists():
                     continue
                 zip.write(Path(f"dist/{folder_name}/{file}"), file)
             for _, src_filename in src_paths:
@@ -152,15 +148,23 @@ if __name__ == "__main__":
                     Path(f"dist/{folder_name}/plugins/{src_filename}"),
                     f"plugins/{src_filename}",
                 )
+
         # Dev use only: copy files over to Thunderstore location
-        # for file in top_level_files:
-        #     if(not Path(f"dist/{folder_name}/{file}").exists()): 
-        #         continue
-        #     shutil.copyfile(
-        #         Path(f"dist/{folder_name}/{file}").absolute(), f"{dest_path}/{file}"
-        #     )
-        # for _, src_filename in src_paths:
-        #     shutil.copyfile(
-        #         Path(f"dist/{folder_name}/plugins/{src_filename}"),
-        #         f"{dest_path}/{src_filename}",
-        #     )
+        dest_path = Path(
+            f"{os.getenv('APPDATA')}/Thunderstore Mod Manager/DataFolder/ShadowsofDoubt/profiles/Default/BepInEx/plugins/{folder_name}-{folder_name}"
+        ).absolute()
+        if not dest_path.exists():
+            os.mkdir(dest_path)
+        clear_dir(dest_path)
+
+        for file in top_level_files:
+            if not Path(f"dist/{folder_name}/{file}").exists():
+                continue
+            shutil.copyfile(
+                Path(f"dist/{folder_name}/{file}").absolute(), f"{dest_path}/{file}"
+            )
+        for _, src_filename in src_paths:
+            shutil.copyfile(
+                Path(f"dist/{folder_name}/plugins/{src_filename}"),
+                f"{dest_path}/{src_filename}",
+            )
