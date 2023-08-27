@@ -9,8 +9,9 @@ pipelines:
             script:
               - echo 'Installing deps (git, 7-Zip)'
               - apt-get update && apt-get install -y python3 p7zip-full
+              - echo 'export PATH="/usr/bin:$PATH"' >> ~/.bashrc
+              - source ~/.bashrc
               - echo "Python version check"
-              - which python
               - python --version
               - python -m ensurepip --upgrade
               - echo 'Initializing dependencies submodule'
