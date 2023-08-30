@@ -26,7 +26,7 @@ def get_project_files():
 def get_dll_paths(folder_name):
     print(f"Plugin files for {folder_name}:")
     paths = []
-    for root, _, files in os.walk(Path(f"{folder_name}/bin/Debug/net6.0").absolute()):
+    for root, _, files in os.walk(Path(f"{script_dir}/../{folder_name}/bin/Debug/net6.0").absolute()):
         for file in files:
             filename = Path(file).name
             if not (
@@ -35,7 +35,7 @@ def get_dll_paths(folder_name):
                 or filename.startswith("Il2Cppmscorlib")
                 or filename.startswith("Rewired")
                 or filename.startswith("Unhollower")
-                or filename.startswith("Uni")
+                or filename.startswith("Unity")
                 or filename.startswith("System")
             ) and (filename.endswith(".dll") or filename.endswith(".pdb")):
                 result = os.path.join(root, file)
@@ -72,43 +72,29 @@ if __name__ == "__main__":
     new_versions = find_new_versions()
 
     # 2: Run dotnet build on everything
-    subprocess.run(["dotnet", "build"], check=True, text=True)
+    subprocess.run(
+        ["dotnet", "build", Path(f"{script_dir}/../SpyraxiMods.sln").resolve()],
+        check=True,
+        text=True,
+    )
 
-    # 3: Delete all local *.zip files, regardless of versioning
-    # Not needed for CI
-    # remove_dist_zip_files()
-
+    # 3: Manage files and package
     for path, version, suffix in new_versions:
         # a: Clear plugins folders in dist directories for mods with new versions
         folder_name = Path(path).parts[0]
-        # Not needed for CI
-        # print(f"Clearing {folder_name} plugins folder")
+        if folder_name.endswith("Tests"):
+            continue # don't release test code
         dest_path = f"dist/{folder_name}/plugins"
         # CI: need to create the plugins folder
         os.mkdir(dest_path)
-        # Not needed for CI
-        # clear_dir(dest_path)
 
         # b: Copy mod, CLSS*, UniverseLib*, and M31* dlls to dist plugin directories
         src_paths = get_dll_paths(folder_name)
         for src_path, src_filename in src_paths:
             shutil.copyfile(src_path, Path(f"{dest_path}/{src_filename}").absolute())
 
-        # c: Modify manifest.json file to ensure version number matches new version number
-        # Not needed for CI
-        # manifest_path = Path(f"dist/{folder_name}/manifest.json").absolute()
-        # with open(manifest_path, "r") as file:
-        #     data = json.load(file)
-        #     # remove the version_number field and add it back with the new version
-        #     data.pop("version_number")
-        #     data["version_number"] = version
-        #     new_data = json.dumps(data, indent=4)
-        #     print(new_data)
-        # with open(manifest_path, "w") as file:
-        #     file.write(new_data)
-
-        # d: Package dist files into new .zip files, for the new versions only
-        zip_path = Path(f"dist/{folder_name}-v{version}-{suffix}.zip").absolute()
+        # c: Package dist files into new .zip files, for the new versions only
+        zip_path = Path(f"{script_dir}/../dist/{folder_name}-v{version}-{suffix}.zip").absolute()
 
         with ZipFile(zip_path, "w") as zip:
             top_level_files = [
@@ -118,32 +104,11 @@ if __name__ == "__main__":
                 "TestSave.sodb",
             ]
             for file in top_level_files:
-                if not Path(f"dist/{folder_name}/{file}").exists():
+                if not Path(f"{script_dir}/../dist/{folder_name}/{file}").exists():
                     continue
-                zip.write(Path(f"dist/{folder_name}/{file}"), file)
+                zip.write(Path(f"{script_dir}/../dist/{folder_name}/{file}"), file)
             for _, src_filename in src_paths:
                 zip.write(
-                    Path(f"dist/{folder_name}/plugins/{src_filename}"),
+                    Path(f"{script_dir}/../dist/{folder_name}/plugins/{src_filename}"),
                     f"plugins/{src_filename}",
                 )
-
-        # Not needed for CI
-        # Dev use only: copy files over to Thunderstore location
-        # dest_path = Path(
-        #     f"{os.getenv('APPDATA')}/Thunderstore Mod Manager/DataFolder/ShadowsofDoubt/profiles/Default/BepInEx/plugins/{folder_name}-{folder_name}"
-        # ).absolute()
-        # if not dest_path.exists():
-        #     os.mkdir(dest_path)
-        # clear_dir(dest_path)
-        #
-        # for file in top_level_files:
-        #     if(not Path(f"dist/{folder_name}/{file}").exists()):
-        #         continue
-        #     shutil.copyfile(
-        #         Path(f"dist/{folder_name}/{file}").absolute(), f"{dest_path}/{file}"
-        #     )
-        # for _, src_filename in src_paths:
-        #     shutil.copyfile(
-        #         Path(f"dist/{folder_name}/plugins/{src_filename}"),
-        #         f"{dest_path}/{src_filename}",
-        #     )

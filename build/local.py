@@ -28,8 +28,8 @@ def clear_dir(dir):
     resolved_path = path.resolve()
     print(f"Resolved path: {resolved_path}")
     files = [
-        *glob.glob(f"{resolved_path.absolute()}/.*"),
-        *glob.glob(f"{resolved_path.absolute()}/*"),
+        *glob.glob(f"{resolved_path.resolve()}/.*"),
+        *glob.glob(f"{resolved_path.resolve()}/*"),
     ]
     print(files)
     for file in files:
@@ -54,7 +54,9 @@ def get_project_files():
 def get_dll_paths(folder_name):
     print(f"Plugin files for {folder_name}:")
     paths = []
-    for root, _, files in os.walk(Path(f"{folder_name}/bin/Debug/net6.0").absolute()):
+    for root, _, files in os.walk(
+        Path(f"{script_dir}/../{folder_name}/bin/Debug/net6.0").resolve()
+    ):
         for file in files:
             filename = Path(file).name
             if not (
@@ -63,7 +65,7 @@ def get_dll_paths(folder_name):
                 or filename.startswith("Il2Cppmscorlib")
                 or filename.startswith("Rewired")
                 or filename.startswith("Unhollower")
-                or filename.startswith("Uni")
+                or filename.startswith("Unity")
                 or filename.startswith("System")
             ) and (filename.endswith(".dll") or filename.endswith(".pdb")):
                 result = os.path.join(root, file)
@@ -109,16 +111,18 @@ if __name__ == "__main__":
         # a: Clear plugins folders in dist directories for mods with new versions
         folder_name = Path(path).parts[0]
         print(f"Clearing {folder_name} plugins folder")
-        dest_path = f"dist/{folder_name}/plugins"
+        dest_path = f"{script_dir}/../dist/{folder_name}/plugins"
         clear_dir(dest_path)
 
         # b: Copy mod, CLSS*, UniverseLib*, and M31* dlls to dist plugin directories
         src_paths = get_dll_paths(folder_name)
         for src_path, src_filename in src_paths:
-            shutil.copyfile(src_path, Path(f"{dest_path}/{src_filename}").absolute())
+            shutil.copyfile(src_path, Path(f"{dest_path}/{src_filename}").resolve())
 
         # c: Modify manifest.json file to ensure version number matches new version number
-        manifest_path = Path(f"dist/{folder_name}/manifest.json").absolute()
+        manifest_path = Path(
+            f"{script_dir}/../dist/{folder_name}/manifest.json"
+        ).resolve()
         with open(manifest_path, "r") as file:
             data = json.load(file)
             # remove the version_number field and add it back with the new version
@@ -130,7 +134,9 @@ if __name__ == "__main__":
             file.write(new_data)
 
         # d: Package dist files into new .zip files, for the new versions only
-        zip_path = Path(f"dist/{folder_name}-v{version}-{suffix}.zip").absolute()
+        zip_path = Path(
+            f"{script_dir}/../dist/{folder_name}-v{version}-{suffix}.zip"
+        ).resolve()
 
         with ZipFile(zip_path, "w") as zip:
             top_level_files = [
@@ -140,31 +146,32 @@ if __name__ == "__main__":
                 "TestSave.sodb",
             ]
             for file in top_level_files:
-                if not Path(f"dist/{folder_name}/{file}").exists():
+                if not Path(f"{script_dir}/../dist/{folder_name}/{file}").exists():
                     continue
-                zip.write(Path(f"dist/{folder_name}/{file}"), file)
+                zip.write(Path(f"{script_dir}/../dist/{folder_name}/{file}"), file)
             for _, src_filename in src_paths:
                 zip.write(
-                    Path(f"dist/{folder_name}/plugins/{src_filename}"),
+                    Path(f"{script_dir}/../dist/{folder_name}/plugins/{src_filename}"),
                     f"plugins/{src_filename}",
                 )
 
         # Dev use only: copy files over to Thunderstore location
         dest_path = Path(
             f"{os.getenv('APPDATA')}/Thunderstore Mod Manager/DataFolder/ShadowsofDoubt/profiles/Default/BepInEx/plugins/{folder_name}-{folder_name}"
-        ).absolute()
+        ).resolve()
         if not dest_path.exists():
             os.mkdir(dest_path)
         clear_dir(dest_path)
 
         for file in top_level_files:
-            if not Path(f"dist/{folder_name}/{file}").exists():
+            if not Path(f"{script_dir}/../dist/{folder_name}/{file}").exists():
                 continue
             shutil.copyfile(
-                Path(f"dist/{folder_name}/{file}").absolute(), f"{dest_path}/{file}"
+                Path(f"{script_dir}/../dist/{folder_name}/{file}").resolve(),
+                f"{dest_path}/{file}",
             )
         for _, src_filename in src_paths:
             shutil.copyfile(
-                Path(f"dist/{folder_name}/plugins/{src_filename}"),
+                Path(f"{script_dir}/../dist/{folder_name}/plugins/{src_filename}"),
                 f"{dest_path}/{src_filename}",
             )
