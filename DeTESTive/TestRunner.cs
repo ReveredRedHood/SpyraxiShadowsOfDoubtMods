@@ -23,6 +23,7 @@ namespace DeTESTive
         public static bool ApplicationStarted { get; internal set; }
         public static bool MainMenuLoaded { get; internal set; }
         private static readonly List<DeTest> tests = new();
+        private static bool s_runnerStarted { get; set; } = false;
         private static bool s_gameNotStarted { get; set; }
         private static bool s_isFirstLog { get; set; } = true;
 
@@ -41,8 +42,15 @@ namespace DeTESTive
         /// <summary>
         /// Runs all added tests.
         /// </summary>
-        public static void RunTests(bool exitGameWhenFinished = false) =>
-            RuntimeHelper.StartCoroutine(TestRunner.RunTestsCoroutine(exitGameWhenFinished));
+        public static void RunTests(bool exitGameWhenFinished = false)
+        {
+            if (s_runnerStarted)
+            {
+                return;
+            }
+            s_runnerStarted = true;
+            RuntimeHelper.StartCoroutine(RunTestsCoroutine(exitGameWhenFinished));
+        }
 
         private static System.Collections.IEnumerator RunTestsCoroutine(bool exitGameWhenFinished)
         {

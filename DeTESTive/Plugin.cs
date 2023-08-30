@@ -19,7 +19,7 @@ namespace DeTESTive
 
             // Plugin startup logic
             Log.LogInfo($"Plugin {MyPluginInfo.PLUGIN_GUID} is loaded!");
-
+            
             Harmony = new Harmony(MyPluginInfo.PLUGIN_GUID);
             Harmony.PatchAll();
 
