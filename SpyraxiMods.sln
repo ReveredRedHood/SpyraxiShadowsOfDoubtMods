@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeTESTive", "DeTESTive\DeTE
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeTESTiveExample", "DeTESTiveExample\DeTESTiveExample.csproj", "{D69BF514-37B4-426F-B7DD-E91918F0CEA7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpyraxiHelpers", "SpyraxiHelpers\SpyraxiHelpers.csproj", "{5E3814B6-8A13-4807-B339-86AA959EB3A0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpyraxiHelpersTests", "SpyraxiHelpersTests\SpyraxiHelpersTests.csproj", "{ADE0DADE-38C1-4909-AD90-DE0441D49F8B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +28,13 @@ Global
 		{D69BF514-37B4-426F-B7DD-E91918F0CEA7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D69BF514-37B4-426F-B7DD-E91918F0CEA7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D69BF514-37B4-426F-B7DD-E91918F0CEA7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5E3814B6-8A13-4807-B339-86AA959EB3A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5E3814B6-8A13-4807-B339-86AA959EB3A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5E3814B6-8A13-4807-B339-86AA959EB3A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5E3814B6-8A13-4807-B339-86AA959EB3A0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ADE0DADE-38C1-4909-AD90-DE0441D49F8B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ADE0DADE-38C1-4909-AD90-DE0441D49F8B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ADE0DADE-38C1-4909-AD90-DE0441D49F8B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ADE0DADE-38C1-4909-AD90-DE0441D49F8B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
