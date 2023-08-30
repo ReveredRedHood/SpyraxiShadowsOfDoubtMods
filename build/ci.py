@@ -16,7 +16,7 @@ def get_project_files():
     paths = []
     for root, _, files in os.walk("."):
         for file in files:
-            if file.endswith(".csproj"):
+            if file.endswith(".csproj") and (not file.startswith("Plugin")):
                 result = os.path.join(root, file)
                 print(" ", result)
                 paths.append(result)

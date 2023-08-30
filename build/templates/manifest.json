@@ -1,0 +1,7 @@
+{
+    "name": "{{ manifest_name }}",
+    "website_url": "https://bitbucket.org/shadows-of-doubt-mods/",
+    "description": "{{ plugin_desc }}",
+    "dependencies": [{{ deps }}],
+    "version_number": "0.1.0"
+}

@@ -44,7 +44,7 @@ def get_project_files():
     paths = []
     for root, _, files in os.walk("."):
         for file in files:
-            if file.endswith(".csproj"):
+            if file.endswith(".csproj") and (not file.startswith("Plugin")):
                 result = os.path.join(root, file)
                 print(" ", result)
                 paths.append(result)
@@ -90,10 +90,12 @@ def find_new_versions():
             last_version = vdb.get(path)
             if last_version is None or semver.compare(version, last_version) > 0:
                 print(f" Detected new version: {last_version} => {version}")
-                vdb[path] = version  # update db entry
-                new_paths.append(
-                    (path, version, suffix)
-                )  # append the path/version/suffix as a tuple
+                # vdb[path] = version  # update db entry
+            # Difference from CI: we do not update shelve, and we act as if the
+            # version is ne no matter what.
+            new_paths.append(
+                (path, version, suffix)
+            )  # append the path/version/suffix as a tuple
     return new_paths
 
 
