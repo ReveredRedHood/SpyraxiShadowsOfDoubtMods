@@ -13,15 +13,15 @@ namespace SpyraxiHelpers
         public static ManagedEvent OnGameStart { get; } = new();
         public static ManagedEvent OnMainMenuStart { get; } = new();
         public static ManagedEvent OnApplicationStarted { get; } = new();
-        public static ManagedEvent OnAddAwarenessIcon { get; } = new();
-        public static ManagedEvent OnSetAwarenessOutlineActive { get; } = new();
+        // public static ManagedEvent OnAddAwarenessIcon { get; } = new();
+        // public static ManagedEvent OnSetAwarenessOutlineActive { get; } = new();
         public static ManagedEvent OnPreSave = new();
         public static ManagedEvent OnPostSave = new();
         public static ManagedEvent OnMurderDetected = new();
         public static ManagedEvent OnPlayerKnockedOut = new();
         public static ManagedEvent<bool> OnGamePauseChange = new();
         public static ManagedEvent<string> OnActionPressed = new();
-        public static ManagedEvent<Interactable> OnInteractableSpawnOrRespawn = new();
+        // public static ManagedEvent<Interactable> OnInteractableSpawnOrRespawn = new();
         private const float SAVE_WAIT_TIME = 3.0f;
 
 #pragma warning disable IDE1006
@@ -33,6 +33,7 @@ namespace SpyraxiHelpers
             {
                 return !OnApplicationStarted.ShouldSkip();
             }
+
             internal static void Postfix()
             {
                 Plugin.Logger.LogInfo("Application start detected");
@@ -49,6 +50,7 @@ namespace SpyraxiHelpers
             {
                 return !OnMainMenuStart.ShouldSkip();
             }
+
             internal static void Postfix()
             {
                 if (s_hasInit)
@@ -71,6 +73,7 @@ namespace SpyraxiHelpers
             {
                 return !OnGameStart.ShouldSkip();
             }
+
             internal static void Postfix()
             {
                 OnGameStart.Invoke();
@@ -85,6 +88,7 @@ namespace SpyraxiHelpers
             {
                 return !OnGameTransitionToLoading.ShouldSkip();
             }
+
             internal static void Postfix()
             {
                 if (s_isFirstLoadingTip)
@@ -94,44 +98,57 @@ namespace SpyraxiHelpers
                 }
             }
         }
-        
-        [HarmonyPatch(typeof(InterfaceController), nameof(InterfaceController.AddAwarenessIcon))]
-        internal static class InterfaceController_AddAwarenessIcon
-        {
-            internal static bool Prefix()
-            {
-                return !OnAddAwarenessIcon.ShouldSkip();
-            }
-            internal static void Postfix()
-            {
-                OnAddAwarenessIcon.Invoke();
-            }
-        }
 
-        [HarmonyPatch(typeof(OutlineController), nameof(OutlineController.SetOutlineActive))]
-        internal static class OutlineController_SetOutlineActive
-        {
-            internal static bool Prefix()
-            {
-                return !OnSetAwarenessOutlineActive.ShouldSkip();
-            }
-            internal static void Postfix()
-            {
-                OnSetAwarenessOutlineActive.Invoke();
-            }
-        }
-        
+        // [HarmonyPatch(typeof(InterfaceController), nameof(InterfaceController.AddAwarenessIcon))]
+        // internal static class InterfaceController_AddAwarenessIcon
+        // {
+        //     internal static bool Prefix()
+        //     {
+        //         return !OnAddAwarenessIcon.ShouldSkip();
+        //     }
+
+        //     internal static void Postfix()
+        //     {
+        //         OnAddAwarenessIcon.Invoke();
+        //     }
+        // }
+
+        // [HarmonyPatch(typeof(OutlineController), nameof(OutlineController.SetOutlineActive))]
+        // internal static class OutlineController_SetOutlineActive
+        // {
+        //     internal static bool Prefix()
+        //     {
+        //         return !OnSetAwarenessOutlineActive.ShouldSkip();
+        //     }
+
+        //     internal static void Postfix()
+        //     {
+        //         OnSetAwarenessOutlineActive.Invoke();
+        //     }
+        // }
+
         [HarmonyPatch(typeof(MurderController), nameof(MurderController.OnVictimDiscovery))]
         internal static class MurderController_OnVictimDiscovery
         {
+            internal static bool Prefix()
+            {
+                return !OnMurderDetected.ShouldSkip();
+            }
+
             internal static void Postfix()
             {
                 OnMurderDetected.Invoke();
             }
         }
-                [HarmonyPatch(typeof(Player), nameof(Player.TriggerPlayerKO))]
+
+        [HarmonyPatch(typeof(Player), nameof(Player.TriggerPlayerKO))]
         internal static class Player_TriggerPlayerKO
         {
+            internal static bool Prefix()
+            {
+                return !OnPlayerKnockedOut.ShouldSkip();
+            }
+
             internal static void Postfix()
             {
                 OnPlayerKnockedOut.Invoke();
@@ -145,6 +162,7 @@ namespace SpyraxiHelpers
             {
                 return !OnGamePauseChange.ShouldSkip(true);
             }
+
             internal static void Postfix()
             {
                 OnGamePauseChange.Invoke(true);
@@ -158,41 +176,38 @@ namespace SpyraxiHelpers
             {
                 return !OnGamePauseChange.ShouldSkip(false);
             }
+
             internal static void Postfix()
             {
                 OnGamePauseChange.Invoke(false);
             }
         }
 
-        [HarmonyPatch(typeof(MainMenuController), nameof(MainMenuController.StartSave))]
-        internal static class MainMenuController_StartSave
+        [HarmonyPatch(typeof(MainMenuController), nameof(MainMenuController.SaveCompleteMessage))]
+        internal static class MainMenuController_SaveCompleteMessage
         {
-            internal static void Prefix()
+            internal static bool Prefix()
             {
-                OnPreSave.Invoke();
+                return !OnPostSave.ShouldSkip();
             }
+
             internal static void Postfix()
             {
-                // RuntimeHelper.StartCoroutine();
-                // new WaitInstruction(
-                //     SAVE_WAIT_TIME,
-                //     new Action(() => OnPostSave.Invoke()),
-                //     0
-                // );
                 OnPostSave.Invoke();
             }
         }
 
-        [HarmonyPatch(typeof(Interactable), nameof(Interactable.OnSpawn))]
-        internal static class Interactable_OnSpawn
+        [HarmonyPatch(typeof(MainMenuController), nameof(MainMenuController.StartSaveAsync))]
+        internal static class MainMenuController_StartSaveAsync
         {
-            internal static void Postfix(Il2CppSystem.Object __instance)
+            internal static bool Prefix()
             {
-                var castResult = __instance.TryCast<Interactable>();
-                if (castResult.preset != null)
-                {
-                    OnInteractableSpawnOrRespawn.Invoke(castResult);
-                }
+                return !OnPreSave.ShouldSkip();
+            }
+
+            internal static void Postfix()
+            {
+                OnPreSave.Invoke();
             }
         }
 
@@ -218,10 +233,6 @@ namespace SpyraxiHelpers
                 }
 
                 OnPreSave.Invoke();
-                // _ = new WaitInstruction(
-                //     SAVE_WAIT_TIME,
-                //     new Action(() => OnPostSave.Invoke()),
-                //     0);
             }
         }
     }
