@@ -7,7 +7,7 @@ The full READMEs for each mod can be found at the following locations:
 * [DeTESTive](https://bitbucket.org/shadows-of-doubt-mods/mods/src/main/dist/DeTESTive/README.md)
 * [DeTESTiveExample](https://bitbucket.org/shadows-of-doubt-mods/mods/src/main/dist/DeTESTiveExample/README.md)
 
-# Working with the Code
+# Working with the code
 
 ## Building the packages locally
 
@@ -19,17 +19,21 @@ Set up python:
 
 When building and testing locally, run the `local.py` script with `python ./build/local.py`. The script automatically updates all versions within the `dist` directory including those in `manifest.json` (where the plugin gets packaged) to match the ones set in the `.csproj` files. When you are releasing new versions of your plugin(s), you'll only need to bump the version number in the `.csproj` file(s) prior to committing. Run `ci.py` **after** you commit to update the stored version numbers.
 
-One difference between the `local.py` and `ci.py` scripts is that `local.py` will copy plugin zip files to the Default profile location for Thunderstore Mod Manager. Note that you will need to manually go into Thunderstore Mod Manager and use the "Import Local Mod" button in the settings menu of the mod manager for it to recognize that the file is there. You only need to do this once, after which the mod will appear in the list and be auto-updated by running `local.py`. Edit `local.py` to change the path if you aren't using Thunderstore. I might add a command line arg to `local.py` to allow you to override the path.
+One difference between the `local.py` and `ci.py` scripts is that `local.py` will copy plugin zip files to the Default profile location for Thunderstore Mod Manager. Note that you will need to manually go into Thunderstore Mod Manager and use the "Import Local Mod" button in the settings menu of the mod manager for it to recognize that the file is there. You only need to do this once, after which the mod will appear in the list and be auto-updated by running `local.py`. Edit `local.py` to change the path if you aren't using Thunderstore.
 
-[^1]: I can't guarantee `local.py` and `plugin-scaffolding.py` will work on Linux because I haven't tested it, but `ci.py` runs on a .NET SDK 7.0 Linux-based Docker image as part of BitBucket Pipelines.
+[^1]: I can't guarantee scripts other than `ci.py` will work on Linux because I haven't tested it. I know `ci.py` works because it runs on a .NET SDK 7.0 Linux-based Docker image as part of BitBucket Pipelines.
 
-## Continuous Integration
+## Updating BepInEx dependencies for new game versions
+
+There is a simple script named `update-deps.py` which will copy BepInEx/interop dll files over to the dependencies submodule. See the comments in the script for more information.
+
+## Continuous integration
 
 There is a CI script named `ci.py` which is very similar to `local.py` but it checks to see which plugins have new versions and only packages those. The latest version numbers are stored in the `./build/shelve` directory's files. In the future I might update the CI script so that it interfaces with the Thunderstore Mod Manager API to upload new versions of your mods for you.
 
 You need to add $BITBUCKET_USERNAME (variable) and $BITBUCKET_APP_PASSWORD (secret) to your Pipeline to make the "upload files" step of the bitbucket-pipelines.yml script work. [See the documentation for more info](https://bitbucket.org/atlassian/bitbucket-upload-file/src/master/). You can set up a GitHub Actions script to do something similar if you are using GitHub... I haven't done that because I only host my mods on BitBucket.
 
-## Scaffolding Plugins
+## Scaffolding plugins
 
 You can scaffold a new plugin that will be compatible with the build scripts using `python ./build/plugin-scaffolding.py`. The script will prompt you for inputs. You can also pass command line args instead (see `python ./build/plugin-scaffolding.py --help`).
 
