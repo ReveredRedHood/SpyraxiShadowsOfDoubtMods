@@ -157,7 +157,7 @@ if __name__ == "__main__":
                     f"plugins/{src_filename}",
                 )
 
-        # Dev use only: copy files over to Thunderstore location
+        # Devs: change the following variable to reference the correct location to copy your plugins to
         dest_path = Path(
             f"{os.getenv('APPDATA')}/Thunderstore Mod Manager/DataFolder/ShadowsofDoubt/profiles/Default/BepInEx/plugins/{folder_name}-{folder_name}"
         ).resolve()
