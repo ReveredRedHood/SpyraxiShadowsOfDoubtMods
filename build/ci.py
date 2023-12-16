@@ -6,8 +6,7 @@ from zipfile import ZipFile
 import semver
 import json
 from bs4 import BeautifulSoup
-
-script_dir = os.path.dirname(os.path.abspath(sys.argv[0]))
+from config import script_dir
 
 
 def get_project_files():
@@ -26,7 +25,9 @@ def get_project_files():
 def get_dll_paths(folder_name):
     print(f"Plugin files for {folder_name}:")
     paths = []
-    for root, _, files in os.walk(Path(f"{script_dir}/../{folder_name}/bin/Debug/net6.0").absolute()):
+    for root, _, files in os.walk(
+        Path(f"{script_dir}/../{folder_name}/bin/Debug/net6.0").absolute()
+    ):
         for file in files:
             filename = Path(file).name
             if not (
@@ -83,7 +84,7 @@ if __name__ == "__main__":
         # a: Clear plugins folders in dist directories for mods with new versions
         folder_name = Path(path).parts[0]
         if folder_name.endswith("Tests"):
-            continue # don't release test code
+            continue  # don't release test code
         dest_path = f"dist/{folder_name}/plugins"
         # CI: need to create the plugins folder
         os.mkdir(dest_path)
@@ -94,7 +95,9 @@ if __name__ == "__main__":
             shutil.copyfile(src_path, Path(f"{dest_path}/{src_filename}").absolute())
 
         # c: Package dist files into new .zip files, for the new versions only
-        zip_path = Path(f"{script_dir}/../dist/{folder_name}-v{version}-{suffix}.zip").absolute()
+        zip_path = Path(
+            f"{script_dir}/../dist/{folder_name}-v{version}-{suffix}.zip"
+        ).absolute()
 
         with ZipFile(zip_path, "w") as zip:
             top_level_files = [

@@ -6,8 +6,7 @@ from zipfile import ZipFile
 import semver
 import json
 from bs4 import BeautifulSoup
-
-script_dir = os.path.dirname(os.path.abspath(sys.argv[0]))
+from config import script_dir, get_dest_path
 
 
 def remove_dist_zip_files():
@@ -157,12 +156,10 @@ if __name__ == "__main__":
                     f"plugins/{src_filename}",
                 )
 
-        # Devs: change the following variable to reference the correct location to copy your plugins to
-        dest_path = Path(
-            f"{os.getenv('APPDATA')}/Thunderstore Mod Manager/DataFolder/ShadowsofDoubt/profiles/Default/BepInEx/plugins/{folder_name}-{folder_name}"
-        ).resolve()
+        dest_path = Path(get_dest_path(folder_name)).resolve()
         if not dest_path.exists():
             os.mkdir(dest_path)
+            print(f"mkdir on {dest_path}")
         clear_dir(dest_path)
 
         for file in top_level_files:

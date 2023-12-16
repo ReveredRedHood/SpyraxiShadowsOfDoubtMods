@@ -5,9 +5,7 @@ import subprocess
 import sys
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 import click
-
-
-script_dir = os.path.dirname(os.path.abspath(sys.argv[0]))
+from config import script_dir
 
 
 def render_and_write(fnames, dest_from_root, plugin_name, env, dict):
@@ -116,7 +114,7 @@ def run(name, nice_name, desc, headline, usage):
     # In { plugin_name }Tests/:
     files_tests = ["PluginTests.cs", "PluginTests.csproj", "TestEx.cs", "NuGet.Config"]
     render_and_write(files_tests, f"{name}Tests", name, env, dict)
-    
+
     subprocess.run(
         [
             "dotnet",

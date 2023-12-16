@@ -1,0 +1,49 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <AssemblyName>PluginDataPersistenceTests</AssemblyName>
+    <Description>Test plugin for PluginDataPersistence</Description>
+    <VersionPrefix>0.1.0</VersionPrefix>
+    <VersionSuffix>BE667</VersionSuffix>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <LangVersion>latest</LangVersion>
+    <RestoreAdditionalProjectSources>
+      https://api.nuget.org/v3/index.json;
+      https://nuget.bepinex.dev/v3/index.json;
+      https://nuget.samboy.dev/v3/index.json
+    </RestoreAdditionalProjectSources>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="BepInEx.Unity.IL2CPP" Version="6.0.0-be.*" IncludeAssets="compile" />
+    <PackageReference Include="BepInEx.PluginInfoProps" Version="2.*" />
+    <PackageReference Include="UniverseLib.IL2CPP.Interop" Version="1.5.1" />
+    <PackageReference Include="Il2CppAssemblyUnhollower.BaseLib" Version="0.4.15.3" />
+    <PackageReference Include="CLSS.ExtensionMethods.IEnumerable.ForEach" Version="1.1.1" />
+    <PackageReference Include="CLSS.ExtensionMethods.IList.Shuffle" Version="1.1.0" />
+    <PackageReference Include="CLSS.ExtensionMethods.IDictionary.SwapKeys" Version="1.1.1" />
+    <PackageReference Include="CLSS.ExtensionMethods.IDictionary.MoveKey" Version="1.1.1" />
+    <PackageReference Include="CLSS.ExtensionMethods.IDictionary.GetOrAdd" Version="1.1.1" />
+    <PackageReference Include="M31.FluentApi" Version="1.0.0" PrivateAssets="all" />
+    <PackageReference Include="FluentAssertions" Version="6.12.0" />
+    <ProjectReference Include="../DeTESTive/DeTESTive.csproj" />
+    <ProjectReference Include="../PluginDataPersistence/PluginDataPersistence.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Assembly-CSharp.dll">
+      <HintPath>../dependencies/Assembly-CSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="Il2Cppmscorlib.dll">
+      <HintPath>../dependencies/Il2Cppmscorlib.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.CoreModule.dll">
+      <HintPath>../dependencies/UnityEngine.CoreModule.dll</HintPath>
+    </Reference>
+    <Reference Include="Rewired_Core.dll">
+      <HintPath>../dependencies/Rewired_Core.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+</Project>
