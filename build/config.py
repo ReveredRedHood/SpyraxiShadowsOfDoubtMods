@@ -11,7 +11,8 @@ bepinex_thunderstore = f"{os.getenv('APPDATA')}/Thunderstore Mod Manager/DataFol
 
 
 def dest_r2modman(folder_name):
-    return f"{bepinex_r2modman}/plugins/{team_name}-{folder_name}"
+    return f"{bepinex_r2modman}/plugins/{folder_name}-{folder_name}"
+    # return f"{bepinex_r2modman}/plugins/{team_name}-{folder_name}"
 
 
 def dest_thunderstore(folder_name):

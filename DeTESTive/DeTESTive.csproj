@@ -28,6 +28,7 @@
     <PackageReference Include="CLSS.ExtensionMethods.IDictionary.MoveKey" Version="1.1.1" />
     <PackageReference Include="CLSS.ExtensionMethods.IDictionary.GetOrAdd" Version="1.1.1" />
     <PackageReference Include="M31.FluentApi" Version="1.0.0" PrivateAssets="all"/>
+    <ProjectReference Include="../SpyraxiHelpers/SpyraxiHelpers.csproj" />
   </ItemGroup>
 
   <ItemGroup>

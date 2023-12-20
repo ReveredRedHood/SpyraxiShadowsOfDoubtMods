@@ -22,7 +22,7 @@ namespace DeTESTiveExample
 
         private static System.Collections.IEnumerator Setup()
         {
-            yield return RuntimeHelper.StartCoroutine(TestHelpers.DefaultSetup());
+            yield return RuntimeHelper.StartCoroutine(DeTest.DefaultSetup());
 
             // This next part shows how to get around assertion limitations, so
             // you can make multiple assertions with delays even though the
@@ -70,7 +70,7 @@ namespace DeTESTiveExample
 
         private static System.Collections.IEnumerator Teardown()
         {
-            yield return RuntimeHelper.StartCoroutine(TestHelpers.DefaultTeardown());
+            yield return RuntimeHelper.StartCoroutine(DeTest.DefaultTeardown());
             // ...
         }
     }

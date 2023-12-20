@@ -8,69 +8,32 @@ namespace SpyraxiHelpers
 {
     public static class Helpers
     {
-        public static readonly string THUNDERSTORE_MM_CACHE_PATH =
-            $@"{Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)}\Thunderstore Mod Manager\DataFolder\ShadowsofDoubt\cache";
-
-        public static readonly string BEPINEX_PATH =
-            $@"{Directory.GetCurrentDirectory()}\BepInEx\plugins";
-
-        public static readonly string SAVE_FILES_PATH = $@"{Application.persistentDataPath}/Save";
-
-        /// <summary>
-        /// Searches possible directories where mod files are installed for a
-        /// file and returns the full path to that file.
-        /// </summary>
-        /// <param name="modFolderName">The name of the mod folder, used to
-        /// verify that the file found is for the correct mod.</param>
-        /// <param name="nameWithExt">The name of the file, e.g. "list.txt".</param>
-        /// <returns>The full path to the mod's file.</returns>
-        public static string GetFilePathInModInstallDirectory(
-            string modFolderName,
-            string nameWithExt
-        )
+        public const string SAVE_FOLDER_NAME = "Save";
+        public static void StartNewGame(string cityName, string seed, int cityX, int cityY)
         {
-            var dirs = new List<string>(2) { THUNDERSTORE_MM_CACHE_PATH, BEPINEX_PATH };
-            string potentialPath;
-            foreach (var dir in dirs)
-            {
-                potentialPath = nameWithExt;
-                Plugin.Logger.LogInfo($"Path: {potentialPath}");
-                var path = GetFilePathFromPattern(dir, potentialPath, modFolderName);
-                if (path?.Length == 0)
-                {
-                    Plugin.Logger.LogInfo($"File not found at: {dir}");
-                    continue;
-                }
-                Plugin.Logger.LogInfo($"File found at: {path}");
-                return path;
-            }
-            // Note: This one uses forward-slashes
-            potentialPath = $"{SAVE_FILES_PATH}/{nameWithExt}";
-            Plugin.Logger.LogInfo($"File assumed to be at: {potentialPath}");
-            return potentialPath;
+            RestartSafeController.Instance.cityName = cityName;
+            RestartSafeController.Instance.seed = seed;
+            RestartSafeController.Instance.cityX = cityX;
+            RestartSafeController.Instance.cityY = cityY;
+            CityConstructor.Instance.GenerateNewCity();
         }
 
-        private static string GetFilePathFromPattern(
-            string directory,
-            string checkPath,
-            string modFolderName
-        )
+        public static void LoadGame(string fileName)
         {
-            IEnumerable<string> results;
-            try
-            {
-                results = Directory.GetFiles(directory, checkPath, SearchOption.AllDirectories);
+            var fi = new Il2CppSystem.IO.FileInfo($"{Application.persistentDataPath}/{SAVE_FOLDER_NAME}/{Path.GetFileNameWithoutExtension(fileName)}.sodb");
+            if(!fi.Exists) {
+                fi = new Il2CppSystem.IO.FileInfo($"{Application.persistentDataPath}/{SAVE_FOLDER_NAME}/{Path.GetFileNameWithoutExtension(fileName)}.sod");
             }
-            catch (System.Exception e)
-                when (e is System.IO.FileNotFoundException
-                    || e is System.IO.DirectoryNotFoundException
-                )
-            {
-                return "";
+            if(!fi.Exists) {
+                throw new System.Exception($"Could not load game, no file at path: {fi.OriginalPath}");
             }
-            // Filter out results that aren't specific to the particular plugin
-            results = results.Where(result => result.Contains(modFolderName));
-            return results.Any() ? results.First() : "";
+            RestartSafeController.Instance.saveStateFileInfo = fi;
+            CityConstructor.Instance.LoadSaveGame();
+        }
+
+        public static void SaveGame(string fileName)
+        {
+            SaveStateController.Instance.CaptureSaveStateAsync($"{Application.persistentDataPath}/{SAVE_FOLDER_NAME}/{Path.GetFileNameWithoutExtension(fileName)}.sod");
         }
 
         /// <summary>

@@ -63,7 +63,17 @@ namespace DeTESTive
         [FluentDefault("DefaultSetup")]
         [FluentNullable("NoSetup")]
         public System.Func<System.Collections.IEnumerator> Setup { get; private set; } =
-            TestHelpers.DefaultSetup;
+            DeTest.DefaultSetup;
+
+        /// <summary>
+        /// The default setup used for each test. Simply turns off the player camera.
+        /// </summary>
+        /// <returns></returns>
+        public static System.Collections.IEnumerator DefaultSetup()
+        {
+            Plugin.Logger.LogInfo("Turn off the camera plz");
+            yield return new WaitForEndOfFrame();
+        }
 
         [FluentMember(4, "WhichAsserts")]
         [FluentDefault("AlwaysPasses")]
@@ -97,12 +107,16 @@ namespace DeTESTive
         [FluentDefault("DefaultTeardown")]
         [FluentNullable("NoTeardown")]
         public System.Func<System.Collections.IEnumerator> Teardown { get; private set; } =
-            TestHelpers.DefaultTeardown;
+            DeTest.DefaultTeardown;
 
-        // [FluentMethod(6)]
-        // private void WithNoTeardown()
-        // {
-        //     Teardown = null;
-        // }
+        /// <summary>
+        /// The default teardown used for each test. Simply turns on the player camera.
+        /// </summary>
+        /// <returns></returns>
+        public static System.Collections.IEnumerator DefaultTeardown()
+        {
+            Plugin.Logger.LogInfo("Turn on the camera plz");
+            yield return new WaitForEndOfFrame();
+        }
     }
 }

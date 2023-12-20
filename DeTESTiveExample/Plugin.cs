@@ -5,6 +5,7 @@ using DeTESTive;
 using UnityEngine;
 using FluentAssertions;
 using UniverseLib;
+using SpyraxiHelpers;
 
 namespace DeTESTiveExample
 {
@@ -96,7 +97,7 @@ namespace DeTESTiveExample
         {
             Game.Instance.bloomIntensity = 1.0f;
             yield return new WaitForSecondsRealtime(0.5f);
-            yield return RuntimeHelper.StartCoroutine(TestHelpers.DefaultTeardown());
+            yield return RuntimeHelper.StartCoroutine(DeTest.DefaultTeardown());
         }
 
         private bool ExampleAAssertion()
@@ -117,13 +118,12 @@ namespace DeTESTiveExample
 
         private bool ExampleBAssertion()
         {
-            CameraController.Instance.cam.nearClipPlane
+            Game.Instance.playerBirthDay
                 .Should()
                 .Be(
-                    TestHelpers.defaultCameraNearClip,
-                    "it was set to that value last during Setup"
+                    1,
+                    "it was that date in the example save"
                 );
-            Plugin.Logger.LogInfo($"Player name: {Player.Instance.casualName}.");
             return true;
         }
 
@@ -136,17 +136,17 @@ namespace DeTESTiveExample
         private System.Collections.IEnumerator ExampleBSetup()
         {
             // Turn off camera after 5 seconds
-            yield return new WaitForSecondsRealtime(5.0f);
-            TestHelpers.CameraEnabled = false;
+            // yield return new WaitForSecondsRealtime(5.0f);
+            // TestHelpers.CameraEnabled = false;
             // Wait 2 seconds, then back on
-            yield return new WaitForSecondsRealtime(2.0f);
-            TestHelpers.CameraEnabled = true;
+            // yield return new WaitForSecondsRealtime(2.0f);
+            // TestHelpers.CameraEnabled = true;
             // Wait 1 second, then pause the game
             yield return new WaitForSecondsRealtime(1.0f);
-            TestHelpers.PauseGame(true, true, false);
+            Helpers.PauseGame(true, true, false);
             // Wait 2 seconds, then resume the game, then wait 2 seconds and we are done
             yield return new WaitForSecondsRealtime(2.0f);
-            TestHelpers.ResumeGame();
+            Helpers.ResumeGame();
             yield return new WaitForSecondsRealtime(2.0f);
         }
     }

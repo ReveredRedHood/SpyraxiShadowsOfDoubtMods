@@ -1,39 +1,34 @@
 ﻿using System.Linq;
 using System.Reflection;
+using BepInEx.Logging;
 using HarmonyLib;
+using UniverseLib;
 
 // TODO
 namespace SpyraxiHelpers
 {
     public static class Hooks
     {
-        private static bool s_isFirstLoadingTip = true;
-
-        public static ManagedEvent OnGameTransitionToLoading { get; } = new();
-        public static ManagedEvent OnGameStart { get; } = new();
-        public static ManagedEvent OnMainMenuStart { get; } = new();
+        internal static bool s_isFirstLoadingTip = true;
+        internal static string s_loadGameFilePath;
+        internal static string s_saveGameFilePath;
         public static ManagedEvent OnApplicationStarted { get; } = new();
-        // public static ManagedEvent OnAddAwarenessIcon { get; } = new();
-        // public static ManagedEvent OnSetAwarenessOutlineActive { get; } = new();
-        public static ManagedEvent OnPreSave = new();
-        public static ManagedEvent OnPostSave = new();
+        public static ManagedEvent OnMainMenuStart { get; } = new();
         public static ManagedEvent OnMurderDetected = new();
         public static ManagedEvent OnPlayerKnockedOut = new();
         public static ManagedEvent<bool> OnGamePauseChange = new();
         public static ManagedEvent<string> OnActionPressed = new();
-        // public static ManagedEvent<Interactable> OnInteractableSpawnOrRespawn = new();
-        private const float SAVE_WAIT_TIME = 3.0f;
+        public static ManagedEvent<string> OnGameStart { get; } = new();
+        public static ManagedEvent<string> OnPreLoad { get; } = new();
+        public static ManagedEvent<string> OnPostLoad { get; } = new();
+        public static ManagedEvent<string> OnPreSave = new();
+        public static ManagedEvent<string> OnPostSave = new();
 
 #pragma warning disable IDE1006
 
         [HarmonyPatch(typeof(ControlDetectController), nameof(ControlDetectController.Start))]
         internal static class ControlDetectController_Start
         {
-            internal static bool Prefix()
-            {
-                return !OnApplicationStarted.ShouldSkip();
-            }
-
             internal static void Postfix()
             {
                 Plugin.Logger.LogInfo("Application start detected");
@@ -45,11 +40,6 @@ namespace SpyraxiHelpers
         internal static class MainMenuController_Start
         {
             static bool s_hasInit = false;
-
-            internal static bool Prefix()
-            {
-                return !OnMainMenuStart.ShouldSkip();
-            }
 
             internal static void Postfix()
             {
@@ -66,75 +56,33 @@ namespace SpyraxiHelpers
             }
         }
 
-        [HarmonyPatch(typeof(MurderController), nameof(MurderController.OnStartGame))]
-        internal static class MurderController_OnStartGame
+        [HarmonyPatch(typeof(CityConstructor), nameof(CityConstructor.StartGame))]
+        internal static class CityConstructor_StartGame
         {
-            internal static bool Prefix()
-            {
-                return !OnGameStart.ShouldSkip();
-            }
-
             internal static void Postfix()
             {
-                OnGameStart.Invoke();
+                OnGameStart.Invoke(s_loadGameFilePath);
                 s_isFirstLoadingTip = true;
             }
         }
 
-        [HarmonyPatch(typeof(MainMenuController), nameof(MainMenuController.LoadTip))]
-        internal static class MainMenuController_LoadTip
+        [HarmonyPatch(typeof(SaveStateController), nameof(SaveStateController.LoadSaveState))]
+        internal static class SaveStateController_LoadSaveState
         {
-            internal static bool Prefix()
+            internal static void Prefix(StateSaveData load)
             {
-                return !OnGameTransitionToLoading.ShouldSkip();
+                s_loadGameFilePath = RestartSafeController.Instance.saveStateFileInfo.FullName;
+                OnPreLoad.Invoke(s_loadGameFilePath);
             }
-
-            internal static void Postfix()
+            internal static void Postfix(StateSaveData load)
             {
-                if (s_isFirstLoadingTip)
-                {
-                    s_isFirstLoadingTip = false;
-                    OnGameTransitionToLoading.Invoke();
-                }
+                OnPostLoad.Invoke(s_loadGameFilePath);
             }
         }
-
-        // [HarmonyPatch(typeof(InterfaceController), nameof(InterfaceController.AddAwarenessIcon))]
-        // internal static class InterfaceController_AddAwarenessIcon
-        // {
-        //     internal static bool Prefix()
-        //     {
-        //         return !OnAddAwarenessIcon.ShouldSkip();
-        //     }
-
-        //     internal static void Postfix()
-        //     {
-        //         OnAddAwarenessIcon.Invoke();
-        //     }
-        // }
-
-        // [HarmonyPatch(typeof(OutlineController), nameof(OutlineController.SetOutlineActive))]
-        // internal static class OutlineController_SetOutlineActive
-        // {
-        //     internal static bool Prefix()
-        //     {
-        //         return !OnSetAwarenessOutlineActive.ShouldSkip();
-        //     }
-
-        //     internal static void Postfix()
-        //     {
-        //         OnSetAwarenessOutlineActive.Invoke();
-        //     }
-        // }
 
         [HarmonyPatch(typeof(MurderController), nameof(MurderController.OnVictimDiscovery))]
         internal static class MurderController_OnVictimDiscovery
         {
-            internal static bool Prefix()
-            {
-                return !OnMurderDetected.ShouldSkip();
-            }
-
             internal static void Postfix()
             {
                 OnMurderDetected.Invoke();
@@ -144,11 +92,6 @@ namespace SpyraxiHelpers
         [HarmonyPatch(typeof(Player), nameof(Player.TriggerPlayerKO))]
         internal static class Player_TriggerPlayerKO
         {
-            internal static bool Prefix()
-            {
-                return !OnPlayerKnockedOut.ShouldSkip();
-            }
-
             internal static void Postfix()
             {
                 OnPlayerKnockedOut.Invoke();
@@ -158,11 +101,6 @@ namespace SpyraxiHelpers
         [HarmonyPatch(typeof(SessionData), nameof(SessionData.PauseGame))]
         internal static class SessionData_PauseGame
         {
-            internal static bool Prefix()
-            {
-                return !OnGamePauseChange.ShouldSkip(true);
-            }
-
             internal static void Postfix()
             {
                 OnGamePauseChange.Invoke(true);
@@ -172,42 +110,36 @@ namespace SpyraxiHelpers
         [HarmonyPatch(typeof(SessionData), nameof(SessionData.ResumeGame))]
         internal static class SessionData_ResumeGame
         {
-            internal static bool Prefix()
-            {
-                return !OnGamePauseChange.ShouldSkip(false);
-            }
-
             internal static void Postfix()
             {
                 OnGamePauseChange.Invoke(false);
             }
         }
 
-        [HarmonyPatch(typeof(MainMenuController), nameof(MainMenuController.SaveCompleteMessage))]
-        internal static class MainMenuController_SaveCompleteMessage
+        [HarmonyPatch(typeof(SaveStateController), nameof(SaveStateController.CaptureSaveStateAsync))]
+        internal static class SaveStateController_CaptureSaveStateAsync
         {
-            internal static bool Prefix()
+            internal static void Prefix(string path)
             {
-                return !OnPostSave.ShouldSkip();
-            }
-
-            internal static void Postfix()
-            {
-                OnPostSave.Invoke();
+                s_saveGameFilePath = path;
+                OnPreSave.Invoke(s_saveGameFilePath);
             }
         }
 
-        [HarmonyPatch(typeof(MainMenuController), nameof(MainMenuController.StartSaveAsync))]
-        internal static class MainMenuController_StartSaveAsync
+        [HarmonyPatch(typeof(InterfaceController), nameof(InterfaceController.NewGameMessage))]
+        internal static class InterfaceController_NewGameMessage
         {
-            internal static bool Prefix()
+            internal static void Postfix(InterfaceController.GameMessageType newType, int newNumerical, string newMessage, InterfaceControls.Icon newIcon, AudioEvent additionalSFX, bool colourOverride, UnityEngine.Color col, int newMergeType, float newMessageDelay, UnityEngine.RectTransform moveToOnDestroy, GameMessageController.PingOnComplete ping, Evidence keyMergeEvidence, Il2CppSystem.Collections.Generic.List<Evidence.DataKey> keyMergeKeys, UnityEngine.Sprite iconOverride)
             {
-                return !OnPreSave.ShouldSkip();
-            }
-
-            internal static void Postfix()
-            {
-                OnPreSave.Invoke();
+                if (newType != InterfaceController.GameMessageType.notification)
+                {
+                    return;
+                }
+                if (!newMessage.Contains("Game saved"))
+                {
+                    return;
+                }
+                OnPostSave.Invoke(s_saveGameFilePath);
             }
         }
 
@@ -227,12 +159,13 @@ namespace SpyraxiHelpers
             internal static void Postfix(string actionName, ref bool __result)
             {
                 OnActionPressed.Invoke(actionName);
-                if (actionName != GameConstants.ButtonActions.QUICKSAVE || !__result)
-                {
-                    return;
-                }
 
-                OnPreSave.Invoke();
+                // if (actionName != GameConstants.ButtonActions.QUICKSAVE || !__result)
+                // {
+                //     return;
+                // }
+
+                // OnPreSave.Invoke($"{Helpers.SAVE_FILES_PATH}/Quick Save.sodb");
             }
         }
     }

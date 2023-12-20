@@ -43,7 +43,7 @@ def get_project_files():
     paths = []
     for root, _, files in os.walk("."):
         for file in files:
-            if file.endswith(".csproj") and (not file.startswith("Plugin")):
+            if file.endswith(".csproj") and (not file.startswith("Plugin") or file.startswith("PluginDataPersistence")):
                 result = os.path.join(root, file)
                 print(" ", result)
                 paths.append(result)
@@ -174,3 +174,4 @@ if __name__ == "__main__":
                 Path(f"{script_dir}/../dist/{folder_name}/plugins/{src_filename}"),
                 f"{dest_path}/{src_filename}",
             )
+    print("Completed successfully.")
