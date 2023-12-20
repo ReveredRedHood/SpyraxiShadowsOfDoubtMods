@@ -36,7 +36,7 @@ namespace PluginDataPersistence
             Logger = Log;
 
             // Plugin startup logic
-            Log.LogInfo($"Plugin {MyPluginInfo.PLUGIN_GUID} is loaded!");
+            Logger.LogInfo($"Plugin {MyPluginInfo.PLUGIN_GUID} is loaded!");
 
             SpyraxiHelpers.Hooks.OnPreSave.AddListener(_ => StoreModDataInSave());
             SpyraxiHelpers.Hooks.OnPostSave.AddListener(_ => UnstoreModDataInSave());
@@ -47,28 +47,28 @@ namespace PluginDataPersistence
         /// <summary>
         /// Called just after saving a game. Reverts the changes made by StoreModDataInSave.
         /// </summary>
-        private void UnstoreModDataInSave()
+        private static void UnstoreModDataInSave()
         {
             s_OriginalProperty = s_tempOriginalPropertyData;
-            Log.LogInfo("Removed stored mod plugin data post-save.");
+            Logger.LogInfo("Removed stored mod plugin data post-save.");
         }
 
         /// <summary>
         /// Called just after loading a game. Reverts the changes made to game properties by StoreModDataInSave, and stores the saved information for mod access.
         /// </summary>
-        private void UnpackStoredModData()
+        private static void UnpackStoredModData()
         {
-            Log.LogInfo("Unpacking stored mod data.");
+            Logger.LogInfo("Unpacking stored mod data.");
             string jsonStr = s_OriginalProperty;
             if (!jsonStr.StartsWith('{'))
             {
-                Log.LogInfo("No mod data found in savegame.");
+                Logger.LogInfo("No mod data found in savegame.");
                 return;
             }
             var fullData = JsonSerializer.Deserialize<Dictionary<string, string>>(jsonStr);
 
             s_OriginalProperty = fullData[DATA_TO_RESTORE_KEY];
-            Log.LogInfo("Restored property storing mod data to original value.");
+            Logger.LogInfo("Restored property storing mod data to original value.");
             fullData.Remove(DATA_TO_RESTORE_KEY);
 
             queuedDataDictionary = new();
@@ -77,7 +77,7 @@ namespace PluginDataPersistence
                 jsonStr = fullData[key];
                 var modData = JsonSerializer.Deserialize<Dictionary<string, object>>(jsonStr);
                 queuedDataDictionary[key] = modData;
-                Log.LogInfo($"Loaded {key} mod plugin data into dictionary.");
+                Logger.LogInfo($"Loaded {key} mod plugin data into dictionary.");
             }
         }
 
@@ -88,7 +88,7 @@ namespace PluginDataPersistence
         {
             if (queuedDataDictionary.Keys.Count == 0)
             {
-                Log.LogInfo("No mod data found, saving game normally.");
+                Logger.LogInfo("No mod data found, saving game normally.");
                 return;
             }
             Dictionary<string, string> fullData = new();
@@ -104,17 +104,17 @@ namespace PluginDataPersistence
                 var size = jsonStr.GetBinaryFormatterSize();
                 if (size > MAX_JSON_SIZE)
                 {
-                    Log.LogError($"Skipping writing {key} mod plugin data: size of {size} bytes exceeds {MAX_JSON_SIZE} byte limit.");
+                    Logger.LogError($"Skipping writing {key} mod plugin data: size of {size} bytes exceeds {MAX_JSON_SIZE} byte limit.");
                     continue;
                 }
                 fullData.Add(key, jsonStr);
-                Log.LogInfo($"Wrote {key} mod plugin data to the saved data ({size} bytes).");
+                Logger.LogInfo($"Wrote {key} mod plugin data to the saved data ({size} bytes).");
             }
             fullData.Add(DATA_TO_RESTORE_KEY, s_OriginalProperty);
             jsonStr = JsonSerializer.Serialize(fullData);
             s_tempOriginalPropertyData = s_OriginalProperty;
             s_OriginalProperty = jsonStr;
-            Log.LogInfo("Finished storing mod plugin data in save.");
+            Logger.LogInfo("Finished storing mod plugin data in save.");
         }
 
         public static Dictionary<string, object> LoadOrGetSaveGameData(BasePlugin plugin)

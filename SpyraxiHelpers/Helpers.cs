@@ -21,11 +21,13 @@ namespace SpyraxiHelpers
         public static void LoadGame(string fileName)
         {
             var fi = new Il2CppSystem.IO.FileInfo($"{Application.persistentDataPath}/{SAVE_FOLDER_NAME}/{Path.GetFileNameWithoutExtension(fileName)}.sodb");
-            if(!fi.Exists) {
+            if (!fi.Exists)
+            {
                 fi = new Il2CppSystem.IO.FileInfo($"{Application.persistentDataPath}/{SAVE_FOLDER_NAME}/{Path.GetFileNameWithoutExtension(fileName)}.sod");
             }
-            if(!fi.Exists) {
-                throw new System.Exception($"Could not load game, no file at path: {fi.OriginalPath}");
+            if (!fi.Exists)
+            {
+                throw new FileNotFoundException($"Could not load game, no file at path: {fi.OriginalPath}");
             }
             RestartSafeController.Instance.saveStateFileInfo = fi;
             CityConstructor.Instance.LoadSaveGame();

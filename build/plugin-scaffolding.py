@@ -112,7 +112,7 @@ def run(name, nice_name, desc, headline, usage):
     render_and_write(files_plugin, f"{name}", name, env, dict)
 
     # In { plugin_name }Tests/:
-    files_tests = ["PluginTests.cs", "PluginTests.csproj", "TestEx.cs", "NuGet.Config"]
+    files_tests = ["PluginTests.cs", "PluginTests.csproj", "NuGet.Config"]
     render_and_write(files_tests, f"{name}Tests", name, env, dict)
 
     subprocess.run(

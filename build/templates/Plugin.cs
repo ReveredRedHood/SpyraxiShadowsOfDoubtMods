@@ -9,6 +9,7 @@ namespace {{ namespace }}
 {
     [BepInPlugin(MyPluginInfo.PLUGIN_GUID, MyPluginInfo.PLUGIN_NAME, MyPluginInfo.PLUGIN_VERSION)]
     [BepInProcess("Shadows of Doubt.exe")]
+    [BepInDependency("SpyraxiHelpers", BepInDependency.DependencyFlags.HardDependency)]
     public class Plugin : BasePlugin
     {
         internal static ManualLogSource Logger;
