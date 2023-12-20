@@ -2,6 +2,8 @@
     "name": "PluginDataPersistence",
     "website_url": "https://bitbucket.org/shadows-of-doubt-mods/",
     "description": "Mod utility to persist data between gameplay sessions or game saves",
-    "dependencies": [],
+    "dependencies": [
+        "SpyraxiHelpers"
+    ],
     "version_number": "0.1.0"
 }

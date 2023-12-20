@@ -1,7 +1,7 @@
 {
     "name": "SpyraxiHelpers",
     "website_url": "https://bitbucket.org/shadows-of-doubt-mods/",
-    "description": "A set of modding utilities.",
+    "description": "A set of modding utility functions and Harmony hooks.",
     "dependencies": [],
-    "version_number": "0.1.1"
+    "version_number": "0.2.0"
 }

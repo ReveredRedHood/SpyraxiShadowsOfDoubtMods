@@ -104,7 +104,6 @@ if __name__ == "__main__":
                 "icon.png",
                 "manifest.json",
                 "README.md",
-                "TestSave.sodb",
             ]
             for file in top_level_files:
                 if not Path(f"{script_dir}/../dist/{folder_name}/{file}").exists():

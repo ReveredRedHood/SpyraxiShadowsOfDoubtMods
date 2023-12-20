@@ -3,7 +3,6 @@ using BepInEx.Unity.IL2CPP;
 using BepInEx.Logging;
 using System.Collections.Generic;
 using System.Text.Json;
-// using HarmonyLib;
 using CLSS;
 using AsmResolver;
 
@@ -17,11 +16,7 @@ namespace PluginDataPersistence
         internal const uint MAX_JSON_SIZE = 1_000_000;
         internal const string DATA_TO_RESTORE_KEY = "__dataToRestore";
         internal static ManualLogSource Logger;
-        // internal static Harmony Harmony;
         internal static Dictionary<string, Dictionary<string, object>> queuedDataDictionary = new();
-        // internal static Dictionary<string, Dictionary<string, object>> globalDataDictionary = new();
-        // readonly internal static string s_savePathPrefix = $"{Application.persistentDataPath}/ModSaves";
-        // internal static string s_lastLoadedSavePath;
         internal static string s_tempOriginalPropertyData;
 
         internal static string s_OriginalProperty
@@ -43,26 +38,11 @@ namespace PluginDataPersistence
             // Plugin startup logic
             Log.LogInfo($"Plugin {MyPluginInfo.PLUGIN_GUID} is loaded!");
 
-            // Harmony = new Harmony(MyPluginInfo.PLUGIN_GUID);
-            // Harmony.PatchAll();
-            // Log.LogInfo($"Plugin {MyPluginInfo.PLUGIN_GUID} is patched!");
-
             SpyraxiHelpers.Hooks.OnPreSave.AddListener(_ => StoreModDataInSave());
             SpyraxiHelpers.Hooks.OnPostSave.AddListener(_ => UnstoreModDataInSave());
 
             SpyraxiHelpers.Hooks.OnPostLoad.AddListener(_ => UnpackStoredModData());
         }
-
-        /// <summary>
-        /// Plugin unload.
-        /// </summary>
-        /// <returns></returns>
-        // public override bool Unload()
-        // {
-            // Harmony?.UnpatchSelf();
-
-            // return base.Unload();
-        // }
 
         /// <summary>
         /// Called just after saving a game. Reverts the changes made by StoreModDataInSave.
@@ -80,7 +60,8 @@ namespace PluginDataPersistence
         {
             Log.LogInfo("Unpacking stored mod data.");
             string jsonStr = s_OriginalProperty;
-            if(!jsonStr.StartsWith('{')) {
+            if (!jsonStr.StartsWith('{'))
+            {
                 Log.LogInfo("No mod data found in savegame.");
                 return;
             }
@@ -105,7 +86,8 @@ namespace PluginDataPersistence
         /// </summary>
         private void StoreModDataInSave()
         {
-            if(queuedDataDictionary.Keys.Count == 0) {
+            if (queuedDataDictionary.Keys.Count == 0)
+            {
                 Log.LogInfo("No mod data found, saving game normally.");
                 return;
             }
@@ -120,7 +102,8 @@ namespace PluginDataPersistence
                 }
                 jsonStr = JsonSerializer.Serialize(modData);
                 var size = jsonStr.GetBinaryFormatterSize();
-                if(size > MAX_JSON_SIZE) {
+                if (size > MAX_JSON_SIZE)
+                {
                     Log.LogError($"Skipping writing {key} mod plugin data: size of {size} bytes exceeds {MAX_JSON_SIZE} byte limit.");
                     continue;
                 }
