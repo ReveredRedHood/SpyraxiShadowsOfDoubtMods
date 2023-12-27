@@ -2,9 +2,9 @@
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
-    <AssemblyName>SpyraxiHelpers</AssemblyName>
-    <Description>A set of modding utilities.</Description>
-    <VersionPrefix>0.2.0</VersionPrefix>
+    <AssemblyName>Autosave</AssemblyName>
+    <Description>Adds in-game autosave functionality.</Description>
+    <VersionPrefix>0.1.0</VersionPrefix>
     <VersionSuffix>BE667</VersionSuffix>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <LangVersion>latest</LangVersion>
@@ -19,13 +19,17 @@
   <ItemGroup>
     <PackageReference Include="BepInEx.Unity.IL2CPP" Version="6.0.0-be.*" IncludeAssets="compile" />
     <PackageReference Include="BepInEx.PluginInfoProps" Version="2.*" />
-    <PackageReference Include="UniverseLib.IL2CPP.Interop" Version="1.5.1" />
     <PackageReference Include="Il2CppAssemblyUnhollower.BaseLib" Version="0.4.15.3" />
-    <PackageReference Include="CLSS.ExtensionMethods.IEnumerable.ForEach" Version="1.1.1" />
-    <PackageReference Include="CLSS.ExtensionMethods.IList.Shuffle" Version="1.1.0" />
-    <PackageReference Include="CLSS.ExtensionMethods.IDictionary.SwapKeys" Version="1.1.1" />
-    <PackageReference Include="CLSS.ExtensionMethods.IDictionary.MoveKey" Version="1.1.1" />
-    <PackageReference Include="CLSS.ExtensionMethods.IDictionary.GetOrAdd" Version="1.1.1" />
+    <!-- <PackageReference Include="CLSS.ExtensionMethods.IEnumerable.ForEach" Version="1.1.1" /> -->
+    <!-- <PackageReference Include="CLSS.ExtensionMethods.IList.Shuffle" Version="1.1.0" /> -->
+    <!-- <PackageReference Include="CLSS.ExtensionMethods.IDictionary.SwapKeys" Version="1.1.1" /> -->
+    <!-- <PackageReference Include="CLSS.ExtensionMethods.IDictionary.MoveKey" Version="1.1.1" /> -->
+    <!-- <PackageReference Include="CLSS.ExtensionMethods.IDictionary.GetOrAdd" Version="1.1.1" /> -->
+    <!-- <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference> --> 
+    <PackageReference Include="SOD.Common" Version="1.1.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -38,8 +42,8 @@
     <Reference Include="UnityEngine.CoreModule.dll">
       <HintPath>../dependencies/UnityEngine.CoreModule.dll</HintPath>
     </Reference>
-    <Reference Include="Rewired_Core.dll">
-      <HintPath>../dependencies/Rewired_Core.dll</HintPath>
+    <Reference Include="UniverseLib.IL2CPP.Interop">
+      <HintPath>../dependencies/UniverseLib.IL2CPP.Interop.dll</HintPath>
     </Reference>
   </ItemGroup>
 </Project>

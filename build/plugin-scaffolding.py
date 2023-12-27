@@ -106,6 +106,9 @@ def run(name, nice_name, desc, headline, usage):
     plugins_path = Path(f"{script_dir}/../dist/{name}/plugins").resolve()
     if not os.path.exists(plugins_path):
         os.mkdir(plugins_path)
+    plugins_path = Path(f"{script_dir}/../dist/{name}Tests/plugins").resolve()
+    if not os.path.exists(plugins_path):
+        os.mkdir(plugins_path)
 
     # In { plugin_name }/:
     files_plugin = ["Plugin.cs", "Plugin.csproj", "NuGet.Config"]

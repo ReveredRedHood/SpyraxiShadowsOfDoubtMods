@@ -1,0 +1,9 @@
+{
+    "name": "Autosave",
+    "website_url": "https://bitbucket.org/shadows-of-doubt-mods/",
+    "description": "Adds in-game autosave functionality.",
+    "dependencies": [
+        "Venomaus-SODCommon-1.1.0"
+    ],
+    "version_number": "0.1.0"
+}

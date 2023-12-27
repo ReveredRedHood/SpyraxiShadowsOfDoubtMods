@@ -66,6 +66,8 @@ def get_dll_paths(folder_name):
                 or filename.startswith("Unhollower")
                 or filename.startswith("Unity")
                 or filename.startswith("System")
+                or filename.startswith("Castle")
+                or filename.startswith("SOD.Common")
             ) and (filename.endswith(".dll") or filename.endswith(".pdb")):
                 result = os.path.join(root, file)
                 print(" ", result)
@@ -91,7 +93,7 @@ def find_new_versions():
                 print(f" Detected new version: {last_version} => {version}")
                 # vdb[path] = version  # update db entry
             # Difference from CI: we do not update shelve, and we act as if the
-            # version is ne no matter what.
+            # version is new no matter what.
             new_paths.append(
                 (path, version, suffix)
             )  # append the path/version/suffix as a tuple

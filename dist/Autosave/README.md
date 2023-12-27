@@ -1,10 +1,10 @@
-# Spyraxi Helpers - Modding Utility Classes and Methods for Shadows of Doubt
+# Autosave - Adds in-game autosave functionality
 
 A BepInEx Bleeding Edge (v667) plugin for Shadows of Doubt
 
 ## What is it?
 
-A set of modding utilities.
+Adds in-game autosave functionality.
 
 ## Installation
 
@@ -18,7 +18,7 @@ If you are not using r2modman or Thunderstore for installation, follow these ste
 
 ## Usage
 
-Install the plugin and set it as a hard dependency for your own plugin using BepInEx.
+INSTRUCTIONS
 
 ### Features
 

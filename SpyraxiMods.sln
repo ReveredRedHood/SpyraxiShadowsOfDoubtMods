@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpyraxiHelpers", "SpyraxiHelpers\SpyraxiHelpers.csproj", "{5E3814B6-8A13-4807-B339-86AA959EB3A0}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PluginDataPersistence", "PluginDataPersistence\PluginDataPersistence.csproj", "{94EE6431-6462-418D-B855-067508DFE997}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Autosave", "Autosave\Autosave.csproj", "{69C2AB39-2A68-4959-8648-653E6D95BB17}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -48,5 +48,13 @@ Global
 		{DB9477D0-F639-479C-ACEE-F267F701FDB4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DB9477D0-F639-479C-ACEE-F267F701FDB4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DB9477D0-F639-479C-ACEE-F267F701FDB4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{69C2AB39-2A68-4959-8648-653E6D95BB17}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{69C2AB39-2A68-4959-8648-653E6D95BB17}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{69C2AB39-2A68-4959-8648-653E6D95BB17}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{69C2AB39-2A68-4959-8648-653E6D95BB17}.Release|Any CPU.Build.0 = Release|Any CPU
+		{70C2B815-EC77-4EF4-B94A-BDB5D0E74E82}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{70C2B815-EC77-4EF4-B94A-BDB5D0E74E82}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{70C2B815-EC77-4EF4-B94A-BDB5D0E74E82}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{70C2B815-EC77-4EF4-B94A-BDB5D0E74E82}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

@@ -1,34 +1,68 @@
-using BepInEx;
-using BepInEx.Unity.IL2CPP;
-using BepInEx.Logging;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.Json;
-using CLSS;
 using AsmResolver;
+using BepInEx;
+using BepInEx.Logging;
+using BepInEx.Unity.IL2CPP;
+using CLSS;
+using SOD.Common;
+using SOD.Common.Extensions;
 
 namespace PluginDataPersistence
 {
     [BepInPlugin(MyPluginInfo.PLUGIN_GUID, MyPluginInfo.PLUGIN_NAME, MyPluginInfo.PLUGIN_VERSION)]
     [BepInProcess("Shadows of Doubt.exe")]
-    [BepInDependency("SpyraxiHelpers", BepInDependency.DependencyFlags.HardDependency)]
+    // [BepInDependency("SOD.Common", BepInDependency.DependencyFlags.HardDependency)]
     public class Plugin : BasePlugin
     {
         internal const uint MAX_JSON_SIZE = 1_000_000;
-        internal const string DATA_TO_RESTORE_KEY = "__dataToRestore";
         internal static ManualLogSource Logger;
         internal static Dictionary<string, Dictionary<string, object>> queuedDataDictionary = new();
-        internal static string s_tempOriginalPropertyData;
 
-        internal static string s_OriginalProperty
+        internal static void WriteToOriginalProperty(string value)
         {
-            get
+            RestoreOriginalProperty();
+            GameplayController.Instance.companiesSabotaged.Add(value);
+            Logger.LogInfo("Wrote mod plugin data to saved object.");
+        }
+
+        internal static bool TryRetrieveModDataFromSaveData(out string modDataJson)
+        {
+            var list = GameplayController.Instance.companiesSabotaged.ToList();
+            if (list == null || !list.Any())
             {
-                return Game.Instance.playerFirstName;
+                modDataJson = String.Empty;
+                return false;
             }
-            set
+            var filteredList = list.Where(element => element.StartsWith('{'));
+            if (!filteredList.Any())
             {
-                Game.Instance.playerFirstName = value;
+                modDataJson = String.Empty;
+                return false;
             }
+            modDataJson = filteredList.First();
+            return true;
+        }
+
+        internal static void RestoreOriginalProperty()
+        {
+            var list = GameplayController.Instance.companiesSabotaged.ToList();
+            if (list == null || !list.Any())
+            {
+                return;
+            }
+            var filteredList = list.Where(element => element.StartsWith('{'));
+            if (!filteredList.Any())
+            {
+                return;
+            }
+            foreach (var i in filteredList)
+            {
+                GameplayController.Instance.companiesSabotaged.Remove(i);
+            }
+            Logger.LogInfo("Removed mod plugin data from saved object.");
         }
 
         public override void Load()
@@ -38,19 +72,9 @@ namespace PluginDataPersistence
             // Plugin startup logic
             Logger.LogInfo($"Plugin {MyPluginInfo.PLUGIN_GUID} is loaded!");
 
-            SpyraxiHelpers.Hooks.OnPreSave.AddListener(_ => StoreModDataInSave());
-            SpyraxiHelpers.Hooks.OnPostSave.AddListener(_ => UnstoreModDataInSave());
-
-            SpyraxiHelpers.Hooks.OnPostLoad.AddListener(_ => UnpackStoredModData());
-        }
-
-        /// <summary>
-        /// Called just after saving a game. Reverts the changes made by StoreModDataInSave.
-        /// </summary>
-        private static void UnstoreModDataInSave()
-        {
-            s_OriginalProperty = s_tempOriginalPropertyData;
-            Logger.LogInfo("Removed stored mod plugin data post-save.");
+            Lib.SaveGame.OnBeforeSave += (_, _) => StoreModDataInSave();
+            Lib.SaveGame.OnAfterSave += (_, _) => RestoreOriginalProperty();
+            Lib.SaveGame.OnAfterLoad += (_, _) => UnpackStoredModData();
         }
 
         /// <summary>
@@ -59,17 +83,14 @@ namespace PluginDataPersistence
         private static void UnpackStoredModData()
         {
             Logger.LogInfo("Unpacking stored mod data.");
-            string jsonStr = s_OriginalProperty;
-            if (!jsonStr.StartsWith('{'))
+            if (!TryRetrieveModDataFromSaveData(out string jsonStr))
             {
                 Logger.LogInfo("No mod data found in savegame.");
                 return;
             }
             var fullData = JsonSerializer.Deserialize<Dictionary<string, string>>(jsonStr);
 
-            s_OriginalProperty = fullData[DATA_TO_RESTORE_KEY];
-            Logger.LogInfo("Restored property storing mod data to original value.");
-            fullData.Remove(DATA_TO_RESTORE_KEY);
+            RestoreOriginalProperty();
 
             queuedDataDictionary = new();
             foreach (var key in fullData.Keys)
@@ -104,16 +125,16 @@ namespace PluginDataPersistence
                 var size = jsonStr.GetBinaryFormatterSize();
                 if (size > MAX_JSON_SIZE)
                 {
-                    Logger.LogError($"Skipping writing {key} mod plugin data: size of {size} bytes exceeds {MAX_JSON_SIZE} byte limit.");
+                    Logger.LogError(
+                        $"Skipping writing {key} mod plugin data: size of {size} bytes exceeds {MAX_JSON_SIZE} byte limit."
+                    );
                     continue;
                 }
                 fullData.Add(key, jsonStr);
                 Logger.LogInfo($"Wrote {key} mod plugin data to the saved data ({size} bytes).");
             }
-            fullData.Add(DATA_TO_RESTORE_KEY, s_OriginalProperty);
             jsonStr = JsonSerializer.Serialize(fullData);
-            s_tempOriginalPropertyData = s_OriginalProperty;
-            s_OriginalProperty = jsonStr;
+            WriteToOriginalProperty(jsonStr);
             Logger.LogInfo("Finished storing mod plugin data in save.");
         }
 
