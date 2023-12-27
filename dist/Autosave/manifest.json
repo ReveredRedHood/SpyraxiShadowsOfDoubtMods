@@ -1,6 +1,6 @@
 {
     "name": "Autosave",
-    "website_url": "https://bitbucket.org/shadows-of-doubt-mods/",
+    "website_url": "https://github.com/ReveredRedHood/SpyraxiShadowsOfDoubtMods",
     "description": "Adds in-game autosave functionality.",
     "dependencies": [
         "Venomaus-SODCommon-1.1.0"

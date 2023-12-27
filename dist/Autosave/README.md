@@ -1,6 +1,6 @@
 # Autosave - Adds in-game autosave functionality
 
-A BepInEx Bleeding Edge (v667) plugin for Shadows of Doubt
+A BepInEx Bleeding Edge (v667) plugin for Shadows of Doubt.
 
 ## What is it?
 
