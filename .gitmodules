@@ -1,4 +1,0 @@
-[submodule "dependencies"]
-	path = dependencies
-	url = git@bitbucket.org:shadows-of-doubt-mods/dependencies.git
-	branch = BepInExBE667
