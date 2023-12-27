@@ -4,7 +4,7 @@
     <TargetFramework>net6.0</TargetFramework>
     <AssemblyName>PluginDataPersistence</AssemblyName>
     <Description>Mod utility to persist data between gameplay sessions or game saves</Description>
-    <VersionPrefix>0.1.0</VersionPrefix>
+    <VersionPrefix>0.0.1</VersionPrefix>
     <VersionSuffix>BE667</VersionSuffix>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <LangVersion>latest</LangVersion>

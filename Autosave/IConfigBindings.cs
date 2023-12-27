@@ -4,7 +4,7 @@ namespace Autosave;
 
 public interface IConfigBindings
 {
-    [Binding(120, "The amount of time between autosaves in seconds. The minimum is 15 seconds.")]
+    [Binding(300, "The amount of time between autosaves in seconds. The minimum is 15 seconds.")]
     int AutosaveDelay { get; set; }
 
     [Binding(true, "If true, warn of upcoming autosaves 5 seconds and 30 seconds beforehand.")]
