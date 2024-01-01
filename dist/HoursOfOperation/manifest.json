@@ -1,0 +1,7 @@
+{
+    "name": "Hours of Operation",
+    "website_url": "https://github.com/ReveredRedHood/SpyraxiShadowsOfDoubtMods",
+    "description": "Shows the operating hours for businesses on their door.",
+    "dependencies": [],
+    "version_number": "0.0.1"
+}

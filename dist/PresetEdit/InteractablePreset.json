@@ -1,0 +1,13 @@
+{
+  "gameBuildId": "36.05",
+  "InteractablePreset": [
+    {
+      "value": {
+        "x": 300,
+        "y": 5000
+      },
+      "presetName": "LockpickKit",
+      "name": "LockpickKit"
+    }
+  ]
+}

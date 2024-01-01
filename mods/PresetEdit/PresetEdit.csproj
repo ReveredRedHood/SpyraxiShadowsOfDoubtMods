@@ -2,8 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
-    <AssemblyName>PluginDataPersistence</AssemblyName>
-    <Description>Mod utility to persist data between gameplay sessions or game saves</Description>
+    <AssemblyName>PresetEdit</AssemblyName>
+    <Description>Import preset values.</Description>
     <VersionPrefix>0.0.1</VersionPrefix>
     <VersionSuffix>BE667</VersionSuffix>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -20,26 +20,26 @@
     <PackageReference Include="BepInEx.Unity.IL2CPP" Version="6.0.0-be.*" IncludeAssets="compile" />
     <PackageReference Include="BepInEx.PluginInfoProps" Version="2.*" />
     <PackageReference Include="Il2CppAssemblyUnhollower.BaseLib" Version="0.4.15.3" />
-    <PackageReference Include="CLSS.ExtensionMethods.IEnumerable.ForEach" Version="1.1.1" />
-    <PackageReference Include="CLSS.ExtensionMethods.IList.Shuffle" Version="1.1.0" />
-    <PackageReference Include="CLSS.ExtensionMethods.IDictionary.SwapKeys" Version="1.1.1" />
-    <PackageReference Include="CLSS.ExtensionMethods.IDictionary.MoveKey" Version="1.1.1" />
-    <PackageReference Include="CLSS.ExtensionMethods.IDictionary.GetOrAdd" Version="1.1.1" />
-    <PackageReference Include="SOD.Common" Version="1.1.0" />
+    <!-- <PackageReference Include="SOD.Common" Version="1.1.0" /> -->
   </ItemGroup>
 
   <ItemGroup>
+    <!-- Dev only -->
+    <Reference Include="SOD.Common.dll">
+      <HintPath>../../../SOD.Common/SOD.Common/bin/Debug/net6.0/SOD.Common.dll</HintPath>
+    </Reference>
+
     <Reference Include="Assembly-CSharp.dll">
-      <HintPath>../dependencies/Assembly-CSharp.dll</HintPath>
+      <HintPath>../../dependencies/Assembly-CSharp.dll</HintPath>
     </Reference>
     <Reference Include="Il2Cppmscorlib.dll">
-      <HintPath>../dependencies/Il2Cppmscorlib.dll</HintPath>
+      <HintPath>../../dependencies/Il2Cppmscorlib.dll</HintPath>
     </Reference>
-    <!-- <Reference Include="UnityEngine.CoreModule.dll">
-      <HintPath>../dependencies/UnityEngine.CoreModule.dll</HintPath>
-    </Reference> -->
+    <Reference Include="UnityEngine.CoreModule.dll">
+      <HintPath>../../dependencies/UnityEngine.CoreModule.dll</HintPath>
+    </Reference>
     <Reference Include="UniverseLib.IL2CPP.Interop">
-      <HintPath>../dependencies/UniverseLib.IL2CPP.Interop.dll</HintPath>
+      <HintPath>../../dependencies/UniverseLib.IL2CPP.Interop.dll</HintPath>
     </Reference>
   </ItemGroup>
 </Project>

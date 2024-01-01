@@ -3,9 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PluginDataPersistence", "PluginDataPersistence\PluginDataPersistence.csproj", "{94EE6431-6462-418D-B855-067508DFE997}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PluginDataPersistence", "mods\PluginDataPersistence\PluginDataPersistence.csproj", "{94EE6431-6462-418D-B855-067508DFE997}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Autosave", "Autosave\Autosave.csproj", "{69C2AB39-2A68-4959-8648-653E6D95BB17}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Autosave", "mods\Autosave\Autosave.csproj", "{69C2AB39-2A68-4959-8648-653E6D95BB17}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HoursOfOperation", "mods\HoursOfOperation\HoursOfOperation.csproj", "{4B28C7FF-BF7F-4DE6-BEFE-4E4B78C71A6F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PresetEdit", "mods\PresetEdit\PresetEdit.csproj", "{68EF0A40-5FB1-48DF-9D33-5EC8A8D790ED}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -56,5 +60,13 @@ Global
 		{70C2B815-EC77-4EF4-B94A-BDB5D0E74E82}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{70C2B815-EC77-4EF4-B94A-BDB5D0E74E82}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{70C2B815-EC77-4EF4-B94A-BDB5D0E74E82}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4B28C7FF-BF7F-4DE6-BEFE-4E4B78C71A6F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4B28C7FF-BF7F-4DE6-BEFE-4E4B78C71A6F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4B28C7FF-BF7F-4DE6-BEFE-4E4B78C71A6F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4B28C7FF-BF7F-4DE6-BEFE-4E4B78C71A6F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{68EF0A40-5FB1-48DF-9D33-5EC8A8D790ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{68EF0A40-5FB1-48DF-9D33-5EC8A8D790ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{68EF0A40-5FB1-48DF-9D33-5EC8A8D790ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{68EF0A40-5FB1-48DF-9D33-5EC8A8D790ED}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

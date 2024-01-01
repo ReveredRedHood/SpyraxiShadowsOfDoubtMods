@@ -1,0 +1,24 @@
+{
+    "gameBuildId": "36.05",
+    "MenuPreset": [
+        {
+            "name": "PoliceAutomat",
+            "itemsSold": [
+                "Donut",
+                "Camera",
+                "Handcuffs",
+                "DoorWedge",
+                "LockpickKit",
+                "Codebreaker",
+                "Splint",
+                "Bandage",
+                "Truncheon",
+                "Tracker",
+                "FlashBomb",
+                "Incapacitator",
+                "BallisticArmour"
+            ],
+            "presetName": "PoliceAutomat"
+        }
+    ]
+}
