@@ -66,7 +66,16 @@ def render_and_write(fnames, dest_from_root, plugin_name, env, dict):
     prompt="Plugin usage instructions",
     help="A short description of how to use the plugin.",
 )
-def run(name, nice_name, desc, headline, usage):
+@click.option(
+    "--deps",
+    prompt="Plugin dependencies",
+    help="Comma-separated Thunderstore dependency strings, besides SOD.Common.",
+)
+@click.option(
+    "--tests-only",
+    prompt="Do you want to only generate the tests?",
+)
+def run(name, nice_name, desc, headline, usage, deps, tests_only):
     """Scaffolds out a plugin for this repo"""
 
     features = []
@@ -83,7 +92,7 @@ def run(name, nice_name, desc, headline, usage):
         "plugin_name_nice": nice_name,
         "plugin_desc": desc,
         "manifest_name": name,
-        "deps": "",
+        "deps": deps,
         "readme_headline": headline,
         "readme_desc": desc,
         "usage": usage,
@@ -99,36 +108,45 @@ def run(name, nice_name, desc, headline, usage):
 
     # In dist/{ plugin_name }/ and dist/{ plugin_name }Tests/:
     files_dist = ["icon.png", "manifest.json", "README.md"]
-    render_and_write(files_dist, f"dist/{name}", name, env, dict)
+    if not tests_only:
+        render_and_write(files_dist, f"dist/{name}", name, env, dict)
     render_and_write(files_dist, f"dist/{name}Tests", name, env, dict)
 
     # add the plugins folders under the dist dir
-    plugins_path = Path(f"{script_dir}/../dist/{name}/plugins").resolve()
-    if not os.path.exists(plugins_path):
-        os.mkdir(plugins_path)
+    if not tests_only:
+        plugins_path = Path(f"{script_dir}/../dist/{name}/plugins").resolve()
+        if not os.path.exists(plugins_path):
+            os.mkdir(plugins_path)
     plugins_path = Path(f"{script_dir}/../dist/{name}Tests/plugins").resolve()
     if not os.path.exists(plugins_path):
         os.mkdir(plugins_path)
 
-    # In { plugin_name }/:
-    files_plugin = ["Plugin.cs", "Plugin.csproj", "NuGet.Config"]
-    render_and_write(files_plugin, f"{name}", name, env, dict)
+    if not tests_only:
+        # In { plugin_name }/:
+        files_plugin = ["Plugin.cs", "Plugin.csproj", "NuGet.Config"]
+        render_and_write(files_plugin, f"{name}", name, env, dict)
 
     # In { plugin_name }Tests/:
-    files_tests = ["PluginTests.cs", "PluginTests.csproj", "NuGet.Config"]
+    files_tests = [
+        "PluginTests.cs",
+        "LogUtils.cs",
+        "PluginTests.csproj",
+        "NuGet.Config",
+    ]
     render_and_write(files_tests, f"{name}Tests", name, env, dict)
 
-    subprocess.run(
-        [
-            "dotnet",
-            "sln",
-            Path(f"{script_dir}/../SpyraxiMods.sln").resolve(),
-            "add",
-            Path(f"{script_dir}/../{name}/{name}.csproj").resolve(),
-        ],
-        check=True,
-        text=True,
-    )
+    if not tests_only:
+        subprocess.run(
+            [
+                "dotnet",
+                "sln",
+                Path(f"{script_dir}/../SpyraxiMods.sln").resolve(),
+                "add",
+                Path(f"{script_dir}/../{name}/{name}.csproj").resolve(),
+            ],
+            check=True,
+            text=True,
+        )
     subprocess.run(
         [
             "dotnet",

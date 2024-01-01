@@ -9,28 +9,23 @@ namespace {{ namespace }}
 {
     [BepInPlugin(MyPluginInfo.PLUGIN_GUID, MyPluginInfo.PLUGIN_NAME, MyPluginInfo.PLUGIN_VERSION)]
     [BepInProcess("Shadows of Doubt.exe")]
-    [BepInDependency("SpyraxiHelpers", BepInDependency.DependencyFlags.HardDependency)]
-    public class Plugin : BasePlugin
+    // [BepInDependency(SOD.Common.Plugin.PLUGIN_GUID, BepInDependency.DependencyFlags.HardDependency)]
+    public class Plugin : PluginController<Plugin, IConfigBindings>
     {
-        internal static ManualLogSource Logger;
         internal static Harmony Harmony;
 
         public override void Load()
         {
-            Logger = Log;
-
             // Plugin startup logic
             Log.LogInfo($"Plugin {MyPluginInfo.PLUGIN_GUID} is loaded!");
 
-            Harmony = new Harmony(MyPluginInfo.PLUGIN_GUID);
-            Harmony.PatchAll();
-
-            Log.LogInfo($"Plugin {MyPluginInfo.PLUGIN_GUID} is patched!");
+            // Harmony.PatchAll();
+            // Log.LogInfo($"Plugin {MyPluginInfo.PLUGIN_GUID} is patched!");
         }
 
         public override bool Unload()
         {
-            Harmony?.UnpatchSelf();
+            // Harmony?.UnpatchSelf();
 
             return base.Unload();
         }

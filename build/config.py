@@ -5,9 +5,10 @@ script_dir = os.path.dirname(os.path.abspath(sys.argv[0]))
 
 team_name = "TeamSpyraxi"  # can change
 profile_name = "Modding"  # can change
+copy_these_over = ["HoursOfOperation", "PresetEdit"]  # can change
 
-bepinex_r2modman = f"{os.getenv('APPDATA')}/r2modmanPlus-local/ShadowsofDoubt/cache"  # "profiles/{profile_name}/BepInEx"
-bepinex_thunderstore = f"{os.getenv('APPDATA')}/Thunderstore Mod Manager/DataFolder/ShadowsofDoubt/cache"  # "profiles/{profile_name}/BepInEx"
+bepinex_r2modman = f"{os.getenv('APPDATA')}/r2modmanPlus-local/ShadowsofDoubt/profiles/{profile_name}/BepInEx/plugins"
+bepinex_thunderstore = f"{os.getenv('APPDATA')}/Thunderstore Mod Manager/DataFolder/ShadowsofDoubt/profiles/{profile_name}/BepInEx/plugins"
 
 
 def dest_r2modman(folder_name):

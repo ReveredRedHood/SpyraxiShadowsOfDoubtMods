@@ -19,30 +19,28 @@
   <ItemGroup>
     <PackageReference Include="BepInEx.Unity.IL2CPP" Version="6.0.0-be.*" IncludeAssets="compile" />
     <PackageReference Include="BepInEx.PluginInfoProps" Version="2.*" />
-    <PackageReference Include="UniverseLib.IL2CPP.Interop" Version="1.5.1" />
     <PackageReference Include="Il2CppAssemblyUnhollower.BaseLib" Version="0.4.15.3" />
-    <PackageReference Include="CLSS.ExtensionMethods.IEnumerable.ForEach" Version="1.1.1" />
-    <PackageReference Include="CLSS.ExtensionMethods.IList.Shuffle" Version="1.1.0" />
-    <PackageReference Include="CLSS.ExtensionMethods.IDictionary.SwapKeys" Version="1.1.1" />
-    <PackageReference Include="CLSS.ExtensionMethods.IDictionary.MoveKey" Version="1.1.1" />
-    <PackageReference Include="CLSS.ExtensionMethods.IDictionary.GetOrAdd" Version="1.1.1" />
-    <PackageReference Include="FluentAssertions" Version="6.12.0" />
-    <ProjectReference Include="../SpyraxiHelpers/SpyraxiHelpers.csproj" />
-    <ProjectReference Include="../{{ plugin_name }}/{{ plugin_name }}.csproj" />
+    <PackageReference Include="ThrottleDebounce" Version="2.0.0" />
+    <!-- <PackageReference Include="SOD.Common" Version="*" /> -->
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="Assembly-CSharp.dll">
-      <HintPath>../dependencies/Assembly-CSharp.dll</HintPath>
+    <!-- Dev only -->
+    <Reference Include="SOD.Common.dll">
+      <HintPath>../../../SOD.Common/SOD.Common/bin/Debug/net6.0/SOD.Common.dll</HintPath>
     </Reference>
-    <!-- <Reference Include="Il2Cppmscorlib.dll">
-      <HintPath>../dependencies/Il2Cppmscorlib.dll</HintPath>
-    </Reference> -->
-    <!-- <Reference Include="UnityEngine.CoreModule.dll">
-      <HintPath>../dependencies/UnityEngine.CoreModule.dll</HintPath>
-    </Reference> -->
-    <!-- <Reference Include="Rewired_Core.dll">
-      <HintPath>../dependencies/Rewired_Core.dll</HintPath>
-    </Reference> -->
+
+    <Reference Include="Assembly-CSharp.dll">
+      <HintPath>../../dependencies/Assembly-CSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="Il2Cppmscorlib.dll">
+      <HintPath>../../dependencies/Il2Cppmscorlib.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.CoreModule.dll">
+      <HintPath>../../dependencies/UnityEngine.CoreModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UniverseLib.IL2CPP.Interop">
+      <HintPath>../../dependencies/UniverseLib.IL2CPP.Interop.dll</HintPath>
+    </Reference>
   </ItemGroup>
 </Project>

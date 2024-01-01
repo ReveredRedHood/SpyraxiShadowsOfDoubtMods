@@ -5,8 +5,9 @@ import shutil
 from zipfile import ZipFile
 import semver
 import json
+import datetime
 from bs4 import BeautifulSoup
-from config import script_dir, get_dest_path
+from config import script_dir, get_dest_path, copy_these_over
 
 
 def remove_dist_zip_files():
@@ -43,7 +44,10 @@ def get_project_files():
     paths = []
     for root, _, files in os.walk("."):
         for file in files:
-            if file.endswith(".csproj") and (not file.startswith("Plugin") or file.startswith("PluginDataPersistence")):
+            if file.endswith(".csproj") and (
+                not file.startswith("Plugin")
+                or file.startswith("PluginDataPersistence")
+            ):
                 result = os.path.join(root, file)
                 print(" ", result)
                 paths.append(result)
@@ -54,7 +58,7 @@ def get_dll_paths(folder_name):
     print(f"Plugin files for {folder_name}:")
     paths = []
     for root, _, files in os.walk(
-        Path(f"{script_dir}/../{folder_name}/bin/Debug/net6.0").resolve()
+        Path(f"{script_dir}/../mods/{folder_name}/bin/Debug/net6.0").resolve()
     ):
         for file in files:
             filename = Path(file).name
@@ -66,8 +70,8 @@ def get_dll_paths(folder_name):
                 or filename.startswith("Unhollower")
                 or filename.startswith("Unity")
                 or filename.startswith("System")
-                or filename.startswith("Castle")
-                or filename.startswith("SOD.Common")
+                # or filename.startswith("Castle")
+                # or filename.startswith("SOD.Common")
             ) and (filename.endswith(".dll") or filename.endswith(".pdb")):
                 result = os.path.join(root, file)
                 print(" ", result)
@@ -105,6 +109,8 @@ if __name__ == "__main__":
     new_versions = find_new_versions()
 
     # 2: Run dotnet build on everything
+    # build deps
+    subprocess.run(["dotnet", "build", "../SOD.Common/SOD.Common.sln"], check=True, text=True)
     subprocess.run(["dotnet", "build"], check=True, text=True)
 
     # 3: Delete all local *.zip files, regardless of versioning
@@ -112,7 +118,7 @@ if __name__ == "__main__":
 
     for path, version, suffix in new_versions:
         # a: Clear plugins folders in dist directories for mods with new versions
-        folder_name = Path(path).parts[0]
+        folder_name = Path(path).parts[1]
         print(f"Clearing {folder_name} plugins folder")
         dest_path = f"{script_dir}/../dist/{folder_name}/plugins"
         clear_dir(dest_path)
@@ -147,6 +153,8 @@ if __name__ == "__main__":
                 "manifest.json",
                 "README.md",
                 "TestSave.sodb",
+                "InteractablePreset.json",
+                "MenuPreset.json",
             ]
             for file in top_level_files:
                 if not Path(f"{script_dir}/../dist/{folder_name}/{file}").exists():
@@ -158,6 +166,9 @@ if __name__ == "__main__":
                     f"plugins/{src_filename}",
                 )
 
+        # Copy and overwrite the plugins that we are actively developing
+        if folder_name not in copy_these_over:
+            continue
         dest_path = Path(get_dest_path(folder_name)).resolve()
         if not dest_path.exists():
             os.mkdir(dest_path)
@@ -177,3 +188,6 @@ if __name__ == "__main__":
                 f"{dest_path}/{src_filename}",
             )
     print("Completed successfully.")
+    # helps me see when I forgot to run this script after a different one
+    now = datetime.datetime.now()
+    print(f"Time: {now.time()}")
