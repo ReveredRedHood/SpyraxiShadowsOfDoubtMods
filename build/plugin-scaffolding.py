@@ -124,7 +124,7 @@ def run(name, nice_name, desc, headline, usage, deps, tests_only):
     if not tests_only:
         # In { plugin_name }/:
         files_plugin = ["Plugin.cs", "Plugin.csproj", "NuGet.Config"]
-        render_and_write(files_plugin, f"{name}", name, env, dict)
+        render_and_write(files_plugin, f"mods/{name}", name, env, dict)
 
     # In { plugin_name }Tests/:
     files_tests = [
@@ -133,7 +133,7 @@ def run(name, nice_name, desc, headline, usage, deps, tests_only):
         "PluginTests.csproj",
         "NuGet.Config",
     ]
-    render_and_write(files_tests, f"{name}Tests", name, env, dict)
+    render_and_write(files_tests, f"mods/{name}Tests", name, env, dict)
 
     if not tests_only:
         subprocess.run(
@@ -142,7 +142,7 @@ def run(name, nice_name, desc, headline, usage, deps, tests_only):
                 "sln",
                 Path(f"{script_dir}/../SpyraxiMods.sln").resolve(),
                 "add",
-                Path(f"{script_dir}/../{name}/{name}.csproj").resolve(),
+                Path(f"{script_dir}/../mods/{name}/{name}.csproj").resolve(),
             ],
             check=True,
             text=True,
@@ -153,7 +153,7 @@ def run(name, nice_name, desc, headline, usage, deps, tests_only):
             "sln",
             Path(f"{script_dir}/../SpyraxiMods.sln").resolve(),
             "add",
-            Path(f"{script_dir}/../{name}Tests/{name}Tests.csproj").resolve(),
+            Path(f"{script_dir}/../mods/{name}Tests/{name}Tests.csproj").resolve(),
         ],
         check=True,
         text=True,

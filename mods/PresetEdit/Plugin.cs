@@ -7,8 +7,6 @@ namespace PresetEdit {
     using System.Text.Json;
     using System.Text.Json.Serialization;
     using BepInEx;
-    using BepInEx.Unity.IL2CPP.Utils.Collections;
-    using Il2CppInterop.Runtime;
     using SOD.Common;
     using SOD.Common.BepInEx;
     using SOD.Common.Extensions;

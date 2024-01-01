@@ -152,7 +152,6 @@ if __name__ == "__main__":
                 "icon.png",
                 "manifest.json",
                 "README.md",
-                "TestSave.sodb",
                 "InteractablePreset.json",
                 "MenuPreset.json",
             ]

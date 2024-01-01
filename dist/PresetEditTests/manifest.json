@@ -1,0 +1,9 @@
+{
+    "name": "PresetEdit",
+    "website_url": "https://bitbucket.org/shadows-of-doubt-mods/",
+    "description": "Edit game data in JSON format and overwrite a savegame's data with it.",
+    "dependencies": [
+        "Venomaus-SODCommon-1.1.0"
+    ],
+    "version_number": "0.1.0"
+}

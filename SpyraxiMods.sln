@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HoursOfOperation", "mods\Ho
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PresetEdit", "mods\PresetEdit\PresetEdit.csproj", "{68EF0A40-5FB1-48DF-9D33-5EC8A8D790ED}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PresetEditTests", "mods\PresetEditTests\PresetEditTests.csproj", "{7A164ADD-5175-4BAF-ADB6-6FB997F512C8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -68,5 +70,9 @@ Global
 		{68EF0A40-5FB1-48DF-9D33-5EC8A8D790ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{68EF0A40-5FB1-48DF-9D33-5EC8A8D790ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{68EF0A40-5FB1-48DF-9D33-5EC8A8D790ED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7A164ADD-5175-4BAF-ADB6-6FB997F512C8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7A164ADD-5175-4BAF-ADB6-6FB997F512C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7A164ADD-5175-4BAF-ADB6-6FB997F512C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7A164ADD-5175-4BAF-ADB6-6FB997F512C8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
