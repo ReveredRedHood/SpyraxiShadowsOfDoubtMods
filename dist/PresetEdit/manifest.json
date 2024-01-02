@@ -1,5 +1,5 @@
 {
-    "name": "Preset Edit",
+    "name": "PresetEdit",
     "website_url": "https://github.com/ReveredRedHood/SpyraxiShadowsOfDoubtMods",
     "description": "Edit multiple in-game constants etc. in CSV format and import it into a savegame.",
     "dependencies": [],
