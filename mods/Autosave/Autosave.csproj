@@ -25,9 +25,9 @@
 
   <ItemGroup>
     <!-- Dev only -->
-    <Reference Include="SOD.Common.dll">
+    <!-- <Reference Include="SOD.Common.dll">
       <HintPath>../../../SOD.Common/SOD.Common/bin/Debug/net6.0/SOD.Common.dll</HintPath>
-    </Reference>
+    </Reference> -->
 
     <Reference Include="Assembly-CSharp.dll">
       <HintPath>../../dependencies/Assembly-CSharp.dll</HintPath>
