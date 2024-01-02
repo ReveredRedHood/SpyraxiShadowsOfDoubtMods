@@ -70,8 +70,8 @@ def get_dll_paths(folder_name):
                 or filename.startswith("Unhollower")
                 or filename.startswith("Unity")
                 or filename.startswith("System")
-                # or filename.startswith("Castle")
-                # or filename.startswith("SOD.Common")
+                or filename.startswith("Castle")
+                or filename.startswith("SOD.Common")
             ) and (filename.endswith(".dll") or filename.endswith(".pdb")):
                 result = os.path.join(root, file)
                 print(" ", result)
