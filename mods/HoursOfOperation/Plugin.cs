@@ -14,7 +14,7 @@ namespace HoursOfOperation {
     /// </summary>
     [BepInPlugin(MyPluginInfo.PLUGIN_GUID, MyPluginInfo.PLUGIN_NAME, MyPluginInfo.PLUGIN_VERSION)]
     [BepInProcess("Shadows of Doubt.exe")]
-    // [BepInDependency(SOD.Common.Plugin.PLUGIN_GUID, BepInDependency.DependencyFlags.HardDependency)]
+    [BepInDependency(SOD.Common.Plugin.PLUGIN_GUID, BepInDependency.DependencyFlags.HardDependency)]
     public class Plugin : PluginController<Plugin, IConfigBindings> {
 
         public override void Load() {
@@ -28,6 +28,7 @@ namespace HoursOfOperation {
         }
 
         private const string BEAUTY_SYNC_DISK_NAME = "ElGen-Beauty";
+        private const float SPEECH_SHOW_TIME = 0.25f;
         internal static HashSet<string> VisitedCompanies = new();
 
         private static bool IsSyncDiskUpgradeInstalled(string upgradeName) {
@@ -47,7 +48,8 @@ namespace HoursOfOperation {
             if (company == null) {
                 return;
             }
-            Lib.GameMessage.ShowPlayerSpeech("Looks like they're closed...", 1.0f);
+            var speechText = "Looks like they're closed...";
+            Lib.GameMessage.ShowPlayerSpeech(speechText, SPEECH_SHOW_TIME * NumberOfWords(speechText));
             if (
                 !VisitedCompanies.Contains(company.name)
                 && Config.OnlyShowIfPreviouslyVisited
@@ -56,15 +58,11 @@ namespace HoursOfOperation {
                     || IsSyncDiskUpgradeInstalled(BEAUTY_SYNC_DISK_NAME)
                 )
             ) {
-                Lib.GameMessage.ShowPlayerSpeech(
-                    $"I've never visited {company.name}, so I'm not sure what their hours are.",
-                    3.0f
-                );
+                speechText = $"I've never visited {company.name}, so I'm not sure what their hours are.";
+                Lib.GameMessage.ShowPlayerSpeech(speechText, SPEECH_SHOW_TIME * NumberOfWords(speechText));
                 if (Config.ShowAllIfBeautyInstalled) {
-                    Lib.GameMessage.ShowPlayerSpeech(
-                        $"Maybe I should get the {BEAUTY_SYNC_DISK_NAME} sync disk installed.",
-                        2.0f
-                    );
+                    speechText = $"Maybe I should get the {BEAUTY_SYNC_DISK_NAME} sync disk installed.";
+                    Lib.GameMessage.ShowPlayerSpeech(speechText, SPEECH_SHOW_TIME * NumberOfWords(speechText));
                 }
                 return;
             }
@@ -93,9 +91,13 @@ namespace HoursOfOperation {
             var hrOpensAtStr = TimeSpan.FromHours(hrOpensAt).ToString(@"hh\:mm");
             var hrClosesAtStr = TimeSpan.FromHours(hrClosesAt).ToString(@"hh\:mm");
 
-            var speechText =
+            speechText =
                 $"If I remember right, {company.name} is open from {string.Format(hrOpensAtStr)} - {hrClosesAtStr}, {daysOpenStr}.";
-            Lib.GameMessage.ShowPlayerSpeech(speechText, 5.0f);
+            Lib.GameMessage.ShowPlayerSpeech(speechText, SPEECH_SHOW_TIME * NumberOfWords(speechText));
+        }
+
+        private static int NumberOfWords(string speechText) {
+            return speechText.Split(' ').Count();
         }
 
         public override bool Unload() {
