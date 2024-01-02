@@ -16,7 +16,7 @@ namespace PresetEditTests {
 
         public override void Load() {
             // Plugin startup logic
-            LogUtils.Load();
+            LogUtils.Load(Log);
             Log.LogInfo($"Plugin {MyPluginInfo.PLUGIN_GUID} is loaded!");
 
             Lib.SaveGame.OnAfterLoad += OnAfterLoad;
@@ -31,7 +31,7 @@ namespace PresetEditTests {
         public override bool Unload() {
             // Harmony?.UnpatchSelf();
 
-            LogUtils.Unload();
+            LogUtils.Unload(Log);
             return base.Unload();
         }
     }
