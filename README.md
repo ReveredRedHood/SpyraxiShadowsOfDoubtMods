@@ -36,20 +36,22 @@ You can scaffold a new plugin that will be compatible with the build scripts usi
 │   │   ├── manifest.json
 │   │   └── README.md
 │   └── ... => local.py puts .zip files here
-├── { Plugin Name }/
-│   ├── NuGet.Config
-│   ├── Plugin.cs
-│   └── { Plugin Name }.csproj
-├── { Plugin Name }Tests/
-│   ├── NuGet.Config
-│   ├── Plugin.cs
-│   └── { Plugin Name }Tests.csproj
+├── mods/
+│   ├── { Plugin Name }/
+|   │   ├── NuGet.Config
+|   │   ├── Plugin.cs
+|   │   └── { Plugin Name }.csproj
+│   ├── { Plugin Name }Tests/
+|   │   ├── NuGet.Config
+|   │   ├── Plugin.cs
+|   │   └── { Plugin Name }Tests.csproj
+│   └── ... => local.py puts .zip files here
 └── SpyraxiMods.sln
 ```
 
 ## Contributing
 
-Contributions through pull requests and issues are welcome.
+I do not plan to accept or review pull requests for this repo (due to time limitations), but feel free to submit issues or fork this repo if you wish to base your own mods off of it. You are especially welcome to fork the repo if I am inactive and not responding to requests.
 
 ## License
 
