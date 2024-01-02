@@ -104,13 +104,36 @@ def find_new_versions():
     return new_paths
 
 
+def create_zip(folder_name, src_paths, zip_path):
+    with ZipFile(zip_path, "w") as zip:
+        top_level_files = [
+            "icon.png",
+            "manifest.json",
+            "README.md",
+            "InteractablePreset.json",
+            "MenuPreset.json",
+        ]
+        for file in top_level_files:
+            if not Path(f"{script_dir}/../dist/{folder_name}/{file}").exists():
+                continue
+            zip.write(Path(f"{script_dir}/../dist/{folder_name}/{file}"), file)
+        for _, src_filename in src_paths:
+            zip.write(
+                Path(f"{script_dir}/../dist/{folder_name}/plugins/{src_filename}"),
+                f"plugins/{src_filename}",
+            )
+    return top_level_files
+
+
 if __name__ == "__main__":
     # 1: Check for changes to stored mod versions vs. versions in VersionPrefix of .csproj files
     new_versions = find_new_versions()
 
     # 2: Run dotnet build on everything
     # build deps
-    subprocess.run(["dotnet", "build", "../SOD.Common/SOD.Common.sln"], check=True, text=True)
+    subprocess.run(
+        ["dotnet", "build", "../SOD.Common/SOD.Common.sln"], check=True, text=True
+    )
     subprocess.run(["dotnet", "build"], check=True, text=True)
 
     # 3: Delete all local *.zip files, regardless of versioning
@@ -147,23 +170,7 @@ if __name__ == "__main__":
             f"{script_dir}/../dist/{folder_name}-v{version}-{suffix}.zip"
         ).resolve()
 
-        with ZipFile(zip_path, "w") as zip:
-            top_level_files = [
-                "icon.png",
-                "manifest.json",
-                "README.md",
-                "InteractablePreset.json",
-                "MenuPreset.json",
-            ]
-            for file in top_level_files:
-                if not Path(f"{script_dir}/../dist/{folder_name}/{file}").exists():
-                    continue
-                zip.write(Path(f"{script_dir}/../dist/{folder_name}/{file}"), file)
-            for _, src_filename in src_paths:
-                zip.write(
-                    Path(f"{script_dir}/../dist/{folder_name}/plugins/{src_filename}"),
-                    f"plugins/{src_filename}",
-                )
+        top_level_files = create_zip(folder_name, src_paths, zip_path)
 
         # Copy and overwrite the plugins that we are actively developing
         if folder_name not in copy_these_over:

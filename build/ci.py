@@ -3,7 +3,7 @@ from pathlib import Path
 import shutil
 from zipfile import ZipFile
 from config import script_dir
-from local import get_dll_paths, find_new_versions
+from local import get_dll_paths, find_new_versions, create_zip
 
 if __name__ == "__main__":
     # 1: Check for changes to stored mod versions vs. versions in VersionPrefix of .csproj files
@@ -32,18 +32,4 @@ if __name__ == "__main__":
             f"{script_dir}/../dist/{folder_name}-v{version}-{suffix}.zip"
         ).absolute()
 
-        with ZipFile(zip_path, "w") as zip:
-            top_level_files = [
-                "icon.png",
-                "manifest.json",
-                "README.md",
-            ]
-            for file in top_level_files:
-                if not Path(f"{script_dir}/../dist/{folder_name}/{file}").exists():
-                    continue
-                zip.write(Path(f"{script_dir}/../dist/{folder_name}/{file}"), file)
-            for _, src_filename in src_paths:
-                zip.write(
-                    Path(f"{script_dir}/../dist/{folder_name}/plugins/{src_filename}"),
-                    f"plugins/{src_filename}",
-                )
+        top_level_files = create_zip(folder_name, src_paths, zip_path)
