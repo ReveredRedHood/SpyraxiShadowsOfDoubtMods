@@ -21,15 +21,14 @@
     <PackageReference Include="BepInEx.PluginInfoProps" Version="2.*" />
     <PackageReference Include="Il2CppAssemblyUnhollower.BaseLib" Version="0.4.15.3" />
     <PackageReference Include="ThrottleDebounce" Version="2.0.0" />
-    <!-- <PackageReference Include="SOD.Common" Version="*" /> -->
   </ItemGroup>
 
   <ItemGroup>
-    <!-- Dev only -->
-    <Reference Include="SOD.Common.dll">
-      <HintPath>../../../SOD.Common/SOD.Common/bin/Debug/net6.0/SOD.Common.dll</HintPath>
-    </Reference>
+    <PackageReference Include="SOD.Common" Version="*" />
+    <ProjectReference Include="../PresetEdit/PresetEdit.csproj" />
+  </ItemGroup>
 
+  <ItemGroup>
     <Reference Include="Assembly-CSharp.dll">
       <HintPath>../../dependencies/Assembly-CSharp.dll</HintPath>
     </Reference>

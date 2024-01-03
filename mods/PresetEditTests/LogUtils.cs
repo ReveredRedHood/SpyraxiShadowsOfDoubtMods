@@ -7,14 +7,13 @@ namespace PresetEditTests;
 internal static class LogUtils {
     private static ManualLogSource LogSource { get; set; }
 
-    internal static void Load(ManualLogSource logSource) {
-        LogSource = logSource;
+    internal static void Load(ManualLogSource pluginLogSource) {
+        LogSource = new ManualLogSource(pluginLogSource.SourceName + "/LogUtils");
         // Register the source
         BepInEx.Logging.Logger.Sources.Add(LogSource);
     }
 
-    internal static void Unload(ManualLogSource logSource) {
-        LogSource = logSource;
+    internal static void Unload() {
         // Remove the source to free resources
         BepInEx.Logging.Logger.Sources.Remove(LogSource);
     }
