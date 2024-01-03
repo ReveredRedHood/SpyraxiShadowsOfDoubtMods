@@ -30,14 +30,14 @@ namespace PresetEditTests {
             Log.LogInfo("Exporting...");
             PresetEdit.Serializer.ExportSaveGamePresetData();
             Log.LogInfo("Apply for InteractablePreset.json");
-            PresetEdit.Serializer.TryApplyOverwritesFromJson(
+            PresetEdit.Serializer.ApplyOverwritesFromJson(
                 Path.Combine(
                     Path.GetDirectoryName(this.GetType().Assembly.Location),
                     "InteractablePreset.json"
                 )
             );
             Log.LogInfo("Apply for MenuPreset.json");
-            PresetEdit.Serializer.TryApplyOverwritesFromJson(
+            PresetEdit.Serializer.ApplyOverwritesFromJson(
                 Path.Combine(
                     Path.GetDirectoryName(this.GetType().Assembly.Location),
                     "MenuPreset.json"
