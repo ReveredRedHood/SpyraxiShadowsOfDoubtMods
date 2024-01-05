@@ -25,7 +25,7 @@ namespace PrintBugfix {
             internal static bool Prefix(Interactable __instance) {
                 if (IsBuggedVec3) {
                     IsBuggedVec3 = false;
-                    if (Plugin.AffectedPresetNames.Contains(__instance.preset.presetName)) {
+                    if (Plugin.affectedPresetNames.Contains(__instance.preset.presetName)) {
                         Plugin.Logger.LogDebug($"Squashing bug... skipping deletion for {__instance.GetName()}");
                         return false;
                     }

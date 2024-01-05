@@ -12,14 +12,26 @@ namespace PrintBugfix {
         internal static ManualLogSource Logger;
         public const string PLUGIN_GUID = MyPluginInfo.PLUGIN_GUID;
 
-        public static List<string> AffectedPresetNames => [
+        internal static HashSet<string> affectedPresetNames = new() {
             "PrintedSurveillance",
             "PrintedEmployeeRecord",
             "PrintedVMail",
             "PrintedCitizenFile",
             "PrintedResidentsFile",
             "PrintedReceipt",
-        ];
+        };
+
+        public static void RegisterAffectedPreset(string presetName) {
+            affectedPresetNames.Add(presetName);
+        }
+
+        public static void UnregisterAffectedPreset(string presetName) {
+            affectedPresetNames.Remove(presetName);
+        }
+
+        public static bool IsPresetRegisteredAsAffected(string presetName) {
+            return affectedPresetNames.Contains(presetName);
+        }
 
         public override void Load() {
             Logger = Log;

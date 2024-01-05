@@ -27,15 +27,13 @@ If your mod benefits from this bugfix, consider adding it as a HardDependency vi
 public class Plugin : BasePlugin { // Or inheriting SOD.Common's PluginController instead of BasePlugin
     public override void Load() {
         // OPTIONAL: if your mod prints the preset named BirthCertificate
-        PrintBugfix.Plugin.AffectedPresetNames.Add("BirthCertificate");
-
+        PrintBugfix.Plugin.RegisterAffectedPreset("BirthCertificate");
         // Whatever your plugin startup logic is...
     }
 
     public override bool Unload() {
         // OPTIONAL: if you registered a preset name in Load, unregister it here...
-        PrintBugfix.Plugin.AffectedPresetNames.Remove("BirthCertificate");
-
+        PrintBugfix.Plugin.UnregisterAffectedPreset("BirthCertificate");
         // Whatever your plugin unload logic is...
     }
 }
