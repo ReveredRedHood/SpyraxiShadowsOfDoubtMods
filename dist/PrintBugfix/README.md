@@ -1,10 +1,10 @@
-# PrintVmailBugFix - Fixes the bug where vmails sometimes don't print
+# PrintBugfix - Fixes the bug where things sometimes don't print
 
 A BepInEx Bleeding Edge (v667) plugin for Shadows of Doubt
 
 ## What is it?
 
-Fixes the bug where V-Mails, surveillance files, etc. sometimes don't print. This is not a clean fix for the issue, just a workaround, but it should do the job.
+"Fixes" the bug where V-Mails, surveillance files, etc. sometimes don't print. This is not a clean fix for the issue, just a workaround, but it should do the job.
 
 ## Installation
 
