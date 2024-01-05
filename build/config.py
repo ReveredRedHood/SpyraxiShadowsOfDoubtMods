@@ -3,9 +3,12 @@ import sys
 
 script_dir = os.path.dirname(os.path.abspath(sys.argv[0]))
 
+steam_path = "C:\Program Files (x86)\Steam\steam.exe"
+app_id = "986130"
+
 team_name = "TeamSpyraxi"  # can change
 profile_name = "Modding"  # can change
-copy_these_over = ["HoursOfOperation", "PresetEditTests"]  # can change, should just be the mods you are actively testing
+copy_these_over = ["HoursOfOperation", "TestHelper"]  # can change, should just be the mods you are actively testing
 
 bepinex_r2modman = f"{os.getenv('APPDATA')}/r2modmanPlus-local/ShadowsofDoubt/profiles/{profile_name}/BepInEx/plugins"
 bepinex_thunderstore = f"{os.getenv('APPDATA')}/Thunderstore Mod Manager/DataFolder/ShadowsofDoubt/profiles/{profile_name}/BepInEx/plugins"

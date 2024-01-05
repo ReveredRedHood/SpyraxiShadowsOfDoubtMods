@@ -1,0 +1,9 @@
+{
+    "name": "TestHelper",
+    "website_url": "https://bitbucket.org/shadows-of-doubt-mods/",
+    "description": "Helps test things, if I released it that was a mistake",
+    "dependencies": [
+        "Venomaus-SODCommon-1.1.3"
+    ],
+    "version_number": "0.1.0"
+}

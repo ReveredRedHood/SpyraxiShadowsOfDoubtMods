@@ -5,18 +5,21 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using SOD.Common.Extensions;
+using UnityEngine.Playables;
+using UniverseLib;
+using UniverseLib.Utility;
 
 namespace PresetEdit;
 public sealed class JsonIl2CppListConverter : JsonConverterFactory {
-    public static bool CanConvertSharedChecks(Type typeToConvert) {
-        return typeToConvert.IsGenericType && typeToConvert.GetGenericArguments()[0].IsAssignableTo(typeof(SoCustomComparison)); // TODO: Can move off generic type parameter T
-    }
     public override bool CanConvert(Type typeToConvert) {
-        if (!CanConvertSharedChecks(typeToConvert) || typeToConvert.GetGenericTypeDefinition() != typeof(Il2CppSystem.Collections.Generic.List<>)) {
+        if (!typeToConvert.IsGenericType
+            || !Serializer.AllPresetTypes.Contains(typeToConvert.GetGenericArguments()[0])
+            || typeToConvert.GetGenericTypeDefinition() != typeof(Il2CppSystem.Collections.Generic.List<>)) {
             return false;
         }
         return true;
@@ -35,17 +38,43 @@ public sealed class JsonIl2CppListConverter : JsonConverterFactory {
     }
 
     private class InnerConverter<T> : JsonConverter<Il2CppSystem.Collections.Generic.List<T>> {
-        private readonly JsonConverter<List<T>> _listConverter;
+        private readonly JsonConverter<SoCustomComparison> _soCustomComparisonConverter;
         public InnerConverter(JsonSerializerOptions options) {
-            _listConverter = (JsonConverter<List<T>>)options.GetConverter(typeof(List<T>));
+            _soCustomComparisonConverter = (JsonConverter<SoCustomComparison>)options.Converters.First(converter => converter.GetType() == typeof(JsonSoCustomComparisonConverter<SoCustomComparison>));
         }
 
         public override Il2CppSystem.Collections.Generic.List<T> Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) {
-            return _listConverter.Read(ref reader, typeToConvert, options).ToListIl2Cpp();
+            // We don't read from this converter
+            throw new NotImplementedException();
         }
 
         public override void Write(Utf8JsonWriter writer, Il2CppSystem.Collections.Generic.List<T> value, JsonSerializerOptions options) {
-            _listConverter.Write(writer, value.ToList(), options);
+            var asList = value.ToList();
+            if (asList == null || asList.Count == 0) {
+                writer.WriteStartArray();
+                writer.WriteEndArray();
+                return;
+            }
+            Type argType = value.GetType().GetGenericArguments()[0];
+            var asSoCustomList = asList.Select(preset => preset.TryCast<SoCustomComparison>()).Where(result => !result.IsNullOrDestroyed());
+            writer.WriteStartArray();
+            foreach (var preset in asSoCustomList) {
+                _soCustomComparisonConverter.Write(writer, preset, options);
+            }
+            writer.WriteEndArray();
+            // try {
+            //     var asStrList = asSoCustomList.Select(preset => preset.name)
+            //         .Select(entry => $"{argType.FullName}{JsonSoCustomComparisonConverter.PRESET_PROPERTY_SEPARATOR}{entry}")
+            //         .ToList();
+            //     _listConverter.Write(writer, asStrList, options);
+            // }
+            // catch {
+            //     Plugin.Log.LogWarning($"{argType.FullName}: Name was null, trying alternative method to get the preset name.");
+            //     var asStrList = asSoCustomList.Select(preset => preset.presetName)
+            //         .Select(entry => $"{argType.FullName}{JsonSoCustomComparisonConverter.PRESET_PROPERTY_SEPARATOR}{entry}")
+            //         .ToList();
+            //     _listConverter.Write(writer, asStrList, options);
+            // }
         }
     }
 }

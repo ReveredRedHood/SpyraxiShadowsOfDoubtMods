@@ -2,8 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
-    <AssemblyName>PresetEditTests</AssemblyName>
-    <Description>Test plugin for PresetEdit</Description>
+    <AssemblyName>TestHelper</AssemblyName>
+    <Description>Test plugin</Description>
     <VersionPrefix>0.1.0</VersionPrefix>
     <VersionSuffix>BE667</VersionSuffix>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>

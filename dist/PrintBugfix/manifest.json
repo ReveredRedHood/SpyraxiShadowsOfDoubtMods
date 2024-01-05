@@ -1,0 +1,7 @@
+{
+    "name": "PrintBugfix",
+    "website_url": "https://bitbucket.org/shadows-of-doubt-mods/",
+    "description": "Fixes the bug where V-Mails, surveillance files, etc. sometimes don't print.",
+    "dependencies": [],
+    "version_number": "0.1.0"
+}

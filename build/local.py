@@ -7,7 +7,7 @@ import semver
 import json
 import datetime
 from bs4 import BeautifulSoup
-from config import script_dir, get_dest_path, copy_these_over
+from config import script_dir, get_dest_path, copy_these_over, steam_path, app_id
 
 
 def remove_dist_zip_files():
@@ -72,6 +72,10 @@ def get_dll_paths(folder_name):
                 or filename.startswith("System")
                 or filename.startswith("Castle")
                 or filename.startswith("SOD.Common")
+                # my system doesn't want to acknowledge that I removed this project
+                or filename.startswith("PresetEditTests")
+                or filename.startswith("PrintVmailBugFixTests")
+                or filename.startswith("ThrottleDebounce")
             ) and (filename.endswith(".dll") or filename.endswith(".pdb")):
                 result = os.path.join(root, file)
                 print(" ", result)
@@ -106,13 +110,15 @@ def find_new_versions():
 
 def create_zip(folder_name, src_paths, zip_path):
     with ZipFile(zip_path, "w") as zip:
-        top_level_files = [
-            "icon.png",
-            "manifest.json",
-            "README.md",
-            "InteractablePreset.json",
-            "MenuPreset.json",
-        ]
+        # top_level_files = [
+        #     "icon.png",
+        #     "manifest.json",
+        #     "README.md",
+        # ]
+        top_level_files = []
+        for root, _, files in os.walk(Path(f"{script_dir}/../dist/{folder_name}").resolve()):
+            for file in files:
+                top_level_files.append(file)
         for file in top_level_files:
             if not Path(f"{script_dir}/../dist/{folder_name}/{file}").exists():
                 continue
@@ -197,3 +203,8 @@ if __name__ == "__main__":
     # helps me see when I forgot to run this script after a different one
     now = datetime.datetime.now()
     print(f"Time: {now.time()}")
+    path_to_dll = f"\"{Path(f"{get_dest_path("temp")}/../../core/BepInEx.Unity.IL2CPP.dll").resolve()}\""
+    print(path_to_dll)
+    subprocess.run(
+        f"{steam_path} -applaunch {app_id} --doorstop-enabled true --doorstop-target-assembly {path_to_dll}", check=True, text=True
+    )

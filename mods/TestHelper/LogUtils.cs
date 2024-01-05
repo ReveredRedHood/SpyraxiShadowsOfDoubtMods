@@ -3,7 +3,7 @@ using System.Linq;
 using BepInEx.Logging;
 using ThrottleDebounce;
 
-namespace PresetEditTests;
+namespace TestHelper;
 internal static class LogUtils {
     private static ManualLogSource LogSource { get; set; }
 
@@ -19,15 +19,15 @@ internal static class LogUtils {
     }
 
     internal static void QuickLog(this string msg) {
-        LogSource.LogInfo($"{msg}");
+        LogSource.LogInfo(msg);
     }
 
     internal static void QuickLog<T>(this System.Collections.Generic.IEnumerable<T> msg) {
         if (msg.Count() == 0) {
-            LogSource.LogInfo($"{msg.ToString()} is empty");
+            QuickLog($"{msg.ToString()} is empty");
             return;
         }
-        LogSource.LogInfo($"{string.Join(", ", msg)}");
+        QuickLog($"{string.Join(", ", msg)}");
     }
 
     internal static RateLimitedAction<string> GetThrottledLog(float seconds) {
