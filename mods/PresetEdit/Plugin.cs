@@ -8,7 +8,7 @@ namespace PresetEdit {
     [BepInPlugin(MyPluginInfo.PLUGIN_GUID, MyPluginInfo.PLUGIN_NAME, MyPluginInfo.PLUGIN_VERSION)]
     [BepInProcess("Shadows of Doubt.exe")]
     [BepInDependency(SOD.Common.Plugin.PLUGIN_GUID, BepInDependency.DependencyFlags.HardDependency)]
-    public class Plugin : PluginController<Plugin, IConfigBindings> {
+    public class Plugin : PluginController<Plugin> {
 
         public override void Load() {
             // Plugin startup logic

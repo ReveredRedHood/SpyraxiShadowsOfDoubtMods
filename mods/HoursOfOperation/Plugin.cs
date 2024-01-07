@@ -29,7 +29,7 @@ namespace HoursOfOperation {
 
         private const string BEAUTY_SYNC_DISK_NAME = "ElGen-Beauty";
         private const float SPEECH_SHOW_TIME = 0.25f;
-        internal static HashSet<string> VisitedCompanies = new();
+        internal static HashSet<string> LocationsVisited = new();
 
         private static bool IsSyncDiskUpgradeInstalled(string upgradeName) {
             var upgrades = UpgradesController.Instance.upgrades.ToList();
@@ -44,28 +44,26 @@ namespace HoursOfOperation {
                 return;
             }
 
-            var company = interactable.node.gameLocation.thisAsAddress.company;
+            var company = interactable.node?.gameLocation?.thisAsAddress?.company;
             if (company == null) {
                 return;
             }
             var speechText = "Looks like they're closed...";
             Lib.GameMessage.ShowPlayerSpeech(speechText, SPEECH_SHOW_TIME * NumberOfWords(speechText));
-            if (
-                !VisitedCompanies.Contains(company.name)
-                && Config.OnlyShowIfPreviouslyVisited
-                && (
-                    !Config.ShowAllIfBeautyInstalled
-                    || IsSyncDiskUpgradeInstalled(BEAUTY_SYNC_DISK_NAME)
-                )
-            ) {
-                speechText = $"I've never visited {company.name}, so I'm not sure what their hours are.";
-                Lib.GameMessage.ShowPlayerSpeech(speechText, SPEECH_SHOW_TIME * NumberOfWords(speechText));
-                if (Config.ShowAllIfBeautyInstalled) {
-                    speechText = $"Maybe I should get the {BEAUTY_SYNC_DISK_NAME} sync disk installed.";
-                    Lib.GameMessage.ShowPlayerSpeech(speechText, SPEECH_SHOW_TIME * NumberOfWords(speechText));
+            if (Config.OnlyShowIfPreviouslyVisited) {
+                if (!Config.ShowAllIfBeautyInstalled || !IsSyncDiskUpgradeInstalled(BEAUTY_SYNC_DISK_NAME)) {
+                    if (!LocationsVisited.Contains(company.address.name)) {
+                        speechText = $"I've never visited {company.name}, so I'm not sure what their hours are.";
+                        Lib.GameMessage.ShowPlayerSpeech(speechText, SPEECH_SHOW_TIME * NumberOfWords(speechText));
+                        if (Config.ShowAllIfBeautyInstalled) {
+                            speechText = $"Maybe I should get the {BEAUTY_SYNC_DISK_NAME} sync disk installed.";
+                            Lib.GameMessage.ShowPlayerSpeech(speechText, SPEECH_SHOW_TIME * NumberOfWords(speechText));
+                        }
+                        return;
+                    }
                 }
-                return;
             }
+            Plugin.Log.LogInfo($"Have we visited? {LocationsVisited.Contains(company.address.name)}");
 
             var daysOpen = company.daysOpen.ToList();
             CultureInfo culture = CultureInfo.CurrentCulture;

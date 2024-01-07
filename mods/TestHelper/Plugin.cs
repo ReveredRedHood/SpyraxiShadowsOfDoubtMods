@@ -4,6 +4,7 @@ using System.Linq;
 using BepInEx;
 using BepInEx.Unity.IL2CPP;
 using HarmonyLib;
+using PresetEdit;
 using SOD.Common.Extensions;
 using SOD.Common.Helpers;
 using UnityEngine;
@@ -25,7 +26,7 @@ namespace TestHelper {
             // Harmony.PatchAll();
             // Log.LogInfo($"Plugin {MyPluginInfo.PLUGIN_GUID} is patched!");
 
-            SOD.Common.Lib.SaveGame.OnAfterLoad += OnAfterLoad;
+            // SOD.Common.Lib.SaveGame.OnAfterLoad += OnAfterLoad;
             UniverseLib.RuntimeHelper.StartCoroutine(SkipLoadCoroutine());
         }
 
@@ -62,25 +63,56 @@ namespace TestHelper {
 
             yield return new WaitForEndOfFrame();
             MainMenuController.Instance.SetMenuComponent(MainMenuController.Component.loadingCity);
+
+            OnAfterLoad(this, null);
+        }
+
+        internal static void AddExceptMsg(System.Action action, string addMsgOnException) {
+            try {
+                action();
+            }
+            catch (System.Exception except) {
+                throw new System.InvalidOperationException(innerException: except, message: addMsgOnException);
+            }
         }
 
         private void OnAfterLoad(object sender, SaveGameArgs e) {
             Log.LogInfo("Exporting...");
-            PresetEdit.Serializer.SerializePresetsWithTypeToFile(typeof(MenuPreset), name => name.Contains("Police"));
-            // Log.LogInfo("Apply for InteractablePreset.json");
-            // PresetEdit.Serializer.LoadAndOverwriteFromJson(
-            //     Path.Combine(
-            //         Path.GetDirectoryName(this.GetType().Assembly.Location),
-            //         "InteractablePreset.json"
-            //     )
-            // );
-            Log.LogInfo("Apply for MenuPreset.json");
-            PresetEdit.Serializer.LoadAndOverwriteFromJsonFile(
-                Path.Combine(
-                    Path.GetDirectoryName(this.GetType().Assembly.Location),
-                    "MenuPreset_PoliceAutomat.json"
-                )
-            );
+            var pluginsDir = SOD.Common.Lib.SaveGame.GetSavestoreDirectoryPath(this.GetType().Assembly);
+            Directory.CreateDirectory(pluginsDir);
+            var menuInstances = Helpers.GetPresetInstances(typeof(MenuPreset)).TryCastAll<MenuPreset>();
+            using (var stream = File.Create(Path.Join(pluginsDir, "menues.json"))) {
+                PresetEdit.PresetSerializer.WriteJsonToFileStream(stream, menuInstances, null);
+            }
+        }
+
+        private bool NamePredicate(string arg) {
+            string[] getThese = [
+                "Sniper",
+                "Shotgun",
+                "Semi",
+                "Handcuff",
+                "Codebreak",
+                "Bandage",
+                "Splint",
+                "Armor",
+                "Sync",
+                "Shower",
+                "City",
+                "Lockpic",
+                "Telephone",
+                "Sword",
+                "Trunc",
+                "Wedge",
+                "Secret",
+                "Tracker",
+                "Troph",
+                "Baseba",
+                "Pool",
+                "Briefca",
+                "Crunch",
+            ];
+            return getThese.Any(str => arg.Contains(str));
         }
 
         public override bool Unload() {

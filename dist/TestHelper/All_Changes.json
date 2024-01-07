@@ -1,0 +1,39 @@
+{
+    "__gameBuildId": "36.05",
+    "__presetEditPluginVersion": "0.0.1-BE667",
+    "InteractablePreset": {
+        "value": {
+            "x": 100,
+            "y": 300
+        },
+        "presetName": "Donut",
+        "name": "Donut"
+    },
+    "MenuPreset": {
+        "itemsSold__CUSTOM": "add-union-no-dupes",
+        "itemsSold": [
+            "InteractablePreset__PRESET__Donut",
+            "InteractablePreset__PRESET__Incapacitator",
+            "InteractablePreset__PRESET__BallisticArmour"
+        ],
+        "presetName": "PoliceAutomat",
+        "name": "PoliceAutomat"
+    },
+    "OccupationPreset": {
+        "workOutfit__CUSTOM": "intersection",
+        "workOutfit": [
+            "ClothesPreset__PRESET__FemaleOverweightSuit",
+            "ClothesPreset__PRESET__MaleOverweightSuit"
+        ],
+        "jobItems__CUSTOM": "add-union-no-dupes",
+        "jobItems": [
+            "InteractablePreset__PRESET__Donut"
+        ],
+        "inventoryItems__CUSTOM": "add-union-no-dupes",
+        "inventoryItems": [
+            "InteractablePreset__PRESET__Donut"
+        ],
+        "presetName": "CompanyDirector",
+        "name": "CompanyDirector"
+    }
+}
