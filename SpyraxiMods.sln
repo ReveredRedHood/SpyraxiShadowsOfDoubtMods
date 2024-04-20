@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestHelper", "mods\TestHelp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrintBugfix", "mods\PrintBugfix\PrintBugfix.csproj", "{8B143DB7-2719-4504-81D0-A625C6CBC3FB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Guns", "mods\Guns\Guns.csproj", "{8B42AB53-284B-485E-96FD-BB4F6FADE098}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -86,9 +88,14 @@ Global
 		{8B143DB7-2719-4504-81D0-A625C6CBC3FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8B143DB7-2719-4504-81D0-A625C6CBC3FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8B143DB7-2719-4504-81D0-A625C6CBC3FB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8B42AB53-284B-485E-96FD-BB4F6FADE098}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8B42AB53-284B-485E-96FD-BB4F6FADE098}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8B42AB53-284B-485E-96FD-BB4F6FADE098}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8B42AB53-284B-485E-96FD-BB4F6FADE098}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{EAEBAE9F-060D-416D-ADFD-3229B3C9EC8C} = {DAC528C8-E500-4C66-B297-BBFEFE26FF1F}
 		{8B143DB7-2719-4504-81D0-A625C6CBC3FB} = {DAC528C8-E500-4C66-B297-BBFEFE26FF1F}
+		{8B42AB53-284B-485E-96FD-BB4F6FADE098} = {DAC528C8-E500-4C66-B297-BBFEFE26FF1F}
 	EndGlobalSection
 EndGlobal

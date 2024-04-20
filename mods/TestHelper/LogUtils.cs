@@ -8,18 +8,14 @@ internal static class LogUtils {
     private static ManualLogSource LogSource { get; set; }
 
     internal static void Load(ManualLogSource pluginLogSource) {
-        LogSource = new ManualLogSource(pluginLogSource.SourceName + "/LogUtils");
-        // Register the source
-        BepInEx.Logging.Logger.Sources.Add(LogSource);
+        LogSource = new ManualLogSource(pluginLogSource.SourceName);
     }
 
     internal static void Unload() {
-        // Remove the source to free resources
-        BepInEx.Logging.Logger.Sources.Remove(LogSource);
     }
 
     internal static void QuickLog(this string msg) {
-        LogSource.LogInfo(msg);
+        LogSource.LogDebug(msg);
     }
 
     internal static void QuickLog<T>(this System.Collections.Generic.IEnumerable<T> msg) {

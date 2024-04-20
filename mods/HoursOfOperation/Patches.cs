@@ -3,22 +3,21 @@ using HarmonyLib;
 
 namespace HoursOfOperation {
     internal class Patches {
-        // TODO: Consider adding to SOD.Common
-        [HarmonyPatch(typeof(Actor), nameof(Actor.OnGameLocationChange))]
-        internal class Actor_OnGameLocationChange {
+        [HarmonyPatch(typeof(Player), nameof(Player.OnGameLocationChange))]
+        internal class Player_OnGameLocationChange {
             [HarmonyPostfix]
             internal static void Postfix(
-                Actor __instance,
-                bool enableSocialSightings,
-                bool forceDisableLocationMemory
+                Player __instance
             ) {
-                // Fix later
-                return;
-                var name =
-                    __instance.currentGameLocation?.thisAsAddress?.company?.name ?? String.Empty;
-                if (name != String.Empty) {
-                    Plugin.VisitedCompanies.Add(name);
+                var locationObj = __instance.currentGameLocation as UnityEngine.Object;
+                if (locationObj == null) {
+                    return;
                 }
+                var name = locationObj.name;
+                if (name == String.Empty) {
+                    return;
+                }
+                Plugin.LocationsVisited.Add(name);
             }
         }
     }
