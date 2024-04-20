@@ -77,42 +77,13 @@ namespace TestHelper {
         }
 
         private void OnAfterLoad(object sender, SaveGameArgs e) {
-            Log.LogInfo("Exporting...");
-            var pluginsDir = SOD.Common.Lib.SaveGame.GetSavestoreDirectoryPath(this.GetType().Assembly);
-            Directory.CreateDirectory(pluginsDir);
-            var menuInstances = Helpers.GetPresetInstances(typeof(MenuPreset)).TryCastAll<MenuPreset>();
-            using (var stream = File.Create(Path.Join(pluginsDir, "menues.json"))) {
-                PresetEdit.PresetSerializer.WriteJsonToFileStream(stream, menuInstances, null);
-            }
-        }
-
-        private bool NamePredicate(string arg) {
-            string[] getThese = [
-                "Sniper",
-                "Shotgun",
-                "Semi",
-                "Handcuff",
-                "Codebreak",
-                "Bandage",
-                "Splint",
-                "Armor",
-                "Sync",
-                "Shower",
-                "City",
-                "Lockpic",
-                "Telephone",
-                "Sword",
-                "Trunc",
-                "Wedge",
-                "Secret",
-                "Tracker",
-                "Troph",
-                "Baseba",
-                "Pool",
-                "Briefca",
-                "Crunch",
-            ];
-            return getThese.Any(str => arg.Contains(str));
+            // Log.LogInfo("Exporting...");
+            // var pluginsDir = SOD.Common.Lib.SaveGame.GetSavestoreDirectoryPath(this.GetType().Assembly);
+            // Directory.CreateDirectory(pluginsDir);
+            // var menuInstances = Helpers.GetPresetInstances(typeof(MenuPreset)).TryCastAll<MenuPreset>();
+            // using (var stream = File.Create(Path.Join(pluginsDir, "menues.json"))) {
+            //     PresetEdit.PresetSerializer.WriteJsonToFileStream(stream, menuInstances, null);
+            // }
         }
 
         public override bool Unload() {
