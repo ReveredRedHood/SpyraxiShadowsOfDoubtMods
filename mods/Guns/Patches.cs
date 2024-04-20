@@ -8,12 +8,18 @@ internal class Patches {
         [HarmonyPostfix]
         internal static void Postfix() {
             Plugin.Instance.CurrentWeaponItemState = WeaponItemState.NotEquipped;
+            Plugin.Instance.WeaponActionsUpdate();
         }
     }
     [HarmonyPatch(typeof(FirstPersonItemController), nameof(FirstPersonItemController.FinishedDrawingNewItem))]
     internal class FirstPersonItemController_FinishedDrawingNewItem {
         [HarmonyPostfix]
         internal static void Postfix() {
+            if (Plugin.CurrentInteractablePresetHeld != null && !Plugin.Instance.GunEntriesByPresetName.ContainsKey(Plugin.CurrentInteractablePresetHeld.presetName)) {
+                Plugin.Instance.CurrentWeaponItemState = WeaponItemState.NotEquipped;
+                Plugin.Instance.WeaponActionsUpdate();
+                return;
+            }
             if (Plugin.Instance.CurrentWeaponItemState != WeaponItemState.NotEquipped) {
                 return;
             }
@@ -28,7 +34,7 @@ internal class Patches {
             if (alertSurrounding) {
                 return;
             }
-            if (!fromWho.isPlayer || __instance.isPlayer) {
+            if ((fromWho != null && !fromWho.isPlayer) || __instance.isPlayer) {
                 return;
             }
             if (Plugin.Instance.CurrentWeaponInteractionState != WeaponInteractionState.Firing) {

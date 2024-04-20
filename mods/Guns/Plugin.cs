@@ -138,6 +138,11 @@ public class Plugin : PluginController<Plugin, IConfigBindings> {
             GunEntriesByPresetName.Clear();
         }
 
+        // Reset state in case we are loading a game after already being
+        // in-game
+        CurrentWeaponInteractionState = WeaponInteractionState.BlockedFromInteraction;
+        CurrentWeaponItemState = WeaponItemState.NotEquipped;
+
         // Add DDS strings for Aim and Fire interactionNames
         Lib.DdsStrings.AddOrUpdateEntries(ACTION_DDS_DICTIONARY_NAME, (ACTION_NAME_AIM, ACTION_NAME_AIM), (ACTION_NAME_FIRE, ACTION_NAME_FIRE));
 
@@ -169,6 +174,9 @@ public class Plugin : PluginController<Plugin, IConfigBindings> {
     }
 
     internal void WeaponActionsUpdate() {
+        Log.LogDebug("A");
+        Log.LogDebug(CurrentWeaponInteractionState.ToString());
+        Log.LogDebug(CurrentWeaponItemState.ToString());
         switch (CurrentWeaponItemState) {
             case WeaponItemState.NotEquipped:
                 SetGunActions(false, false);
@@ -200,11 +208,20 @@ public class Plugin : PluginController<Plugin, IConfigBindings> {
 
         if (CurrentInteractablePresetHeld == null) {
             CurrentWeaponItemState = WeaponItemState.NotEquipped;
+            if (CameraFovTweenCoroutine != null) {
+                RuntimeHelper.StopCoroutine(CameraFovTweenCoroutine);
+            }
+            CameraFovTweenCoroutine = RuntimeHelper.StartCoroutine(InGameTween(0.25f, AdjustCameraExitAimMode));
             return;
         }
 
         if (!GunEntriesByPresetName.Keys.Contains(CurrentInteractablePresetHeld.presetName)) {
             CurrentWeaponItemState = WeaponItemState.NotEquipped;
+            if (CameraFovTweenCoroutine != null) {
+                RuntimeHelper.StopCoroutine(CameraFovTweenCoroutine);
+            }
+            CameraFovTweenCoroutine = RuntimeHelper.StartCoroutine(InGameTween(0.25f, AdjustCameraExitAimMode));
+            WeaponActionsUpdate();
             return;
         }
 
@@ -396,12 +413,16 @@ public class Plugin : PluginController<Plugin, IConfigBindings> {
     }
 
     private void SetPrimaryAction(bool showAsFire) {
-        if (CurrentInteractablePresetHeld == null || !GunEntriesByPresetName.Keys.Contains(CurrentInteractablePresetHeld.presetName)) {
-            return;
+        try {
+            var actions = CurrentInteractablePresetHeld.fpsItem.actions.Select(x => x);
+            AttackFpsAction ??= actions.First(x => x.interactionName == ACTION_NAME_ATTACK);
+        }
+        catch {
+            if (AttackFpsAction == null) {
+                return;
+            }
         }
 
-        var actions = CurrentInteractablePresetHeld.fpsItem.actions;
-        AttackFpsAction ??= actions.Select(x => x).First(x => x.interactionName == ACTION_NAME_ATTACK);
         if (!showAsFire) {
             AttackFpsAction.interactionName = ACTION_NAME_ATTACK;
             AttackFpsAction.useCameraJolt = true;
@@ -415,12 +436,16 @@ public class Plugin : PluginController<Plugin, IConfigBindings> {
     }
 
     private void SetSecondaryAction(bool showAsAim) {
-        if (CurrentInteractablePresetHeld == null || !GunEntriesByPresetName.Keys.Contains(CurrentInteractablePresetHeld.presetName)) {
-            return;
+        try {
+            var actions = CurrentInteractablePresetHeld.fpsItem.actions.Select(x => x);
+            ThrowFpsAction ??= actions.First(x => x.interactionName == ACTION_NAME_THROW);
+        }
+        catch {
+            if (ThrowFpsAction == null) {
+                return;
+            }
         }
 
-        var actions = CurrentInteractablePresetHeld.fpsItem.actions;
-        ThrowFpsAction ??= actions.Select(x => x).First(x => x.interactionName == ACTION_NAME_THROW);
         if (!showAsAim) {
             ThrowFpsAction.interactionName = ACTION_NAME_THROW;
             ThrowFpsAction.action.throwObjectsAtTarget = true;
