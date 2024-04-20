@@ -1,0 +1,9 @@
+{
+    "name": "Guns",
+    "website_url": "https://github.com/ReveredRedHood/SpyraxiShadowsOfDoubtMods",
+    "description": "Implements player-shootable guns into the game.",
+    "dependencies": [
+        "Venomaus-SODCommon-1.1.7"
+    ],
+    "version_number": "0.1.0"
+}

@@ -2,9 +2,9 @@
 
 The full READMEs for each mod can be found by clicking on their subfolder in the "dist" directory.
 
-# Working with the code
+## Working with the code
 
-## Building the packages locally
+### Building the packages locally
 
 The build scripts are written using python, allowing for cross-platform development[^1].
 Set up python:
@@ -16,7 +16,7 @@ When building and testing locally, run the `local.py` script with `python ./buil
 
 Note that you will need to manually go into your mod manager and use the "Import Local Mod" button in the settings menu of the mod manager for it to recognize that the file is there. You only need to do this once, after which the mod will appear in the list and be auto-updated by running `local.py`. Edit `config.py` to change the path if you aren't using r2modman.
 
-## Scaffolding plugins
+### Scaffolding plugins
 
 You can scaffold a new plugin that will be compatible with the build scripts using `python ./build/plugin-scaffolding.py`. The script will prompt you for inputs. You can also pass command line args instead (see `python ./build/plugin-scaffolding.py --help`).
 
