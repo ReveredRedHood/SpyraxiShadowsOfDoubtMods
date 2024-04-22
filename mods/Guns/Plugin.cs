@@ -322,7 +322,7 @@ public class Plugin : PluginController<Plugin, IConfigBindings> {
         // afterwards
         var muzzleFlash = weapon.muzzleFlash;
         weapon.muzzleFlash = null;
-        Toolbox.Instance.Shoot(Player.Instance, aimPoint, aimForwardPoint, weaponRangeMax, weaponAccuracy, weaponDamage, weapon, Config.EjectBrass, ejectPoint, false);
+        Toolbox.Instance.Shoot(Player.Instance, aimPoint, aimForwardPoint, weaponRangeMax, weaponAccuracy, weaponDamage, weapon, Config.EjectBrass, ejectPoint, false, true);
 
         // TODO: change this to be extensible to potentially support more
         // weapons in the future
@@ -335,7 +335,8 @@ public class Plugin : PluginController<Plugin, IConfigBindings> {
             weapon.impactEventPlayer = null;
             for (int i = 1; i < SHOTGUN_PROJECTILES_PER_SHELL; i++) {
                 // Do not eject brass for additional shots
-                Toolbox.Instance.Shoot(Player.Instance, aimPoint, aimForwardPoint, weaponRangeMax, weaponAccuracy, weaponDamage, weapon, false, ejectPoint, false);
+                // They are not the first shot
+                Toolbox.Instance.Shoot(Player.Instance, aimPoint, aimForwardPoint, weaponRangeMax, weaponAccuracy, weaponDamage, weapon, false, ejectPoint, false, false);
             }
             weapon.fireEvent = fireEvent;
             weapon.impactEvent = impactEvent;
