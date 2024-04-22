@@ -23,7 +23,7 @@ internal static class Helpers {
     }
 
     internal static bool IsPlayerBeingPursuedByActor(Actor actor) {
-        return Player.Instance.persuedProgressLag > 0.0f && actor.ai.persuitTarget == Player.Instance;
+        return Player.Instance.persuedProgressLag > 0.0f && actor.ai != null && actor.ai.persuitTarget == Player.Instance;
     }
 
     internal static IEnumerable<T> GetPresetInstances<T>(Func<string, bool> presetNamePredicate = null, bool disallowDupes = true) where T : SoCustomComparison {

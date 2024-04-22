@@ -1,8 +1,8 @@
 namespace Guns;
 
-public enum WeaponItemState {
+public enum WeaponSecondaryState {
     NotEquipped,
     Ready,
     Aiming,
-    Reloading,
+    Busy,
 }
