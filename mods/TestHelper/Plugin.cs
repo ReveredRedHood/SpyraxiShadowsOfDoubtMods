@@ -1,10 +1,11 @@
+using System;
 using System.Collections;
-using System.IO;
 using System.Linq;
 using BepInEx;
+using BepInEx.Configuration;
 using BepInEx.Unity.IL2CPP;
 using HarmonyLib;
-using PresetEdit;
+using SOD.Common;
 using SOD.Common.Extensions;
 using SOD.Common.Helpers;
 using UnityEngine;
@@ -13,8 +14,8 @@ using UnityEngine.SceneManagement;
 namespace TestHelper {
     [BepInPlugin(MyPluginInfo.PLUGIN_GUID, MyPluginInfo.PLUGIN_NAME, MyPluginInfo.PLUGIN_VERSION)]
     [BepInProcess("Shadows of Doubt.exe")]
-    // [BepInDependency(SOD.Common.Plugin.PLUGIN_GUID, BepInDependency.DependencyFlags.HardDependency)]
-    [BepInDependency("PresetEdit", BepInDependency.DependencyFlags.HardDependency)]
+    [BepInDependency(SOD.Common.Plugin.PLUGIN_GUID, BepInDependency.DependencyFlags.HardDependency)]
+    // [BepInDependency("PresetEdit", BepInDependency.DependencyFlags.HardDependency)]
     public class Plugin : BasePlugin {
         internal static Harmony Harmony;
 
@@ -26,8 +27,54 @@ namespace TestHelper {
             // Harmony.PatchAll();
             // Log.LogInfo($"Plugin {MyPluginInfo.PLUGIN_GUID} is patched!");
 
-            // SOD.Common.Lib.SaveGame.OnAfterLoad += OnAfterLoad;
+            Lib.PluginDetection.OnAllPluginsFinishedLoading += DetectPlugins;
             UniverseLib.RuntimeHelper.StartCoroutine(SkipLoadCoroutine());
+        }
+
+        private void DetectPlugins(object sender, EventArgs e) {
+            var guid = Lib.PluginDetection.GetPluginGuidFromPartialGuid("Dialog");
+            if (guid == null) {
+                return;
+            }
+
+            Log.LogInfo(Lib.PluginDetection.IsPluginLoaded(guid));
+            Log.LogInfo(Lib.PluginDetection.AllPluginsFinishedLoading);
+
+            BepInPlugin metadata = Lib.PluginDetection.GetPluginInfo(guid).Metadata;
+            Log.LogInfo(metadata.GUID);
+            Log.LogInfo(metadata.Name);
+            Log.LogInfo(metadata.Version);
+
+            var value = Lib.PluginDetection.GetPluginConfigEntryValue<bool>(guid, "Talk to Partner", "Can asking for the partner fail?");
+            Log.LogInfo(value);
+
+            // To respond to in-game changes in plugin config
+            Lib.PluginDetection.AddPluginConfigEntryChangedListener(guid, DialogAdditionsConfigSettingChanged);
+        }
+
+        private void DialogAdditionsConfigSettingChanged(SettingChangedEventArgs args) {
+            Log.LogInfo(args.ChangedSetting.Definition.Section);
+            Log.LogInfo(args.ChangedSetting.Definition.Key);
+            Log.LogInfo(args.ChangedSetting.Description.Description);
+            if (args.ChangedSetting.Definition.Key == "Example") {
+                var value = (float)args.ChangedSetting.BoxedValue;
+                // ...
+            }
+        }
+
+        private void OnButton(object sender, InputDetectionEventArgs e) {
+            if (e.ActionName == "LeanLeft" && e.IsDown) {
+                // Lib.PlayerStatus.SetIllegalStatusModifier("on demand", true, 5.0f);
+                Log.LogDebug("Hello");
+                Player.Instance.illegalActionActive = true;
+                Player.Instance.illegalActionTimer = float.MaxValue;
+            }
+            // if (e.Key == InteractablePreset.InteractionKey.LeanRight && e.IsDown) {
+            // Lib.PlayerStatus.SetIllegalStatusModifier("on demand but doesn't overwrite", false, 5.0f);
+            // }
+            // if (e.Key == InteractablePreset.InteractionKey.flashlight) {
+            // Lib.PlayerStatus.ToggleIllegalStatusModifier("toggled");
+            // }
         }
 
         // Skip the intro and just load into a game
@@ -44,6 +91,7 @@ namespace TestHelper {
             while (!MainMenuController.Instance.mainMenuActive) {
                 yield return new WaitForEndOfFrame();
             }
+            yield break;
             // Ready to load the game
             MainMenuController.Instance.SetMenuComponent(MainMenuController.Component.loadGame);
 
@@ -63,8 +111,6 @@ namespace TestHelper {
 
             yield return new WaitForEndOfFrame();
             MainMenuController.Instance.SetMenuComponent(MainMenuController.Component.loadingCity);
-
-            OnAfterLoad(this, null);
         }
 
         internal static void AddExceptMsg(System.Action action, string addMsgOnException) {
@@ -74,16 +120,6 @@ namespace TestHelper {
             catch (System.Exception except) {
                 throw new System.InvalidOperationException(innerException: except, message: addMsgOnException);
             }
-        }
-
-        private void OnAfterLoad(object sender, SaveGameArgs e) {
-            // Log.LogInfo("Exporting...");
-            // var pluginsDir = SOD.Common.Lib.SaveGame.GetSavestoreDirectoryPath(this.GetType().Assembly);
-            // Directory.CreateDirectory(pluginsDir);
-            // var menuInstances = Helpers.GetPresetInstances(typeof(MenuPreset)).TryCastAll<MenuPreset>();
-            // using (var stream = File.Create(Path.Join(pluginsDir, "menues.json"))) {
-            //     PresetEdit.PresetSerializer.WriteJsonToFileStream(stream, menuInstances, null);
-            // }
         }
 
         public override bool Unload() {
