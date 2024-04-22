@@ -24,11 +24,17 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="SOD.Common" Version="*" />
-    <ProjectReference Include="../PresetEdit/PresetEdit.csproj" />
+    <!-- <PackageReference Include="SOD.Common" Version="*" /> -->
+    <!-- <ProjectReference Include="../PresetEdit/PresetEdit.csproj" /> -->
+    <ProjectReference Include="../../../SOD.Common/SOD.Common/SOD.Common.Mine.GitIgnore.csproj" />
   </ItemGroup>
 
   <ItemGroup>
+    <!-- Dev only -->
+    <!-- <Reference Include="SOD.Common.dll">
+      <HintPath>../../../SOD.Common/SOD.Common/bin/Debug/net6.0/SOD.Common.dll</HintPath>
+    </Reference> -->
+
     <Reference Include="Assembly-CSharp.dll">
       <HintPath>../../dependencies/Assembly-CSharp.dll</HintPath>
     </Reference>

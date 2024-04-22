@@ -7,7 +7,7 @@ import semver
 import json
 import datetime
 from bs4 import BeautifulSoup
-from config import script_dir, get_dest_path, copy_these_over, steam_path, app_id
+from config import script_dir, get_dest_path, copy_these_over, steam_path, app_id, copy_sod_common
 
 
 def remove_dist_zip_files():
@@ -66,12 +66,12 @@ def get_dll_paths(folder_name):
                 filename.startswith("Iced")
                 or filename.startswith("Assembly")
                 or filename.startswith("Il2Cppmscorlib")
-                or filename.startswith("Rewired")
                 or filename.startswith("Unhollower")
                 or filename.startswith("Unity")
                 or filename.startswith("System")
-                or filename.startswith("Castle")
-                or filename.startswith("SOD.Common")
+                or (filename.startswith("Rewired") and (not copy_sod_common))
+                or (filename.startswith("Castle") and (not copy_sod_common))
+                or (filename.startswith("SOD.Common") and (not copy_sod_common))
                 # my system doesn't want to acknowledge that I removed this project
                 or filename.startswith("PresetEditTests")
                 or filename.startswith("PrintVmailBugFixTests")
@@ -137,9 +137,9 @@ if __name__ == "__main__":
 
     # 2: Run dotnet build on everything
     # build deps
-    subprocess.run(
-        ["dotnet", "build", "../SOD.Common/SOD.Common.sln"], check=True, text=True
-    )
+    # subprocess.run(
+    #     ["dotnet", "build", "../SOD.Common/SOD.Common.sln"], check=True, text=True
+    # )
     subprocess.run(["dotnet", "build"], check=True, text=True)
 
     # 3: Delete all local *.zip files, regardless of versioning

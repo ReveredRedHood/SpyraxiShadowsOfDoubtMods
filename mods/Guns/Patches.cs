@@ -3,22 +3,27 @@ using HarmonyLib;
 
 namespace Guns;
 internal class Patches {
-    [HarmonyPatch(typeof(BioScreenController), nameof(BioScreenController.SelectSlot))]
-    internal class BioScreenController_SelectSlot {
-        [HarmonyPostfix]
-        internal static void Postfix() {
-            Plugin.Instance.CurrentWeaponItemState = WeaponItemState.NotEquipped;
-        }
-    }
     [HarmonyPatch(typeof(FirstPersonItemController), nameof(FirstPersonItemController.FinishedDrawingNewItem))]
     internal class FirstPersonItemController_FinishedDrawingNewItem {
+        [HarmonyPrefix]
+        internal static void Prefix() {
+            if (Plugin.Instance.IsPlayerHoldingAGun()) {
+                // we are about to switch off our weapon
+                FirstPersonItem currentFpsItem = Plugin.Instance.CurrentInteractablePresetHeld.fpsItem;
+                currentFpsItem.barkTriggerChance = 0.0f;
+            }
+        }
         [HarmonyPostfix]
         internal static void Postfix() {
-            if (Plugin.Instance.CurrentWeaponItemState != WeaponItemState.NotEquipped) {
-                return;
+            if (!Plugin.Instance.IsPlayerHoldingAGun()) {
+                Plugin.Instance.CurrentWeaponSecondaryState = WeaponSecondaryState.NotEquipped;
             }
-            Plugin.Instance.CurrentWeaponItemState = WeaponItemState.Ready;
-            Plugin.Instance.WeaponActionsUpdate();
+            else {
+                Plugin.Instance.CurrentWeaponSecondaryState = WeaponSecondaryState.Ready;
+                FirstPersonItem currentFpsItem = Plugin.Instance.CurrentInteractablePresetHeld.fpsItem;
+                currentFpsItem.bark = SpeechController.Bark.threatenByItem;
+                currentFpsItem.barkTriggerChance = Plugin.Instance.Config.GunDrawBarkChance;
+            }
         }
     }
     [HarmonyPatch(typeof(Citizen), nameof(Citizen.RecieveDamage))]
@@ -28,10 +33,10 @@ internal class Patches {
             if (alertSurrounding) {
                 return;
             }
-            if (!fromWho.isPlayer || __instance.isPlayer) {
+            if ((fromWho != null && !fromWho.isPlayer) || __instance.isPlayer) {
                 return;
             }
-            if (Plugin.Instance.CurrentWeaponInteractionState != WeaponInteractionState.Firing) {
+            if (Plugin.Instance.CurrentWeaponPrimaryState != WeaponPrimaryState.Firing) {
                 return;
             }
             if (Helpers.IsPlayerBeingPursuedByActor(__instance)) {
