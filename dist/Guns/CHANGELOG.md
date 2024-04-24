@@ -1,5 +1,9 @@
 # CHANGELOG
 
+**0.1.3**
+
+- Removed SOD.Common and Castle assemblies that could become outdated.
+
 **0.1.2**
 
 - The GunTestingMode config setting has been changed to work as soon as it is set (no need to load a game or start a new game).

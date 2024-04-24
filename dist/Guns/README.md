@@ -41,7 +41,7 @@ Config settings include:
 | Name | Description |
 |------|-------------|
 | EjectBrass | If true, eject bullet casings (default: true). |
-| GunTestingMode | If true, add all guns to your inventory upon loading a game or starting a new game (default: false). |
+| GunTestingMode | If true, add all guns and ammo to your inventory. Works immediately. Save the setting as false prior to setting it back to true to repeat the command (default: false). |
 | RecoilAmplitudeFactor | The factor applied on top of recoil amplitude. Set to 0.0 to disable recoil completely (default: 1.0). |
 | GunDrawBarkChance | The chance (from 0.0 to 1.0 = 100%) that citizens will warn you to put a gun away while you have one drawn (default: 0.2). |
 
