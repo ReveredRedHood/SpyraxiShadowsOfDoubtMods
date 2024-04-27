@@ -1,5 +1,15 @@
 # CHANGELOG
 
+**0.2.0**
+
+- Added behavior where citizens will lose nerve and run away if you point a gun at them for a long enough period of time. If indoors, citizens will attempt to sound the alarm. The rate at which this happens varies depending on your distance from the citizen, their alertness level, and your visibility. Added configuration settings related to this behavior.
+- Added damage adjustment factors, and did a first pass to balance weapon damage.
+- Increased number of shotgun projectiles per shot to 8 in total.
+- Added weapon buy price adjustments, and did a first pass to balance weapon prices.
+  - If Venomaus' Life and Living mod is installed, this mod will take its item price configuration settings into account.
+- Fixed console errors popping up while barging through a door while aiming a gun (and other events that forcefully unequip items).
+- Fixed bug where melee weapons could get stuck showing "Fire" instead of "Attack" as their primary action, disabling the melee attack (caused by unequipping a gun while aiming it).
+
 **0.1.3**
 
 - Removed SOD.Common and Castle assemblies that could become outdated.

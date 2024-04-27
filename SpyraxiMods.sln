@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PluginDataPersistence", "mods\PluginDataPersistence\PluginDataPersistence.csproj", "{94EE6431-6462-418D-B855-067508DFE997}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Autosave", "mods\Autosave\Autosave.csproj", "{69C2AB39-2A68-4959-8648-653E6D95BB17}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HoursOfOperation", "mods\HoursOfOperation\HoursOfOperation.csproj", "{4B28C7FF-BF7F-4DE6-BEFE-4E4B78C71A6F}"
@@ -18,6 +16,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrintBugfix", "mods\PrintBugfix\PrintBugfix.csproj", "{8B143DB7-2719-4504-81D0-A625C6CBC3FB}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Guns", "mods\Guns\Guns.csproj", "{8B42AB53-284B-485E-96FD-BB4F6FADE098}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Umbrellas", "mods\Umbrellas\Umbrellas.csproj", "{B038CEF7-0350-49AA-8B07-3456560758D8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -92,10 +92,15 @@ Global
 		{8B42AB53-284B-485E-96FD-BB4F6FADE098}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8B42AB53-284B-485E-96FD-BB4F6FADE098}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8B42AB53-284B-485E-96FD-BB4F6FADE098}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B038CEF7-0350-49AA-8B07-3456560758D8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B038CEF7-0350-49AA-8B07-3456560758D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B038CEF7-0350-49AA-8B07-3456560758D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B038CEF7-0350-49AA-8B07-3456560758D8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{EAEBAE9F-060D-416D-ADFD-3229B3C9EC8C} = {DAC528C8-E500-4C66-B297-BBFEFE26FF1F}
 		{8B143DB7-2719-4504-81D0-A625C6CBC3FB} = {DAC528C8-E500-4C66-B297-BBFEFE26FF1F}
 		{8B42AB53-284B-485E-96FD-BB4F6FADE098} = {DAC528C8-E500-4C66-B297-BBFEFE26FF1F}
+		{B038CEF7-0350-49AA-8B07-3456560758D8} = {DAC528C8-E500-4C66-B297-BBFEFE26FF1F}
 	EndGlobalSection
 EndGlobal

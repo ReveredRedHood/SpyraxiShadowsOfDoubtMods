@@ -26,7 +26,7 @@
   <ItemGroup>
     <!-- <PackageReference Include="SOD.Common" Version="*" /> -->
     <!-- <ProjectReference Include="../PresetEdit/PresetEdit.csproj" /> -->
-    <ProjectReference Include="../../../SOD.Common/SOD.Common/SOD.Common.Mine.GitIgnore.csproj" />
+    <ProjectReference Include="../../../SOD.Common/SOD.Common/GitIgnore.csproj" />
   </ItemGroup>
 
   <ItemGroup>

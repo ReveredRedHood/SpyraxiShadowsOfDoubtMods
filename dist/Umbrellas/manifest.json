@@ -1,9 +1,9 @@
 {
-    "name": "Guns",
+    "name": "Umbrellas",
     "website_url": "https://github.com/ReveredRedHood/SpyraxiShadowsOfDoubtMods",
-    "description": "Implements player-shootable guns into the game.",
+    "description": "Adds in-game autosave functionality.",
     "dependencies": [
         "Venomaus-SODCommon-1.1.8"
     ],
-    "version_number": "0.2.0"
+    "version_number": "0.1.0"
 }

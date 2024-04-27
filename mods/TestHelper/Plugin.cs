@@ -27,7 +27,8 @@ namespace TestHelper {
             // Harmony.PatchAll();
             // Log.LogInfo($"Plugin {MyPluginInfo.PLUGIN_GUID} is patched!");
 
-            Lib.PluginDetection.OnAllPluginsFinishedLoading += DetectPlugins;
+            // Lib.PluginDetection.OnAllPluginsFinishedLoading += DetectPlugins;
+            // Lib.PluginDetection.OnAllPluginsFinishedLoading += DetectPluginsFails;
             UniverseLib.RuntimeHelper.StartCoroutine(SkipLoadCoroutine());
         }
 
@@ -50,6 +51,16 @@ namespace TestHelper {
 
             // To respond to in-game changes in plugin config
             Lib.PluginDetection.AddPluginConfigEntryChangedListener(guid, DialogAdditionsConfigSettingChanged);
+        }
+
+        private void DetectPluginsFails(object sender, EventArgs e) {
+            var guid = Lib.PluginDetection.GetPluginGuidFromPartialGuid("Dialog");
+            if (guid == null) {
+                return;
+            }
+
+            var value = Lib.PluginDetection.GetPluginConfigEntryValue<bool>("lol", "Talk to Partner", "Can asking for the partner fail?");
+            Log.LogInfo(value);
         }
 
         private void DialogAdditionsConfigSettingChanged(SettingChangedEventArgs args) {
@@ -91,7 +102,6 @@ namespace TestHelper {
             while (!MainMenuController.Instance.mainMenuActive) {
                 yield return new WaitForEndOfFrame();
             }
-            yield break;
             // Ready to load the game
             MainMenuController.Instance.SetMenuComponent(MainMenuController.Component.loadGame);
 

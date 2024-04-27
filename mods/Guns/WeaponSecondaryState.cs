@@ -2,7 +2,6 @@ namespace Guns;
 
 public enum WeaponSecondaryState {
     NotEquipped,
-    Ready,
+    NotAiming,
     Aiming,
-    Busy,
 }

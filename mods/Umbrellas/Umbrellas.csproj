@@ -2,9 +2,9 @@
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
-    <AssemblyName>Guns</AssemblyName>
-    <Description>Implements player-shootable guns into the game.</Description>
-    <VersionPrefix>0.2.0</VersionPrefix>
+    <AssemblyName>Umbrellas</AssemblyName>
+    <Description>Umbrellas to keep you from getting wet in the rain.</Description>
+    <VersionPrefix>0.1.0</VersionPrefix>
     <VersionSuffix>BE667</VersionSuffix>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <LangVersion>latest</LangVersion>
@@ -32,9 +32,6 @@
     </Reference>
     <Reference Include="UnityEngine.CoreModule.dll">
       <HintPath>../../dependencies/UnityEngine.CoreModule.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.PhysicsModule.dll">
-      <HintPath>../../dependencies/UnityEngine.PhysicsModule.dll</HintPath>
     </Reference>
     <Reference Include="UniverseLib.IL2CPP.Interop">
       <HintPath>../../dependencies/UniverseLib.IL2CPP.Interop.dll</HintPath>
