@@ -4,7 +4,7 @@
     <TargetFramework>net6.0</TargetFramework>
     <AssemblyName>Guns</AssemblyName>
     <Description>Implements player-shootable guns into the game.</Description>
-    <VersionPrefix>0.1.2</VersionPrefix>
+    <VersionPrefix>0.2.0</VersionPrefix>
     <VersionSuffix>BE667</VersionSuffix>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <LangVersion>latest</LangVersion>
@@ -24,11 +24,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <!-- Dev only -->
-    <!-- <Reference Include="SOD.Common.dll">
-      <HintPath>../../../SOD.Common/SOD.Common/bin/Debug/net6.0/SOD.Common.dll</HintPath>
-    </Reference> -->
-
     <Reference Include="Assembly-CSharp.dll">
       <HintPath>../../dependencies/Assembly-CSharp.dll</HintPath>
     </Reference>

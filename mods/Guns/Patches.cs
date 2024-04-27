@@ -15,11 +15,12 @@ internal class Patches {
         }
         [HarmonyPostfix]
         internal static void Postfix() {
+            Plugin.Instance.CurrentWeaponPrimaryState = WeaponPrimaryState.NotAiming;
             if (!Plugin.Instance.IsPlayerHoldingAGun()) {
                 Plugin.Instance.CurrentWeaponSecondaryState = WeaponSecondaryState.NotEquipped;
             }
             else {
-                Plugin.Instance.CurrentWeaponSecondaryState = WeaponSecondaryState.Ready;
+                Plugin.Instance.CurrentWeaponSecondaryState = WeaponSecondaryState.NotAiming;
                 FirstPersonItem currentFpsItem = Plugin.Instance.CurrentInteractablePresetHeld.fpsItem;
                 currentFpsItem.bark = SpeechController.Bark.threatenByItem;
                 currentFpsItem.barkTriggerChance = Plugin.Instance.Config.GunDrawBarkChance;

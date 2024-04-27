@@ -1,7 +1,7 @@
 namespace Guns;
 
 public enum WeaponPrimaryState {
-    NotEquipped,
-    Ready,
+    NotAiming,
+    Aiming,
     Firing,
 }

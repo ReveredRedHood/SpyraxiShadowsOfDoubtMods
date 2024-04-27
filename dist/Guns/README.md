@@ -40,10 +40,13 @@ Config settings include:
 
 | Name | Description |
 |------|-------------|
-| EjectBrass | If true, eject bullet casings (default: true). |
-| GunTestingMode | If true, add all guns to your inventory upon loading a game or starting a new game (default: false). |
-| RecoilAmplitudeFactor | The factor applied on top of recoil amplitude. Set to 0.0 to disable recoil completely (default: 1.0). |
-| GunDrawBarkChance | The chance (from 0.0 to 1.0 = 100%) that citizens will warn you to put a gun away while you have one drawn (default: 0.2). |
+| EjectBrass | If true, eject bullet casings. |
+| RecoilAmplitudeFactor | The factor applied on top of recoil amplitude. Set to 0 to disable recoil completely. |
+| GunDrawBarkChance | The chance (from 0.0 to 1.0 = 100%) that citizens will warn you to put a gun away while you have one drawn. |
+| IllegalStatusDurationOnHit | The number of seconds after a citizen is hit by the player's gunfire that the player has illegal status. |
+| CitizenNerveLostPerSecondAimedAt | How much of a citizen's nerve is lost per second that the player is aiming directly at them with a gun within the citizen's sight range. Citizen's tend to have maximum nerve values of around 0.4 to 0.5, and start running away around 0.1 (and may attempt to sound the alarm). |
+| CitizenNerveLossAccountsForAwareness | Account for citizen alertness and blindness when calculating the actual nerve lost per second while being aimed at. The amount of nerve lost will be reduced by some factor depending on the citizen's traits while this setting is enabled. |
+| GunTestingMode | If true, add all guns and ammo to your inventory. Works immediately. Save the setting as false prior to setting it back to true to repeat the command. |
 
 You can use r2modman or Thunderstore Mod Manager to easily change the plugin's config settings (via the Config Editor tab). You can also manually edit the config file in the BepInEx directory (I believe that changes you make will take effect while the game is running, but I'm not 100% positive about that).
 
@@ -57,12 +60,13 @@ Report any other issues in the "Spyraxi's Mods & Utilities" thread on the offici
 
 Roughly in order of highest to lowest priority. Lower items on the list are more ambitious ideas that might be implemented in separate plugins.
 
-- Add a configuration option that makes aiming your gun in a citizen's face for too long an illegal action.
 - Add a configuration option where ammo must be in the player's inventory for the gun to fire.
 - Add temporarily shooting out lights, disabling cameras, breaking TVs, etc.
 - Add a configuration option that causes ammo in the inventory to be used up while firing.
 - Add a configuration option that adds clip sizes and makes reloading required (that works with or without the ammo setting).
+- Add the ability for bullets to pierce through objects.
 - Allow the Pistol Silencer to be attached to a pistol as a contextual action, or detached by putting it down.
+- Add new guns.
 
 ## License
 

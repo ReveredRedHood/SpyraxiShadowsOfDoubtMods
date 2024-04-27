@@ -1,0 +1,9 @@
+{
+    "name": "Umbrellas",
+    "website_url": "https://github.com/ReveredRedHood/SpyraxiShadowsOfDoubtMods",
+    "description": "Adds in-game autosave functionality.",
+    "dependencies": [
+        "Venomaus-SODCommon-1.1.8"
+    ],
+    "version_number": "0.1.0"
+}

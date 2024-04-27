@@ -2,18 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using SOD.Common.Extensions;
+using UnityEngine;
+using UnityEngine.Rendering;
 using UniverseLib;
 
 namespace Guns;
 
 internal static class Helpers {
     // TODO: move these (or equivalent functionality) to SOD.Common
-
-    internal static bool IsPresentInPlayerInventory(InteractablePreset preset) {
-        // FIXME
-        return FirstPersonItemController.Instance.slots.Select(x => x).Any(x => x.GetFirstPersonItem().GetPresetName() == preset.name);
-    }
-
     internal static bool IsPlayerHeardByOthers() {
         return InterfaceController.Instance.awarenessIcons.Where(x => x.alertProgress > 0.0f).Any();
     }
