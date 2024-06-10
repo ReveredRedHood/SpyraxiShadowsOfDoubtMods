@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using BepInEx.Configuration;
 using BepInEx.Logging;
@@ -34,8 +35,17 @@ internal sealed class LifeAndLivingIntegration {
 
     internal void OverwriteVars(ref int minItemValue, ref int percentageValueIncrease) {
         if (Lib.PluginDetection.IsPluginLoaded(LIFE_AND_LIVING_GUID)) {
-            minItemValue = Lib.PluginDetection.GetPluginConfigEntryValue<int>(LIFE_AND_LIVING_GUID, "LifeAndLiving.ItemPrice", "MinItemValue");
-            percentageValueIncrease = Lib.PluginDetection.GetPluginConfigEntryValue<int>(LIFE_AND_LIVING_GUID, "LifeAndLiving.ItemPrice", "PercentageValueIncrease");
+            SetValueFromConfigEntry(LIFE_AND_LIVING_GUID, "LifeAndLiving.ItemPrice", "MinItemValue", ref minItemValue);
+            SetValueFromConfigEntry(LIFE_AND_LIVING_GUID, "LifeAndLiving.ItemPrice", "PercentageValueIncrease", ref percentageValueIncrease);
+        }
+    }
+
+    internal void SetValueFromConfigEntry<T>(string pluginGuid, string section, string key, ref T field) {
+        try {
+            field = Lib.PluginDetection.GetPluginConfigEntryValue<T>(pluginGuid, section, key);
+        }
+        catch(InvalidOperationException) {
+            Log.LogError($"Missing config entry detected for LifeAndLiving integration ({section}, {key}). Skipped config entry integration, was there an update to LifeAndLiving?");
         }
     }
 }
