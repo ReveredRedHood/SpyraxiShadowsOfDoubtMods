@@ -35,8 +35,9 @@ internal sealed class LifeAndLivingIntegration {
 
     internal void OverwriteVars(ref int minItemValue, ref int percentageValueIncrease) {
         if (Lib.PluginDetection.IsPluginLoaded(LIFE_AND_LIVING_GUID)) {
-            SetValueFromConfigEntry(LIFE_AND_LIVING_GUID, "LifeAndLiving.ItemPrice", "MinItemValue", ref minItemValue);
-            SetValueFromConfigEntry(LIFE_AND_LIVING_GUID, "LifeAndLiving.ItemPrice", "PercentageValueIncrease", ref percentageValueIncrease);
+            // General items = non-food items
+            SetValueFromConfigEntry(LIFE_AND_LIVING_GUID, "LifeAndLiving.ItemPrice", "MinGeneralItemValue", ref minItemValue);
+            SetValueFromConfigEntry(LIFE_AND_LIVING_GUID, "LifeAndLiving.ItemPrice", "PercentageValueIncreaseGeneral", ref percentageValueIncrease);
         }
     }
 
