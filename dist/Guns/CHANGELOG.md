@@ -1,5 +1,9 @@
 # CHANGELOG
 
+**0.2.1**
+
+- Adjustment to LifeAndLiving integration to be compatible with the newest version.
+
 **0.2.0**
 
 - Added behavior where citizens will lose nerve and run away if you point a gun at them for a long enough period of time. If indoors, citizens will attempt to sound the alarm. The rate at which this happens varies depending on your distance from the citizen, their alertness level, and your visibility. Added configuration settings related to this behavior.
