@@ -26,6 +26,7 @@
   <ItemGroup>
     <!-- <PackageReference Include="SOD.Common" Version="*" /> -->
     <!-- <ProjectReference Include="../PresetEdit/PresetEdit.csproj" /> -->
+    <!-- <ProjectReference Include="../Guns/Guns.csproj" /> -->
     <ProjectReference Include="../../../SOD.Common/SOD.Common/GitIgnore.csproj" />
   </ItemGroup>
 
@@ -43,6 +44,9 @@
     </Reference>
     <Reference Include="UnityEngine.CoreModule.dll">
       <HintPath>../../dependencies/UnityEngine.CoreModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.PhysicsModule.dll">
+      <HintPath>../../dependencies/UnityEngine.PhysicsModule.dll</HintPath>
     </Reference>
     <Reference Include="UniverseLib.IL2CPP.Interop">
       <HintPath>../../dependencies/UniverseLib.IL2CPP.Interop.dll</HintPath>
