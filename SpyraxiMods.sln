@@ -7,8 +7,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Autosave", "mods\Autosave\A
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HoursOfOperation", "mods\HoursOfOperation\HoursOfOperation.csproj", "{4B28C7FF-BF7F-4DE6-BEFE-4E4B78C71A6F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PresetEdit", "mods\PresetEdit\PresetEdit.csproj", "{68EF0A40-5FB1-48DF-9D33-5EC8A8D790ED}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "mods", "mods", "{DAC528C8-E500-4C66-B297-BBFEFE26FF1F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestHelper", "mods\TestHelper\TestHelper.csproj", "{EAEBAE9F-060D-416D-ADFD-3229B3C9EC8C}"
@@ -31,10 +29,6 @@ Global
 		{4B28C7FF-BF7F-4DE6-BEFE-4E4B78C71A6F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4B28C7FF-BF7F-4DE6-BEFE-4E4B78C71A6F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4B28C7FF-BF7F-4DE6-BEFE-4E4B78C71A6F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{68EF0A40-5FB1-48DF-9D33-5EC8A8D790ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{68EF0A40-5FB1-48DF-9D33-5EC8A8D790ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{68EF0A40-5FB1-48DF-9D33-5EC8A8D790ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{68EF0A40-5FB1-48DF-9D33-5EC8A8D790ED}.Release|Any CPU.Build.0 = Release|Any CPU
 		{EAEBAE9F-060D-416D-ADFD-3229B3C9EC8C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{EAEBAE9F-060D-416D-ADFD-3229B3C9EC8C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EAEBAE9F-060D-416D-ADFD-3229B3C9EC8C}.Release|Any CPU.ActiveCfg = Release|Any CPU
