@@ -23,4 +23,4 @@ def test(plugin_names, additional_dlls_to_copy, profile_name):
     print(f"Time: {now.time()}")
 
 def test_sod_common():
-    test("TestHelper", "SOD.Common", "Utils")
+    test("TestHelper", "SOD.Common", "Modding")

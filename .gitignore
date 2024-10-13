@@ -8,3 +8,4 @@ bin/
 obj/
 dist/*/plugins/*
 dist/*.zip
+dependencies

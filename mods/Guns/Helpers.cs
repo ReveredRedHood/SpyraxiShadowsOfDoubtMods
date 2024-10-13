@@ -2,8 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using SOD.Common.Extensions;
-using UnityEngine;
-using UnityEngine.Rendering;
 using UniverseLib;
 
 namespace Guns;
@@ -37,7 +35,7 @@ internal static class Helpers {
         if (disallowDupes) {
             presetInstances = presetInstances.DistinctBy(GetPresetKey);
         }
-        return presetInstances.Select(x => x.TryCast<T>());
+        return presetInstances.Select(TypeExtensions.TryCast<T>);
     }
 
     internal static string GetPresetKey(object obj) {
@@ -45,7 +43,7 @@ internal static class Helpers {
     }
 
     internal static string GetPresetName(object obj) {
-        var castObj = obj.TryCast<SoCustomComparison>();
+        var castObj = TypeExtensions.TryCast<SoCustomComparison>(obj);
         string presetName;
         try {
             presetName = castObj.name;

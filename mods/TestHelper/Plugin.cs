@@ -1,8 +1,6 @@
-using System;
 using System.Collections;
 using System.Linq;
 using BepInEx;
-using BepInEx.Configuration;
 using BepInEx.Unity.IL2CPP;
 using HarmonyLib;
 using SOD.Common;
@@ -15,77 +13,142 @@ namespace TestHelper {
     [BepInPlugin(MyPluginInfo.PLUGIN_GUID, MyPluginInfo.PLUGIN_NAME, MyPluginInfo.PLUGIN_VERSION)]
     [BepInProcess("Shadows of Doubt.exe")]
     [BepInDependency(SOD.Common.Plugin.PLUGIN_GUID, BepInDependency.DependencyFlags.HardDependency)]
-    // [BepInDependency("PresetEdit", BepInDependency.DependencyFlags.HardDependency)]
     public class Plugin : BasePlugin {
         internal static Harmony Harmony;
 
         public override void Load() {
             // Plugin startup logic
-            LogUtils.Load(Log);
             Log.LogInfo($"Plugin {MyPluginInfo.PLUGIN_GUID} is loaded!");
 
             // Harmony.PatchAll();
             // Log.LogInfo($"Plugin {MyPluginInfo.PLUGIN_GUID} is patched!");
 
-            // Lib.PluginDetection.OnAllPluginsFinishedLoading += DetectPlugins;
-            // Lib.PluginDetection.OnAllPluginsFinishedLoading += DetectPluginsFails;
+            // Lib.InputDetection.OnButtonStateChanged += OnButtonStateChanged;
+            // Lib.InputDetection.OnAxisStateChanged += OnAxisStateChanged;
+            // Lib.InputDetection.OnSuppressedButtonStateChanged += OnSuppressedButtonStateChanged;
+            // Lib.InputDetection.OnSuppressedAxisStateChanged += OnSuppressedAxisStateChanged;
+            Lib.SaveGame.OnAfterLoad += Test;
+
             UniverseLib.RuntimeHelper.StartCoroutine(SkipLoadCoroutine());
         }
 
-        private void DetectPlugins(object sender, EventArgs e) {
-            var guid = Lib.PluginDetection.GetPluginGuidFromPartialGuid("Dialog");
-            if (guid == null) {
-                return;
-            }
+        // private void OnSuppressedAxisStateChanged(object sender, SuppressedAxisInputDetectionEventArgs e) {
+        //     if (e.Key != InteractablePreset.InteractionKey.moveVertical && e.Key != InteractablePreset.InteractionKey.moveHorizontal) {
+        //         return;
+        //     }
+        //     Log.LogInfo($"SuppressedAxisStateChanged {e.ActionName} {e.AxisValue}");
+        // }
 
-            Log.LogInfo(Lib.PluginDetection.IsPluginLoaded(guid));
-            Log.LogInfo(Lib.PluginDetection.AllPluginsFinishedLoading);
+        // private void OnSuppressedButtonStateChanged(object sender, SuppressedInputDetectionEventArgs e) {
+        //     if (e.Key != InteractablePreset.InteractionKey.primary && e.Key != InteractablePreset.InteractionKey.secondary) {
+        //         return;
+        //     }
+        //     Log.LogInfo($"SuppressedButtonStateChanged {e.ActionName}");
+        // }
 
-            BepInPlugin metadata = Lib.PluginDetection.GetPluginInfo(guid).Metadata;
-            Log.LogInfo(metadata.GUID);
-            Log.LogInfo(metadata.Name);
-            Log.LogInfo(metadata.Version);
+        // private void OnAxisStateChanged(object sender, AxisInputDetectionEventArgs e) {
+        //     if (e.Key != InteractablePreset.InteractionKey.moveVertical && e.Key != InteractablePreset.InteractionKey.moveHorizontal) {
+        //         return;
+        //     }
+        //     Log.LogInfo($"AxisStateChanged {e.ActionName} {e.AxisValue}");
+        // }
 
-            var value = Lib.PluginDetection.GetPluginConfigEntryValue<bool>(guid, "Talk to Partner", "Can asking for the partner fail?");
-            Log.LogInfo(value);
+        // private void OnButtonStateChanged(object sender, InputDetectionEventArgs e) {
+        //     if (e.Key != InteractablePreset.InteractionKey.primary && e.Key != InteractablePreset.InteractionKey.secondary) {
+        //         return;
+        //     }
+        //     Log.LogInfo($"ButtonStateChanged {e.ActionName}");
+        // }
 
-            // To respond to in-game changes in plugin config
-            Lib.PluginDetection.AddPluginConfigEntryChangedListener(guid, DialogAdditionsConfigSettingChanged);
+        private void Test(object sender, SaveGameArgs e) {
+            UniverseLib.RuntimeHelper.StartCoroutine(TestCoroutine());
         }
 
-        private void DetectPluginsFails(object sender, EventArgs e) {
-            var guid = Lib.PluginDetection.GetPluginGuidFromPartialGuid("Dialog");
-            if (guid == null) {
-                return;
-            }
+        private IEnumerator TestCoroutine() {
+            yield return new WaitForEndOfFrame();
+            // var guid = MyPluginInfo.PLUGIN_GUID;
 
-            var value = Lib.PluginDetection.GetPluginConfigEntryValue<bool>("lol", "Talk to Partner", "Can asking for the partner fail?");
-            Log.LogInfo(value);
-        }
+            // Log.LogInfo(Lib.InputDetection.RewiredPlayer.descriptiveName);
 
-        private void DialogAdditionsConfigSettingChanged(SettingChangedEventArgs args) {
-            Log.LogInfo(args.ChangedSetting.Definition.Section);
-            Log.LogInfo(args.ChangedSetting.Definition.Key);
-            Log.LogInfo(args.ChangedSetting.Description.Description);
-            if (args.ChangedSetting.Definition.Key == "Example") {
-                var value = (float)args.ChangedSetting.BoxedValue;
-                // ...
-            }
-        }
+            // Log.LogInfo(Lib.InputDetection.GetBinding(InteractablePreset.InteractionKey.primary));
+            // Log.LogInfo(Lib.InputDetection.GetRewiredAction(InteractablePreset.InteractionKey.crouch).name);
+            // Log.LogInfo(Lib.InputDetection.GetRewiredActionName(InteractablePreset.InteractionKey.crouch));
 
-        private void OnButton(object sender, InputDetectionEventArgs e) {
-            if (e.ActionName == "LeanLeft" && e.IsDown) {
-                // Lib.PlayerStatus.SetIllegalStatusModifier("on demand", true, 5.0f);
-                Log.LogDebug("Hello");
-                Player.Instance.illegalActionActive = true;
-                Player.Instance.illegalActionTimer = float.MaxValue;
-            }
-            // if (e.Key == InteractablePreset.InteractionKey.LeanRight && e.IsDown) {
-            // Lib.PlayerStatus.SetIllegalStatusModifier("on demand but doesn't overwrite", false, 5.0f);
+            // // Suppressed keycode and suppressed action
+            // Lib.InputDetection.SetInputSuppressed(guid, KeyCode.Mouse2);
+            // Lib.InputDetection.SetInputSuppressed(guid, InteractablePreset.InteractionKey.flashlight);
+            // Log.LogInfo(Lib.InputDetection.IsInputSuppressed(guid, KeyCode.Mouse2, out _));
+            // Log.LogInfo(Lib.InputDetection.IsInputSuppressed(guid, InteractablePreset.InteractionKey.flashlight, out _));
+            // Log.LogInfo(Lib.InputDetection.IsInputSuppressed(guid, InteractablePreset.InteractionKey.flashlight, out _));
+            // // Unsuppressed keycode, but suppressed action
+            // Lib.InputDetection.SetInputSuppressed(guid, InteractablePreset.InteractionKey.LeanLeft);
+            // Log.LogInfo(Lib.InputDetection.IsInputSuppressed(guid, KeyCode.Q, out _));
+            // Log.LogInfo(Lib.InputDetection.IsInputSuppressed(guid, InteractablePreset.InteractionKey.LeanLeft, out _));
+            // Log.LogInfo(Lib.InputDetection.IsInputSuppressed(guid, InteractablePreset.InteractionKey.LeanLeft, out _));
+            // // Suppressed keycode, indirectly suppressed action
+            // Lib.InputDetection.SetInputSuppressed(guid, KeyCode.E);
+            // Log.LogInfo(Lib.InputDetection.IsInputSuppressed(guid, KeyCode.E, out _));
+            // Log.LogInfo(Lib.InputDetection.IsInputSuppressed(guid, InteractablePreset.InteractionKey.LeanRight, out _));
+            // Log.LogInfo(Lib.InputDetection.IsInputSuppressed(guid, InteractablePreset.InteractionKey.LeanRight, out _));
+            // // Remove suppression
+            // Lib.InputDetection.RemoveInputSuppression(InteractablePreset.InteractionKey.flashlight);
+            // Lib.InputDetection.RemoveInputSuppression(KeyCode.E);
+            // // Check
+            // Log.LogInfo(Lib.InputDetection.IsInputSuppressed(guid, KeyCode.Mouse2, out _));
+            // Log.LogInfo(Lib.InputDetection.IsInputSuppressed(guid, InteractablePreset.InteractionKey.flashlight, out _));
+            // Log.LogInfo(Lib.InputDetection.IsInputSuppressed(guid, InteractablePreset.InteractionKey.flashlight, out _));
+            // Log.LogInfo(Lib.InputDetection.IsInputSuppressed(guid, KeyCode.Q, out _));
+            // Log.LogInfo(Lib.InputDetection.IsInputSuppressed(guid, InteractablePreset.InteractionKey.LeanLeft, out _));
+            // Log.LogInfo(Lib.InputDetection.IsInputSuppressed(guid, InteractablePreset.InteractionKey.LeanLeft, out _));
+            // Log.LogInfo(Lib.InputDetection.IsInputSuppressed(guid, KeyCode.E, out _));
+            // Log.LogInfo(Lib.InputDetection.IsInputSuppressed(guid, InteractablePreset.InteractionKey.LeanRight, out _));
+            // Log.LogInfo(Lib.InputDetection.IsInputSuppressed(guid, InteractablePreset.InteractionKey.LeanRight, out _));
+
+            // Lib.InputDetection.RemoveInputSuppression(InteractablePreset.InteractionKey.flashlight);
+            // Log.LogInfo(Lib.InputDetection.IsInputSuppressed(guid, KeyCode.Mouse2, out _));
+
+            // Log.LogInfo(Lib.InputDetection.GetBinding(InteractablePreset.InteractionKey.jump));
+
+            // Log.LogInfo("Suppressed sprint for 5 sec");
+            // Lib.InputDetection.SetInputSuppressed(guid, InteractablePreset.InteractionKey.sprint, TimeSpan.FromSeconds(5.0f), true);
+            // Log.LogInfo("Suppressed LeanLeft for 5 sec");
+            // Lib.InputDetection.SetInputSuppressed(guid, InteractablePreset.InteractionKey.LeanLeft, TimeSpan.FromSeconds(5.0f), true);
+            // Log.LogInfo("Suppressed caseBoard for 10 sec");
+            // Lib.InputDetection.SetInputSuppressed(guid, InteractablePreset.InteractionKey.caseBoard, TimeSpan.FromSeconds(10.0f), true);
+            // Log.LogInfo("Suppressed moveHorizontal for 5 sec");
+            // Lib.InputDetection.SetInputSuppressed(guid, InteractablePreset.InteractionKey.moveHorizontal, TimeSpan.FromSeconds(15.0f), true);
+            // Log.LogInfo("Just kidding, suppressed moveHorizontal for 15 sec");
+            // Lib.InputDetection.SetInputSuppressed(guid, InteractablePreset.InteractionKey.moveHorizontal, TimeSpan.FromSeconds(15.0f), true);
+            // Log.LogInfo("Unsuccessfully suppressing moveHorizontal for 60 sec");
+            // Lib.InputDetection.SetInputSuppressed(guid, InteractablePreset.InteractionKey.moveHorizontal, TimeSpan.FromSeconds(60.0f), false);
+            // Log.LogInfo("Suppressed flashlight indefinitely");
+            // Lib.InputDetection.SetInputSuppressed(guid, InteractablePreset.InteractionKey.flashlight);
+            // Log.LogInfo("Do I see the LeanRight suppression entry under a different guid?");
+            // yield return new WaitForSeconds(1.0f);
+            // if (!Lib.InputDetection.IsInputSuppressedByAnyPlugin(InteractablePreset.InteractionKey.LeanRight, out var suppressedBy, out _)) {
+            //     Log.LogInfo("I don't see any suppression entry (expected on first run prior to save)");
+            //     // Log.LogInfo($"Troubleshoot: {Lib.InputDetection.FindInputSuppressionEntries(_ => true).ToStringEnumerable()}");
             // }
-            // if (e.Key == InteractablePreset.InteractionKey.flashlight) {
-            // Lib.PlayerStatus.ToggleIllegalStatusModifier("toggled");
+            // else {
+            //     Log.LogInfo("I see these entries for LeanRight");
+            //     Log.LogInfo(suppressedBy.First());
+            //     Log.LogInfo(suppressedBy.Last());
             // }
+            // if (!Lib.InputDetection.IsInputSuppressed(guid, InteractablePreset.InteractionKey.LeanRight, out _)) {
+            //     Log.LogInfo("I don't see any suppression entry for the actual guid");
+            //     // Log.LogInfo($"Troubleshoot: {Lib.InputDetection.FindInputSuppressionEntries(_ => true).ToStringEnumerable()}");
+            // }
+            // else {
+            //     Log.LogInfo("LeanRight is suppressed by this plugin's actual guid");
+            // }
+            // yield return new WaitForSeconds(5.0f);
+            // Log.LogInfo("Suppressed LeanRight under this guid");
+            // Lib.InputDetection.SetInputSuppressed(guid, InteractablePreset.InteractionKey.LeanRight);
+            // Log.LogInfo("Suppressed LeanRight indefinitely under a different guid");
+            // Lib.InputDetection.SetInputSuppressed("helloworld", InteractablePreset.InteractionKey.LeanRight);
+            // // suppress moveHorizontal, secondary
+            // Lib.InputDetection.SetInputSuppressed(guid, InteractablePreset.InteractionKey.moveHorizontal);
+            // Lib.InputDetection.SetInputSuppressed(guid, InteractablePreset.InteractionKey.secondary);
         }
 
         // Skip the intro and just load into a game
@@ -123,19 +186,9 @@ namespace TestHelper {
             MainMenuController.Instance.SetMenuComponent(MainMenuController.Component.loadingCity);
         }
 
-        internal static void AddExceptMsg(System.Action action, string addMsgOnException) {
-            try {
-                action();
-            }
-            catch (System.Exception except) {
-                throw new System.InvalidOperationException(innerException: except, message: addMsgOnException);
-            }
-        }
-
         public override bool Unload() {
             // Harmony?.UnpatchSelf();
 
-            LogUtils.Unload();
             return base.Unload();
         }
     }
