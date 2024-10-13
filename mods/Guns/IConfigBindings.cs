@@ -24,6 +24,10 @@ public interface IConfigBindings {
     [Binding(false, "If true, the shotgun fires a singular slug round instead of buckshot.")]
     bool ShotgunUsesSingularRound { get; set; }
 
+    [Binding(-1.0f, "The accuracy of the shotgun's buckshot spread as a value from 0.0 to 1.0, with 1.0 being perfectly accurate. Set to -1.0 to use the game's built-in accuracy value.")]
+    float ShotgunAccuracyOverride { get; set; }
+
+
     [Binding(0.7f, "Per-projectile damage multiplier for the Faucon Rifle.")]
     float GunDamageFactorFauconRifle { get; set; }
 

@@ -200,21 +200,26 @@ public partial class Plugin : PluginController<Plugin, IConfigBindings> {
         if (!InGameSetupCompleted) {
             return;
         }
-        GunEntriesByPresetName[SHOTGUN_PRESET_NAME].DamageFactor = (Config.ShotgunUsesSingularRound ? SLUG_SHOTGUN_DAMAGE_FACTOR : 1.0f) * Config.GunDamageFactorShotgun;
-        GunEntriesByPresetName[SHOTGUN_PRESET_NAME].ProjectilesPerShot = Config.ShotgunUsesSingularRound ? 1 : BUCKSHOT_SHOTGUN_PROJECTILES_PER_SHOT;
-        GunEntriesByPresetName[SHOTGUN_PRESET_NAME].AccuracyOverride = Config.ShotgunUsesSingularRound ? 0.9f : -1.0f;
-
-        GunEntriesByPresetName[BATTLE_RIFLE_PRESET_NAME].DamageFactor = Config.GunDamageFactorFauconRifle;
-        GunEntriesByPresetName[SNIPER_RIFLE_PRESET_NAME].DamageFactor = Config.GunDamageFactorHamiltonRifle;
-        GunEntriesByPresetName[REVOLVER_PRESET_NAME].DamageFactor = Config.GunDamageFactorRevolver;
-        GunEntriesByPresetName[SEMI_AUTO_PRESET_NAME].DamageFactor = Config.GunDamageFactorSemiAuto;
-        GunEntriesByPresetName[SEMI_AUTO_SILENCED_PRESET_NAME].DamageFactor = Config.GunDamageFactorSemiAutoSilenced;
+        ApplyGunEntryConfigChanges();
 
         if (Config.GunTestingMode) {
             FirstPersonItemController.Instance.SetSlotSize(12);
             GunEntriesByPresetName.Values.Select(x => x.InteractablePreset).ForEach(x => x.SpawnIntoInventory());
             GunEntriesByPresetName.Values.SelectMany(x => x.InteractablePreset.weapon.ammunition.ToList()).ForEach(x => Log.LogInfo($"{x.name}, {x.retailItem.brandName}, {x.retailItem.name}"));
         }
+    }
+
+    private void ApplyGunEntryConfigChanges() {
+        GunEntriesByPresetName[SHOTGUN_PRESET_NAME].DamageFactor = (Config.ShotgunUsesSingularRound ? SLUG_SHOTGUN_DAMAGE_FACTOR : 1.0f) * Config.GunDamageFactorShotgun;
+        GunEntriesByPresetName[SHOTGUN_PRESET_NAME].ProjectilesPerShot = Config.ShotgunUsesSingularRound ? 1 : BUCKSHOT_SHOTGUN_PROJECTILES_PER_SHOT;
+        var shotgunBuckshotAccuracy = Config.ShotgunAccuracyOverride < 0.0f ? -1.0f : Config.ShotgunAccuracyOverride;
+        GunEntriesByPresetName[SHOTGUN_PRESET_NAME].AccuracyOverride = Config.ShotgunUsesSingularRound ? 0.9f : shotgunBuckshotAccuracy;
+
+        GunEntriesByPresetName[BATTLE_RIFLE_PRESET_NAME].DamageFactor = Config.GunDamageFactorFauconRifle;
+        GunEntriesByPresetName[SNIPER_RIFLE_PRESET_NAME].DamageFactor = Config.GunDamageFactorHamiltonRifle;
+        GunEntriesByPresetName[REVOLVER_PRESET_NAME].DamageFactor = Config.GunDamageFactorRevolver;
+        GunEntriesByPresetName[SEMI_AUTO_PRESET_NAME].DamageFactor = Config.GunDamageFactorSemiAuto;
+        GunEntriesByPresetName[SEMI_AUTO_SILENCED_PRESET_NAME].DamageFactor = Config.GunDamageFactorSemiAutoSilenced;
     }
 
     private void OnAfterNewGame(object sender, EventArgs e) {
@@ -263,6 +268,7 @@ public partial class Plugin : PluginController<Plugin, IConfigBindings> {
             GunEntriesByPresetName.Add(entry.ItemPresetName, entry);
             CalculateBuyPrice(entry);
         }
+        ApplyGunEntryConfigChanges();
 
         foreach (var (key, gunEntry) in GunEntriesByPresetName) {
             // Set the fps item offset and rotation so the guns are aiming
