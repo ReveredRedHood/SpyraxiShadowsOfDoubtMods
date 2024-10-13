@@ -21,6 +21,31 @@ public interface IConfigBindings {
     [Binding(true, "Account for citizen alertness and blindness when calculating the actual nerve lost per second while being aimed at. The amount of nerve lost will be reduced by some factor depending on the citizen's traits while this setting is enabled.")]
     bool CitizenNerveLossAccountsForAwareness { get; set; }
 
+    [Binding(false, "If true, the shotgun fires a singular slug round instead of buckshot.")]
+    bool ShotgunUsesSingularRound { get; set; }
+
+    [Binding(-1.0f, "The accuracy of the shotgun's buckshot spread as a value from 0.0 to 1.0, with 1.0 being perfectly accurate. Set to -1.0 to use the game's built-in accuracy value.")]
+    float ShotgunAccuracyOverride { get; set; }
+
+
+    [Binding(0.7f, "Per-projectile damage multiplier for the Faucon Rifle.")]
+    float GunDamageFactorFauconRifle { get; set; }
+
+    [Binding(1.2f, "Per-projectile damage multiplier for the Revolver.")]
+    float GunDamageFactorRevolver { get; set; }
+
+    [Binding(1.3f, "Per-projectile damage multiplier for the Semi-Auto Pistol.")]
+    float GunDamageFactorSemiAuto { get; set; }
+
+    [Binding(1.3f, "Per-projectile damage multiplier for the Semi-Auto Pistol (Silenced).")]
+    float GunDamageFactorSemiAutoSilenced { get; set; }
+
+    [Binding(1.0f, "Per-projectile damage multiplier for the Shotgun.")]
+    float GunDamageFactorShotgun { get; set; }
+
+    [Binding(1.4f, "Per-projectile damage multiplier for the Hamilton Rifle.")]
+    float GunDamageFactorHamiltonRifle { get; set; }
+
     [Binding(false, "If true, add all guns and ammo to your inventory. Works immediately. Save the setting as false prior to setting it back to true to repeat the command.")]
     bool GunTestingMode { get; set; }
 }

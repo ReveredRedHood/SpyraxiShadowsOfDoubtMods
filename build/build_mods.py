@@ -154,7 +154,8 @@ def get_plugin_paths(plugins_or_all):
             soup = BeautifulSoup(content, "lxml")
             version = soup.find("versionprefix").string
             print(" ", version)
-            suffix = soup.find("versionsuffix").string
+            suffix = soup.find("versionsuffix")
+            suffix = "" if suffix is None else suffix.string
             print(" suffix: ", suffix)
         path_tuples.append((path, version, suffix))
     return path_tuples
@@ -199,7 +200,7 @@ def build_mods(plugins_or_all, additional_dlls_to_copy, profile_name_for_test):
 
         # Package dist files into new .zip files
         zip_path = Path(
-            f"{script_dir}/../dist/{folder_name}-v{version}-{suffix}.zip"
+            f"{script_dir}/../dist/{folder_name}-v{version}{"-" if suffix != "" else ""}{suffix}.zip"
         ).resolve()
         top_level_files = create_zip(folder_name, src_paths, zip_path)
 
