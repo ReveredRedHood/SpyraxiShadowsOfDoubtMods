@@ -21,8 +21,7 @@ namespace Guns;
 [BepInDependency(LifeAndLivingIntegration.LIFE_AND_LIVING_GUID, BepInDependency.DependencyFlags.SoftDependency)]
 [BepInDependency(SOD.Common.Plugin.PLUGIN_GUID, BepInDependency.DependencyFlags.HardDependency)]
 public partial class Plugin : PluginController<Plugin, IConfigBindings> {
-    // TODO: I really don't know how accurate the descriptions for these recoil
-    // patterns are
+    // TODO: I really don't know how accurate the descriptions for these recoil patterns are
     public static Vector3 CircularRecoilPattern = Vector3.one.normalized;
     public static Vector3 DiagonalRecoilPattern = new Vector3(1.0f, 0.5f, 1.0f).normalized;
     public static Vector3 ShortOvalRecoilPattern = new Vector3(1.0f, 1.0f, 0.5f).normalized;
@@ -38,6 +37,15 @@ public partial class Plugin : PluginController<Plugin, IConfigBindings> {
     internal const string PRIMARY = "Primary";
     internal const string SECONDARY = "Secondary";
     internal const float TIMER_DURATION = 0.25f;
+    internal const float SLUG_SHOTGUN_DAMAGE_FACTOR = 2.0f;
+    private const string SHOTGUN_PRESET_NAME = "Shotgun";
+    private const int BUCKSHOT_SHOTGUN_PROJECTILES_PER_SHOT = 8;
+    private const float BUCKSHOT_SHOTGUN_RECOIL_AMPLITUDE = 20.0f;
+    private const string BATTLE_RIFLE_PRESET_NAME = "BattleRifle";
+    private const string SNIPER_RIFLE_PRESET_NAME = "SniperRifle";
+    private const string REVOLVER_PRESET_NAME = "Revolver";
+    private const string SEMI_AUTO_PRESET_NAME = "SemiAutomaticPistol";
+    private const string SEMI_AUTO_SILENCED_PRESET_NAME = "SemiAutomaticPistolSilenced";
 
     /* For those who want to use this as a modding resource, you can add
      * additional weapons that shoot or edit the info for existing ones in
@@ -45,7 +53,7 @@ public partial class Plugin : PluginController<Plugin, IConfigBindings> {
      * loaded save), then call Guns.Plugin.InGameSetup() afterwards.
     */
     public List<GunInfoEntry> GunInfoEntries = new List<GunInfoEntry> {
-        new(itemPresetName: "BattleRifle",
+        new(itemPresetName: BATTLE_RIFLE_PRESET_NAME,
             rotation: new Vector3(0f, 0f, 0f),
             delayBetweenShotsFactor: 0.2f,
             damageFactor: 0.7f,
@@ -55,7 +63,7 @@ public partial class Plugin : PluginController<Plugin, IConfigBindings> {
             zoomInOnAimPct: 0.2f,
             baseGameMinBuyPrice: 1000.0f
             ),
-        new(itemPresetName: "Revolver",
+        new(itemPresetName: REVOLVER_PRESET_NAME,
             rotation: new Vector3(0f, -90f, 0f),
             delayBetweenShotsFactor: 1.0f,
             damageFactor: 1.2f,
@@ -65,7 +73,7 @@ public partial class Plugin : PluginController<Plugin, IConfigBindings> {
             zoomInOnAimPct: 0.2f,
             baseGameMinBuyPrice: 400.0f
             ),
-        new(itemPresetName: "SemiAutomaticPistol",
+        new(itemPresetName: SEMI_AUTO_PRESET_NAME,
             rotation: new Vector3(0f, -90f, 0f),
             delayBetweenShotsFactor: 0.8f,
             damageFactor: 1.3f,
@@ -75,7 +83,7 @@ public partial class Plugin : PluginController<Plugin, IConfigBindings> {
             zoomInOnAimPct: 0.2f,
             baseGameMinBuyPrice: 150.0f
             ),
-        new(itemPresetName: "SemiAutomaticPistolSilenced",
+        new(itemPresetName: SEMI_AUTO_SILENCED_PRESET_NAME,
             rotation: new Vector3(0f, -90f, 0f),
             delayBetweenShotsFactor: 0.8f,
             damageFactor: 1.3f,
@@ -85,18 +93,18 @@ public partial class Plugin : PluginController<Plugin, IConfigBindings> {
             zoomInOnAimPct: 0.2f,
             baseGameMinBuyPrice: 200.0f
             ),
-        new(itemPresetName: "Shotgun",
+        new(itemPresetName: SHOTGUN_PRESET_NAME,
             rotation: new Vector3(0f, 0f, 0f),
             delayBetweenShotsFactor: 1.0f,
             damageFactor: 1.0f,
             isFullAuto: false,
             recoilPatternFactors: ShortOvalRecoilPattern,
-            recoilAmplitude: 20.0f,
+            recoilAmplitude: BUCKSHOT_SHOTGUN_RECOIL_AMPLITUDE,
             zoomInOnAimPct: 0.1f,
             baseGameMinBuyPrice: 500.0f,
-            projectilesPerShot: 8
+            projectilesPerShot: BUCKSHOT_SHOTGUN_PROJECTILES_PER_SHOT
             ),
-        new(itemPresetName: "SniperRifle",
+        new(itemPresetName: SNIPER_RIFLE_PRESET_NAME,
             rotation: new Vector3(270f, 0f, 0f),
             delayBetweenShotsFactor: 1.5f,
             damageFactor: 1.4f,
@@ -107,6 +115,7 @@ public partial class Plugin : PluginController<Plugin, IConfigBindings> {
             baseGameMinBuyPrice: 700.0f
             ),
     };
+
     public Dictionary<string, GunInfoEntry> GunEntriesByPresetName = new();
     public HashSet<int> WeaponsOnCooldown { get; internal set; } = new();
     private WeaponPrimaryState currentWeaponPrimaryState;
@@ -188,10 +197,19 @@ public partial class Plugin : PluginController<Plugin, IConfigBindings> {
         if (!InGameSetupCompleted) {
             return;
         }
+        GunEntriesByPresetName[SHOTGUN_PRESET_NAME].DamageFactor = (Config.ShotgunUsesSingularRound ? SLUG_SHOTGUN_DAMAGE_FACTOR : 1.0f) * Config.GunDamageFactorShotgun;
+        GunEntriesByPresetName[SHOTGUN_PRESET_NAME].ProjectilesPerShot = Config.ShotgunUsesSingularRound ? 1 : BUCKSHOT_SHOTGUN_PROJECTILES_PER_SHOT;
+
+        GunEntriesByPresetName[BATTLE_RIFLE_PRESET_NAME].DamageFactor = Config.GunDamageFactorFauconRifle;
+        GunEntriesByPresetName[SNIPER_RIFLE_PRESET_NAME].DamageFactor = Config.GunDamageFactorHamiltonRifle;
+        GunEntriesByPresetName[REVOLVER_PRESET_NAME].DamageFactor = Config.GunDamageFactorRevolver;
+        GunEntriesByPresetName[SEMI_AUTO_PRESET_NAME].DamageFactor = Config.GunDamageFactorSemiAuto;
+        GunEntriesByPresetName[SEMI_AUTO_SILENCED_PRESET_NAME].DamageFactor = Config.GunDamageFactorSemiAutoSilenced;
+
         if (Config.GunTestingMode) {
             FirstPersonItemController.Instance.SetSlotSize(12);
             GunEntriesByPresetName.Values.Select(x => x.InteractablePreset).ForEach(x => x.SpawnIntoInventory());
-            GunEntriesByPresetName.Values.Select(x => x.InteractablePreset.weapon.ammunition[0]).ForEach(x => x.SpawnIntoInventory());
+            GunEntriesByPresetName.Values.SelectMany(x => x.InteractablePreset.weapon.ammunition.ToList()).ForEach(x => Log.LogInfo($"{x.name}, {x.retailItem.brandName}, {x.retailItem.name}"));
         }
     }
 

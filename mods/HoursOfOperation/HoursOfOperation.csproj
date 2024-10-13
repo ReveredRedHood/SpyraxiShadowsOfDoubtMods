@@ -5,7 +5,6 @@
     <AssemblyName>HoursOfOperation</AssemblyName>
     <Description>Shows the operating hours for businesses on their door.</Description>
     <VersionPrefix>0.1.0</VersionPrefix>
-    <VersionSuffix>BE667</VersionSuffix>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <LangVersion>latest</LangVersion>
     <RestoreAdditionalProjectSources>

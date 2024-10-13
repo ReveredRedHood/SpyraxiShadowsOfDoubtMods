@@ -7,7 +7,6 @@ using UniverseLib;
 namespace Guns;
 
 internal static class Helpers {
-    // TODO: move these (or equivalent functionality) to SOD.Common
     internal static bool IsPlayerHeardByOthers() {
         return InterfaceController.Instance.awarenessIcons.Where(x => x.alertProgress > 0.0f).Any();
     }
@@ -35,7 +34,7 @@ internal static class Helpers {
         if (disallowDupes) {
             presetInstances = presetInstances.DistinctBy(GetPresetKey);
         }
-        return presetInstances.Select(TypeExtensions.TryCast<T>);
+        return presetInstances.Select(x => x.TryCast<T>());
     }
 
     internal static string GetPresetKey(object obj) {
@@ -43,7 +42,7 @@ internal static class Helpers {
     }
 
     internal static string GetPresetName(object obj) {
-        var castObj = TypeExtensions.TryCast<SoCustomComparison>(obj);
+        var castObj = obj.TryCast<SoCustomComparison>();
         string presetName;
         try {
             presetName = castObj.name;

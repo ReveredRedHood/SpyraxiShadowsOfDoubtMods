@@ -19,12 +19,27 @@ public class GunInfoEntry {
     public string ItemPresetName { get; }
     public Vector3 Rotation { get; }
     public float DelayBetweenShotsFactor { get; }
-    public float DamageFactor { get; }
+    public float DamageFactor { get; internal set; }
     public bool IsFullAuto { get; }
     public Vector3 RecoilPatternFactors { get; }
-    public float RecoilAmplitude { get; }
+    public float RecoilAmplitude { get; internal set; }
     public float ZoomInOnAimPct { get; }
     public float BaseGameMinBuyPrice { get; }
-    public int ProjectilesPerShot { get; }
+    public int ProjectilesPerShot { get; internal set; }
     public InteractablePreset InteractablePreset { get; internal set; }
+
+    public override string ToString() {
+        return $@"GunInfoEntry for {ItemPresetName}: 
+            Rotation = {Rotation},
+            DelayBetweenShotsFactor = {DelayBetweenShotsFactor},
+            DamageFactor = {DamageFactor},
+            IsFullAuto = {IsFullAuto},
+            RecoilPatternFactors = {RecoilPatternFactors},
+            RecoilAmplitude = {RecoilAmplitude},
+            ZoomInOnAimPct = {ZoomInOnAimPct},
+            BaseGameMinBuyPrice = {BaseGameMinBuyPrice},
+            ProjectilesPerShot = {ProjectilesPerShot},
+            InteractablePreset = {InteractablePreset},
+        ";
+    }
 }
