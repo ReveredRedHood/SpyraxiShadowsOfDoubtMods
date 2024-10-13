@@ -71,7 +71,8 @@ public partial class Plugin : PluginController<Plugin, IConfigBindings> {
             recoilPatternFactors: ShortOvalRecoilPattern,
             recoilAmplitude: 15.0f,
             zoomInOnAimPct: 0.2f,
-            baseGameMinBuyPrice: 400.0f
+            baseGameMinBuyPrice: 400.0f,
+            accuracyOverride: 0.8f
             ),
         new(itemPresetName: SEMI_AUTO_PRESET_NAME,
             rotation: new Vector3(0f, -90f, 0f),
@@ -81,7 +82,8 @@ public partial class Plugin : PluginController<Plugin, IConfigBindings> {
             recoilPatternFactors: ShortOvalRecoilPattern,
             recoilAmplitude: 1.0f,
             zoomInOnAimPct: 0.2f,
-            baseGameMinBuyPrice: 150.0f
+            baseGameMinBuyPrice: 150.0f,
+            accuracyOverride: 0.9f
             ),
         new(itemPresetName: SEMI_AUTO_SILENCED_PRESET_NAME,
             rotation: new Vector3(0f, -90f, 0f),
@@ -91,7 +93,8 @@ public partial class Plugin : PluginController<Plugin, IConfigBindings> {
             recoilPatternFactors: ShortOvalRecoilPattern,
             recoilAmplitude: 1.0f,
             zoomInOnAimPct: 0.2f,
-            baseGameMinBuyPrice: 200.0f
+            baseGameMinBuyPrice: 200.0f,
+            accuracyOverride: 0.95f
             ),
         new(itemPresetName: SHOTGUN_PRESET_NAME,
             rotation: new Vector3(0f, 0f, 0f),
@@ -199,6 +202,7 @@ public partial class Plugin : PluginController<Plugin, IConfigBindings> {
         }
         GunEntriesByPresetName[SHOTGUN_PRESET_NAME].DamageFactor = (Config.ShotgunUsesSingularRound ? SLUG_SHOTGUN_DAMAGE_FACTOR : 1.0f) * Config.GunDamageFactorShotgun;
         GunEntriesByPresetName[SHOTGUN_PRESET_NAME].ProjectilesPerShot = Config.ShotgunUsesSingularRound ? 1 : BUCKSHOT_SHOTGUN_PROJECTILES_PER_SHOT;
+        GunEntriesByPresetName[SHOTGUN_PRESET_NAME].AccuracyOverride = Config.ShotgunUsesSingularRound ? 0.9f : -1.0f;
 
         GunEntriesByPresetName[BATTLE_RIFLE_PRESET_NAME].DamageFactor = Config.GunDamageFactorFauconRifle;
         GunEntriesByPresetName[SNIPER_RIFLE_PRESET_NAME].DamageFactor = Config.GunDamageFactorHamiltonRifle;
@@ -431,7 +435,13 @@ public partial class Plugin : PluginController<Plugin, IConfigBindings> {
         // Largely taken from NewAIController.RecalculateWeaponStats
         var weaponRangeMax = weapon.GetAttackValue(MurderWeaponPreset.AttackValue.range, Player.Instance);
         var weaponRefire = weapon.GetAttackValue(MurderWeaponPreset.AttackValue.fireDelay, Player.Instance) * gunInfoEntry.DelayBetweenShotsFactor;
-        var weaponAccuracy = weapon.GetAttackValue(MurderWeaponPreset.AttackValue.accuracy, Player.Instance);
+        float weaponAccuracy;
+        if (gunInfoEntry.AccuracyOverride < 0.0f) {
+            weaponAccuracy = weapon.GetAttackValue(MurderWeaponPreset.AttackValue.accuracy, Player.Instance);
+        }
+        else {
+            weaponAccuracy = gunInfoEntry.AccuracyOverride;
+        }
         var weaponDamage = weapon.GetAttackValue(MurderWeaponPreset.AttackValue.damage, Player.Instance) * gunInfoEntry.DamageFactor;
 
         // Largely taken from Game.ShootFromPlayer
